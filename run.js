@@ -4,11 +4,16 @@
 
 // BACKLOG:
 // Implement TypeScript
-// Agent Constructor: import both data.vars and data.methods
 // Implement Priority System (priority = importance * urgency * delay)
+// > ---MVP---
+// Human-Agent: Post processing request
+// Agent Constructor: Import data.methods
+// Agent Runner: Save agent data.vars
+// Agent Constructor: Import data.vars
 // Request Reader: Translates request json to human readable format
 // Request Reader: Print out how many human requests vs machine requests
 // Agent: Act: Read messages from the board
+// Agent: Post request
 // Create Message Board: Requests and Responses
 
 // Pass 5:
@@ -16,7 +21,6 @@
 
 // Pass 4:
 // Agent Runner: Create dummy agent from file
-
 
 
 // class Agent {
