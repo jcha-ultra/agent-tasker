@@ -1,16 +1,21 @@
-// Info:
+// Guiding Principles:
+// - Humans are just another type of agents
+// - Agents should be as similar to each other as possible in terms of possible actions
 
 // BACKLOG:
-// > [jest testing]
-// > [implement typescript?]
+// Implement TypeScript
+// Agent Constructor: import both data.vars and data.methods
+// Implement Priority System (priority = importance * urgency * delay)
+// Request Reader: Translates request json to human readable format
+// Request Reader: Print out how many human requests vs machine requests
+// Agent: Act: Read messages from the board
+// Create Message Board: Requests and Responses
 
-// Pass 2:
+// Pass 5:
+// Agent Runner: Loop through agent files in reverse order
 
-// Pass 1:
-// TODO: Github Setup
-
-
-
+// Pass 4:
+// Agent Runner: Create dummy agent from file
 
 
 
