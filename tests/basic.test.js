@@ -15,20 +15,20 @@
 // Agent Constructor: Import data.vars
 // Human-Agent: Request Reader: Translates request json to human readable format
 // Human-Agent: Request Reader: Print out how many human requests vs machine requests
+// Agent: Spawn new agent
 // Agent: Act: Save self to file
 // Agent: Act: Read messages from the board
 // Agent: Post request
 // Create Message Board: Requests and Responses
 
-// Pass 5:
-// Agent Runner: Loop through agent files in reverse order
+// Pass 7:
+// > [agent id]
 
-// Pass 4:
-// Agent: Spawn dummy agent from file
+// Pass 6:
+// Agent Runner: Loop through agent files
 
 
-
-const Agent = require('../run.js');
+const {createAgent, Agent, AgentRunner} = require('../run.js');
 
 beforeAll(() => {
 });
@@ -40,7 +40,12 @@ afterEach(() => {
 });
 
 
-test('print out spawned agent', () => {
-    const agent = new Agent('./agents/3_dummy.js')
-    console.log(agent);
+test('agent runner loops through agent files', () => {
+    const runner = new AgentRunner();
+    runner.runRound();
+});
+
+test('able to create new agent from file', () => {
+    const agent = createAgent('./agents/3_dummy.js');
+    expect(Object.keys(agent).length).toBe(6);
 });

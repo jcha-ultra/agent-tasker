@@ -1,6 +1,12 @@
+const fs = require('fs');
+
 class Agent {
-    constructor(dataPath) {
-        console.log(process.cwd());
+
+    act() {
+        console.log("Agent acted!")
+    }
+
+    setData(dataPath) {
         const agentData = require(dataPath);
         for (const dataItem in agentData) {
             this[dataItem] = agentData[dataItem];
@@ -8,7 +14,23 @@ class Agent {
     }
 }
 
-module.exports = Agent;
+function createAgent(dataPath) {
+    const agent = new Agent();
+    agent.setData(dataPath);
+    return agent;
+}
+
+class AgentRunner {
+    runRound() {
+        const agentList = fs.readdirSync('./agents');
+        for (const agentName of agentList) {
+            const agent = createAgent(`./agents/${agentName}`);
+            agent.act();
+        }
+    }
+}
+
+module.exports = {createAgent, Agent, AgentRunner};
 
 // class Agent {
 //     constructor(world, id, x, y) {
