@@ -22,9 +22,9 @@ function createAgent(dataPath) {
 
 class AgentRunner {
     runRound() {
-        const agentList = fs.readdirSync('./agents');
+        const agentList = fs.readdirSync('./agents/active');
         for (const agentName of agentList) {
-            const agent = createAgent(`./agents/${agentName}`);
+            const agent = createAgent(`./agents/active/${agentName}`);
             agent.act();
         }
     }

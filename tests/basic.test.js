@@ -20,13 +20,12 @@
 // Agent: Act: Read messages from the board
 // Agent: Post request
 // Create Message Board: Requests and Responses
+// Agent: Ids
 
 // Pass 7:
-// > [agent id]
 
 // Pass 6:
-// Agent Runner: Loop through agent files
-
+// Agents: Move to active folder
 
 const {createAgent, Agent, AgentRunner} = require('../run.js');
 
@@ -46,6 +45,6 @@ test('agent runner loops through agent files', () => {
 });
 
 test('able to create new agent from file', () => {
-    const agent = createAgent('./agents/3_dummy.js');
+    const agent = createAgent('./agents/active/3_dummy.js');
     expect(Object.keys(agent).length).toBe(6);
 });
