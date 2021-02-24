@@ -20,14 +20,13 @@
 // Agent: Act: Read messages from the board
 // Agent: Post request
 // Create Message Board: Requests and Responses
-// Agent: Ids
 
 // Pass 7:
 
 // Pass 6:
-// Agents: Move to active folder
 
 const {createAgent, Agent, AgentRunner} = require('../run.js');
+const AGENT_PATH = './agents/active';
 
 beforeAll(() => {
 });
@@ -38,6 +37,10 @@ beforeEach(() => {
 afterEach(() => {
 });
 
+test('agents can be created with names', () => {
+    const agent = createAgent('3_dummy.js', AGENT_PATH);
+    expect(agent.name).toBe('3_dummy.js');
+});
 
 test('agent runner loops through agent files', () => {
     const runner = new AgentRunner();
@@ -45,6 +48,6 @@ test('agent runner loops through agent files', () => {
 });
 
 test('able to create new agent from file', () => {
-    const agent = createAgent('./agents/active/3_dummy.js');
-    expect(Object.keys(agent).length).toBe(6);
+    const agent = createAgent(`3_dummy.js`, AGENT_PATH);
+    expect(Object.keys(agent).length).toBe(7);
 });
