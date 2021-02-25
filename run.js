@@ -10,6 +10,16 @@ class Agent {
         console.log("Agent acted!")
     }
 
+    save(dataPath = AGENT_PATH) {
+        const selfExport = 'module.exports = ' + JSON.stringify(this, null, 4);
+        fs.writeFile(`${dataPath}/${this.name}`, selfExport, err => {
+            if (err) {
+                console.error(err)
+                return
+            }
+        })
+    }
+
     setData(dataPath) {
         const agentData = require(dataPath);
         for (const dataItem in agentData) {

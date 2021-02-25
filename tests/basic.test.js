@@ -8,6 +8,7 @@
 // Orphaned Agents: Neither requests or responses outstanding for it
 // Timer Agent
 // Implement Priority System (priority = importance * urgency * delay)
+// Create new agent that doesn't have a data path
 // > ---MVP---
 // Human-Agent: Post processing request
 // Agent Constructor: Import data.methods
@@ -16,16 +17,16 @@
 // Human-Agent: Request Reader: Translates request json to human readable format
 // Human-Agent: Request Reader: Print out how many human requests vs machine requests
 // Agent: Spawn new agent
-// Agent: Act: Save self to file
 // Agent: Act: Read messages from the board
 // Agent: Post request
+
+// Pass 9:
+
+// Pass 8:
 // Create Message Board: Requests and Responses
+// Create
 
-// Pass 7:
-
-// Pass 6:
-
-const {createAgent, Agent, AgentRunner} = require('../run.js');
+const {createAgent, Agent, AgentRunner, MessageBoard} = require('../run.js');
 const AGENT_PATH = './agents/active';
 
 beforeAll(() => {
@@ -35,6 +36,13 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+});
+
+test('agent can be saved', () => {
+    const agent = createAgent('3_dummy.js', AGENT_PATH);
+    agent.save(AGENT_PATH);
+    const agent2 = createAgent('3_dummy.js', AGENT_PATH);
+    console.log(agent2);
 });
 
 test('agents can be created with names', () => {
@@ -49,5 +57,5 @@ test('agent runner loops through agent files', () => {
 
 test('able to create new agent from file', () => {
     const agent = createAgent(`3_dummy.js`, AGENT_PATH);
-    expect(Object.keys(agent).length).toBe(7);
+    expect(Object.keys(agent).length).toBe(4);
 });
