@@ -1,5 +1,17 @@
 const fs = require('fs');
 const AGENT_PATH = './agents/active'
+const MESSAGE_PATH = './messages/active'
+
+
+function saveData(contents, dataPath) {
+    const selfExport = 'module.exports = ' + JSON.stringify(contents, null, 4);
+    fs.writeFile(dataPath, selfExport, err => {
+        if (err) {
+            console.error(err)
+            return
+        }
+    })
+}
 
 class Agent {
     constructor(name) {
@@ -8,6 +20,10 @@ class Agent {
 
     act() {
         console.log("Agent acted!")
+    }
+
+    createMessage(messageName, contents) {
+        saveData(contents, `${MESSAGE_PATH}/${messageName}.js`);
     }
 
     save(dataPath = AGENT_PATH) {
@@ -28,7 +44,7 @@ class Agent {
     }
 }
 
-function createAgent(name, dataPath) {
+function createAgent(name, dataPath = AGENT_PATH) {
     const agent = new Agent(name);
     agent.setData(`${dataPath}/${name}`);
     return agent;

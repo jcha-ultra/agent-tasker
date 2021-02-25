@@ -24,7 +24,7 @@
 
 // Pass 8:
 // Create Message Board: Requests and Responses
-// Create
+// Create message
 
 const {createAgent, Agent, AgentRunner, MessageBoard} = require('../run.js');
 const AGENT_PATH = './agents/active';
@@ -36,6 +36,11 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+});
+
+test('agent can create message', () => {
+    const agent = createAgent('3_dummy.js', AGENT_PATH);
+    agent.createMessage('dummy1', {blah: 'blah!'});
 });
 
 test('agent can be saved', () => {
