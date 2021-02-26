@@ -17,14 +17,16 @@
 // Human-Agent: Request Reader: Translates request json to human readable format
 // Human-Agent: Request Reader: Print out how many human requests vs machine requests
 // Agent: Spawn new agent
-// Agent: Act: Read messages from the board
+// Agent: Act: Read requests from the board
+
+// Pass 11:
 // Agent: Post request
 
-// Pass 9:
+// Pass 10:
+// > test requestID
+// > test: agent name is now agent id
+// > test: generate new msgId
 
-// Pass 8:
-// Create Message Board: Requests and Responses
-// Create message
 
 const {createAgent, Agent, AgentRunner, MessageBoard} = require('../run.js');
 const AGENT_PATH = './agents/active';
@@ -40,7 +42,8 @@ afterEach(() => {
 
 test('agent can create message', () => {
     const agent = createAgent('3_dummy.js', AGENT_PATH);
-    agent.createMessage('dummy1', {blah: 'blah!'});
+    const board = new MessageBoard();
+    agent.postRequest(board, {blah: 'blah!'});
 });
 
 test('agent can be saved', () => {
@@ -62,5 +65,5 @@ test('agent runner loops through agent files', () => {
 
 test('able to create new agent from file', () => {
     const agent = createAgent(`3_dummy.js`, AGENT_PATH);
-    expect(Object.keys(agent).length).toBe(4);
+    expect(Object.keys(agent).length).toBe(5);
 });

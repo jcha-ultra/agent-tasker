@@ -14,16 +14,18 @@ function saveData(contents, dataPath) {
 }
 
 class Agent {
-    constructor(name) {
+    constructor(name, defaultBoard) {
         this.name = name;
+        this.defaultBoard = defaultBoard;
     }
 
     act() {
         console.log("Agent acted!")
     }
 
-    createMessage(messageName, contents) {
-        saveData(contents, `${MESSAGE_PATH}/${messageName}.js`);
+    postRequest(board = this.defaultBoard, contents) {
+        const requestID = board.postMessage('request', contents);
+        return requestID;
     }
 
     save(dataPath = AGENT_PATH) {
@@ -60,4 +62,27 @@ class AgentRunner {
     }
 }
 
-module.exports = {createAgent, Agent, AgentRunner};
+class MessageBoard {
+
+    constructor(messagePath) {
+        if (messagePath) {
+            this.messagePath = messagePath;
+        } else {
+            this.messagePath = MESSAGE_PATH;
+        }
+    }
+
+    postMessage(msgType, givenContents) {
+        const postedContents = givenContents;
+        const msgId = 'dummy_1';
+        postedContents.msgType = msgType;
+        saveData(postedContents, `${this.messagePath}/${msgId}.js`);
+    }
+
+}
+
+
+
+
+
+module.exports = {createAgent, Agent, AgentRunner, MessageBoard};
