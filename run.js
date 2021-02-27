@@ -1,16 +1,22 @@
 const fs = require('fs');
-const AGENT_PATH = './agents/active'
-const MESSAGE_PATH = './messages/active'
+const AGENT_PATH = './agents/active';
+const MESSAGE_PATH = './messages/active';
 
 
 function saveData(contents, dataPath) {
     const selfExport = 'module.exports = ' + JSON.stringify(contents, null, 4);
     fs.writeFile(dataPath, selfExport, err => {
         if (err) {
-            console.error(err)
-            return
+            console.error(err);
+            return;
         }
     })
+}
+
+function genNewId(path) {
+    const activeNum = fs.readdirSync(`${path}/active`).length;
+    const inactiveNum = fs.readdirSync(`${path}/inactive`).length;
+    return activeNum + inactiveNum;
 }
 
 class Agent {
@@ -20,7 +26,7 @@ class Agent {
     }
 
     act() {
-        console.log("Agent acted!")
+        console.log("Agent acted!");
     }
 
     postRequest(board = this.defaultBoard, contents) {
@@ -46,7 +52,7 @@ class Agent {
     }
 }
 
-function createAgent(fileName, dataPath = AGENT_PATH) {
+function createAgentFromFile(fileName, dataPath = AGENT_PATH) {
     const agent = new Agent();
     agent.setData(`${dataPath}/${fileName}`);
     return agent;
@@ -56,7 +62,7 @@ class AgentRunner {
     runRound() {
         const agentList = fs.readdirSync(AGENT_PATH);
         for (const agentFileName of agentList) {
-            const agent = createAgent(agentFileName, AGENT_PATH);
+            const agent = createAgentFromFile(agentFileName, AGENT_PATH);
             agent.act();
         }
     }
@@ -85,4 +91,4 @@ class MessageBoard {
 
 
 
-module.exports = {createAgent, Agent, AgentRunner, MessageBoard};
+module.exports = {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId};

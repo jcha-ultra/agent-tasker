@@ -19,15 +19,15 @@
 // Agent: Spawn new agent
 // Agent: Act: Read requests from the board
 
+// Pass 12:
+
 // Pass 11:
-// Generate new msgId
-
-// Pass 10:
-// Update agent name to agent id and strip out .js
+// Generate new id
 
 
-const {createAgent, Agent, AgentRunner, MessageBoard} = require('../run.js');
-const AGENT_PATH = './agents/active';
+const {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId} = require('../run.js');
+const AGENT_PATH = './agents';
+const MESSAGE_PATH = './messages';
 
 beforeAll(() => {
 });
@@ -38,21 +38,28 @@ beforeEach(() => {
 afterEach(() => {
 });
 
+test('new id can be generated based on number of files in folder', () => {
+    const newAgentId = genNewId(AGENT_PATH);
+    const newMessageId = genNewId(MESSAGE_PATH);
+    expect(newAgentId).toBe(5);
+    expect(newMessageId).toBe(2);
+});
+
 test('agent can create message', () => {
-    const agent = createAgent('3_dummy.js', AGENT_PATH);
+    const agent = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
     const board = new MessageBoard();
     agent.postRequest(board, {blah: 'blah!'});
 });
 
 test('agent can be saved', () => {
-    const agent = createAgent('3_dummy.js', AGENT_PATH);
-    agent.save(AGENT_PATH);
-    const agent2 = createAgent('3_dummy.js', AGENT_PATH);
+    const agent = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
+    agent.save(`${AGENT_PATH}/active`);
+    const agent2 = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
     console.log(agent2);
 });
 
 test('agents can be created with names', () => {
-    const agent = createAgent('3_dummy.js', AGENT_PATH);
+    const agent = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
     expect(agent.id).toBe('3_dummy');
 });
 
@@ -62,6 +69,6 @@ test('agent runner loops through agent files', () => {
 });
 
 test('able to create new agent from file', () => {
-    const agent = createAgent(`3_dummy.js`, AGENT_PATH);
+    const agent = createAgentFromFile(`3_dummy.js`, `${AGENT_PATH}/active`);
     expect(Object.keys(agent).length).toBe(5);
 });
