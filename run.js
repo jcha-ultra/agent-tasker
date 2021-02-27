@@ -20,18 +20,28 @@ function genNewId(path) {
 }
 
 class Agent {
-    constructor(id, defaultBoard) {
+    constructor(id) {
         this.id = id;
-        this.defaultBoard = defaultBoard;
     }
 
     act() {
-        console.log("Agent acted!");
+        // console.log("Agent acted!");
     }
 
-    postRequest(board = this.defaultBoard, contents) {
+    postRequest(board, contents) {
         const requestID = board.postMessage('request', contents);
         return requestID;
+    }
+
+    readRequests(board) {
+        return board.getRequestsForAgent(this.id);
+    }
+
+    setData(dataPath) {
+        const agentData = require(dataPath);
+        for (const dataItem in agentData) {
+            this[dataItem] = agentData[dataItem];
+        }
     }
 
     save(dataPath = AGENT_PATH) {
@@ -42,13 +52,6 @@ class Agent {
                 return
             }
         })
-    }
-
-    setData(dataPath) {
-        const agentData = require(dataPath);
-        for (const dataItem in agentData) {
-            this[dataItem] = agentData[dataItem];
-        }
     }
 }
 
@@ -76,6 +79,19 @@ class MessageBoard {
         } else {
             this.messagePath = MESSAGE_PATH;
         }
+    }
+
+    get msgList() {
+        return fs.readdirSync(this.messagePath).map(fileName => fileName.replace('.js', ''));
+    }
+
+    getRequestsForAgent(agentID) {
+        return this.msgList.map(msgID => {
+            return require(`${this.messagePath}/${msgID}.js`);
+        })
+        .filter(message => {
+            return message.recipientID === agentID && message.msgType === 'request';
+        });
     }
 
     postMessage(msgType, givenContents) {

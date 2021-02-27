@@ -11,18 +11,16 @@
 // Create new agent that doesn't have a data path
 // > ---MVP---
 // Human-Agent: Post processing request
-// Agent Constructor: Import data.methods
 // Agent Runner: Save agent data.vars
 // Agent Constructor: Import data.vars
 // Human-Agent: Request Reader: Translates request json to human readable format
 // Human-Agent: Request Reader: Print out how many human requests vs machine requests
+// Agent: act()
 // Agent: Spawn new agent
-// Agent: Act: Read requests from the board
 
-// Pass 12:
+// Pass 15:
 
-// Pass 11:
-// Generate new id
+// Pass 14:
 
 
 const {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId} = require('../run.js');
@@ -38,13 +36,20 @@ beforeEach(() => {
 afterEach(() => {
 });
 
-test('new id can be generated based on number of files in folder', () => {
-    const newAgentId = genNewId(AGENT_PATH);
-    const newMessageId = genNewId(MESSAGE_PATH);
-    expect(newAgentId).toBe(5);
-    expect(newMessageId).toBe(2);
+test('agent can read requests for itself', () => {
+    const board = new MessageBoard();
+    const agent = createAgentFromFile('3_dummy.js');
+    const requests = agent.readRequests(board);
+    console.log(requests);
 });
 
+// test('new id can be generated based on number of files in folder', () => {
+//     const newAgentId = genNewId(AGENT_PATH);
+//     const newMessageId = genNewId(MESSAGE_PATH);
+//     expect(newAgentId).toBe(5);
+//     expect(newMessageId).toBe(2);
+// });
+//
 test('agent can create message', () => {
     const agent = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
     const board = new MessageBoard();
@@ -55,7 +60,7 @@ test('agent can be saved', () => {
     const agent = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
     agent.save(`${AGENT_PATH}/active`);
     const agent2 = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
-    console.log(agent2);
+    // console.log(agent2);
 });
 
 test('agents can be created with names', () => {
@@ -68,7 +73,7 @@ test('agent runner loops through agent files', () => {
     runner.runRound();
 });
 
-test('able to create new agent from file', () => {
-    const agent = createAgentFromFile(`3_dummy.js`, `${AGENT_PATH}/active`);
-    expect(Object.keys(agent).length).toBe(5);
-});
+// test('able to create new agent from file', () => {
+//     const agent = createAgentFromFile(`3_dummy.js`, `${AGENT_PATH}/active`);
+//     expect(Object.keys(agent).length).toBe(5);
+// });

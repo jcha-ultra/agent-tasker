@@ -2,6 +2,6 @@
 // Human agent
 module.exports = {
     act: () => {
-        console.log("human action override!")
+        // console.log("human action override!")
     }
 }
