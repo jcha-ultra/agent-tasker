@@ -20,12 +20,10 @@
 // Agent: Act: Read requests from the board
 
 // Pass 11:
-// Agent: Post request
+// Generate new msgId
 
 // Pass 10:
-// > test requestID
-// > test: agent name is now agent id
-// > test: generate new msgId
+// Update agent name to agent id and strip out .js
 
 
 const {createAgent, Agent, AgentRunner, MessageBoard} = require('../run.js');
@@ -55,7 +53,7 @@ test('agent can be saved', () => {
 
 test('agents can be created with names', () => {
     const agent = createAgent('3_dummy.js', AGENT_PATH);
-    expect(agent.name).toBe('3_dummy.js');
+    expect(agent.id).toBe('3_dummy.js');
 });
 
 test('agent runner loops through agent files', () => {

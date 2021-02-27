@@ -14,8 +14,8 @@ function saveData(contents, dataPath) {
 }
 
 class Agent {
-    constructor(name, defaultBoard) {
-        this.name = name;
+    constructor(id, defaultBoard) {
+        this.id = id;
         this.defaultBoard = defaultBoard;
     }
 
@@ -30,7 +30,7 @@ class Agent {
 
     save(dataPath = AGENT_PATH) {
         const selfExport = 'module.exports = ' + JSON.stringify(this, null, 4);
-        fs.writeFile(`${dataPath}/${this.name}`, selfExport, err => {
+        fs.writeFile(`${dataPath}/${this.id}`, selfExport, err => {
             if (err) {
                 console.error(err)
                 return
@@ -46,17 +46,17 @@ class Agent {
     }
 }
 
-function createAgent(name, dataPath = AGENT_PATH) {
-    const agent = new Agent(name);
-    agent.setData(`${dataPath}/${name}`);
+function createAgent(id, dataPath = AGENT_PATH) {
+    const agent = new Agent(id);
+    agent.setData(`${dataPath}/${id}`);
     return agent;
 }
 
 class AgentRunner {
     runRound() {
         const agentList = fs.readdirSync(AGENT_PATH);
-        for (const agentName of agentList) {
-            const agent = createAgent(agentName, AGENT_PATH);
+        for (const agentFileName of agentList) {
+            const agent = createAgent(agentFileName, AGENT_PATH);
             agent.act();
         }
     }
