@@ -30,7 +30,7 @@ class Agent {
 
     save(dataPath = AGENT_PATH) {
         const selfExport = 'module.exports = ' + JSON.stringify(this, null, 4);
-        fs.writeFile(`${dataPath}/${this.id}`, selfExport, err => {
+        fs.writeFile(`${dataPath}/${this.id}.js`, selfExport, err => {
             if (err) {
                 console.error(err)
                 return
@@ -46,9 +46,9 @@ class Agent {
     }
 }
 
-function createAgent(id, dataPath = AGENT_PATH) {
-    const agent = new Agent(id);
-    agent.setData(`${dataPath}/${id}`);
+function createAgent(fileName, dataPath = AGENT_PATH) {
+    const agent = new Agent();
+    agent.setData(`${dataPath}/${fileName}`);
     return agent;
 }
 

@@ -53,7 +53,7 @@ test('agent can be saved', () => {
 
 test('agents can be created with names', () => {
     const agent = createAgent('3_dummy.js', AGENT_PATH);
-    expect(agent.id).toBe('3_dummy.js');
+    expect(agent.id).toBe('3_dummy');
 });
 
 test('agent runner loops through agent files', () => {
