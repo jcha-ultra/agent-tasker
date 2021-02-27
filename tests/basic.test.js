@@ -16,16 +16,17 @@
 // Human-Agent: Request Reader: Translates request json to human readable format
 // Human-Agent: Request Reader: Print out how many human requests vs machine requests
 // Agent: act()
-// Agent: Spawn new agent
+
+// Pass 16:
 
 // Pass 15:
-
-// Pass 14:
+// Agent: Request sub-agents to perform task
 
 
 const {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId} = require('../run.js');
 const AGENT_PATH = './agents';
 const MESSAGE_PATH = './messages';
+const board = new MessageBoard();
 
 beforeAll(() => {
 });
@@ -36,11 +37,18 @@ beforeEach(() => {
 afterEach(() => {
 });
 
+
+
+// test('agent spawns another agent successfully', () => {
+//     const agent = createAgentFromFile('3_dummy.js');
+//     newAgent = agent.spawnSubAgent();
+//     console.log(newAgent);
+// });
+//
 test('agent can read requests for itself', () => {
-    const board = new MessageBoard();
     const agent = createAgentFromFile('3_dummy.js');
     const requests = agent.readRequests(board);
-    console.log(requests);
+    // console.log(requests);
 });
 
 // test('new id can be generated based on number of files in folder', () => {

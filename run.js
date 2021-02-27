@@ -1,5 +1,5 @@
 const fs = require('fs');
-const AGENT_PATH = './agents/active';
+const AGENT_PATH = './agents';
 const MESSAGE_PATH = './messages/active';
 
 
@@ -44,7 +44,7 @@ class Agent {
         }
     }
 
-    save(dataPath = AGENT_PATH) {
+    save(dataPath = `${AGENT_PATH}/active`) {
         const selfExport = 'module.exports = ' + JSON.stringify(this, null, 4);
         fs.writeFile(`${dataPath}/${this.id}.js`, selfExport, err => {
             if (err) {
@@ -53,9 +53,15 @@ class Agent {
             }
         })
     }
+
+    spawnSubAgent(dataPath = `${AGENT_PATH}/active`) {
+        const subAgent = new Agent(genNewId(AGENT_PATH));
+        subAgent.save(dataPath);
+        return `${dataPath}/${subAgent.id}.js`;
+    }
 }
 
-function createAgentFromFile(fileName, dataPath = AGENT_PATH) {
+function createAgentFromFile(fileName, dataPath = `${AGENT_PATH}/active`) {
     const agent = new Agent();
     agent.setData(`${dataPath}/${fileName}`);
     return agent;
@@ -63,9 +69,9 @@ function createAgentFromFile(fileName, dataPath = AGENT_PATH) {
 
 class AgentRunner {
     runRound() {
-        const agentList = fs.readdirSync(AGENT_PATH);
+        const agentList = fs.readdirSync(`${AGENT_PATH}/active`);
         for (const agentFileName of agentList) {
-            const agent = createAgentFromFile(agentFileName, AGENT_PATH);
+            const agent = createAgentFromFile(agentFileName, `${AGENT_PATH}/active`);
             agent.act();
         }
     }
