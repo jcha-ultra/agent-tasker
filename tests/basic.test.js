@@ -1,22 +1,36 @@
-// Guiding Principles:
-// - Little top-down control—agents are semi-independent entities, each making its own decisions
-// - Humans are just another type of agents
-// - Agents should be as similar to each other as possible in terms of possible actions
+/*************
+
+Guiding Principles:
+- Little top-down control—agents are semi-independent entities, each making its own decisions
+- Humans are just another type of agents
+- Agents should be as similar to each other as possible in terms of possible actions
+
+Agents:
+- Agents can only send tasks to either its own subagents, or to agents that are explicitly able to receive requests from any agent
+- Agents _can_ post priority updates to non-subagents
+
+Messages:
+- Priority Updates: Increases or decreases priority on tasks
+
+**************/
 
 // BACKLOG:
 // Implement TypeScript
 // Orphaned Agents: Neither requests or responses outstanding for it
 // Timer Agent
-// Implement Priority System (priority = importance * urgency * delay)
 // Create new agent that doesn't have a data path
+// Implement Priority System (priority = importance * urgency * delay)
+// Agents: Order tasks by ease
 // > ---MVP---
 // Human-Agent: Post processing request
-// Agent Runner: Save agent data.vars
-// Agent Constructor: Import data.vars
-// Human-Agent: Request Reader: Translates request json to human readable format
-// Human-Agent: Request Reader: Print out how many human requests vs machine requests
+// Request Reader: Display task chain (trace back to parent tasks)
+// Request Reader: Translates request json to human readable format
+// Request Reader: Print out how many human requests vs machine requests
 // Agent: act()
 // Agent: Respond to request to perform task
+// Agent: assignTasks(): Assign any unassigned tasks to either existing agent, or new spawned subagent
+// Agent: Refactor tasklist to be request list instead: key is requestId, value is {status, subrequests}
+// Agent: Refactor getRequestsForAgent() to use getMessagesForAgent() instead
 
 // Pass 17:
 
@@ -27,16 +41,9 @@
 // ....
 
 
-// ....
 
-// [story: assignTasks: assigns any unassigned tasks to either existing agent, or new spawned subagent]
-// [story: if there are no free subagents, then spawn a new subagent]
-// [story: if there is a free subagent, then ask that new agent]
-// [move: agent notes: subagents' tasks can only be controlled by superagent]
-// [move: agent notes: subagents' priorities can be changed by other agents besides superagent]
-// [move: request notes: priority update requests: increases/decreases priority on tasks]
-// [move: request notes: evaluation request: checks if task is complete]
-// [move: story: agents order their tasks by priority and ease]
+
+// ....
 
 const {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId} = require('../run.js');
 const AGENT_PATH = './agents';
