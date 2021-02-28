@@ -1,10 +1,11 @@
 const fs = require('fs');
 const AGENT_PATH = './agents';
-const MESSAGE_PATH = './messages/active';
+const MESSAGE_PATH = './messages';
 
 
 function saveData(contents, dataPath) {
     const selfExport = 'module.exports = ' + JSON.stringify(contents, null, 4);
+    console.log(selfExport)
     fs.writeFile(dataPath, selfExport, err => {
         if (err) {
             console.error(err);
@@ -35,6 +36,15 @@ class Agent {
 
     readRequests(board) {
         return board.getRequestsForAgent(this.id);
+    }
+
+    requestTask(board, recipientID, task) {
+        const contents = {
+            recipientID: recipientID,
+            subtype: 'task',
+            taskName: task
+        }
+        this.postRequest(board, contents);
     }
 
     setData(dataPath) {
@@ -83,7 +93,7 @@ class MessageBoard {
         if (messagePath) {
             this.messagePath = messagePath;
         } else {
-            this.messagePath = MESSAGE_PATH;
+            this.messagePath = `${MESSAGE_PATH}/active`;
         }
     }
 
@@ -102,7 +112,7 @@ class MessageBoard {
 
     postMessage(msgType, givenContents) {
         const postedContents = givenContents;
-        const msgId = 'dummy_1';
+        const msgId = genNewId(MESSAGE_PATH);
         postedContents.msgType = msgType;
         saveData(postedContents, `${this.messagePath}/${msgId}.js`);
     }

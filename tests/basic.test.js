@@ -17,10 +17,12 @@
 // Human-Agent: Request Reader: Print out how many human requests vs machine requests
 // Agent: act()
 
-// Pass 16:
+// Pass 17:
+// Agent: Respond to request to perform task
 
-// Pass 15:
-// Agent: Request sub-agents to perform task
+
+// Pass 16:
+// Agent: Tasklist
 
 
 const {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId} = require('../run.js');
@@ -39,16 +41,25 @@ afterEach(() => {
 
 
 
+
+
+
+// test('agent can ask another to perform task', () => {
+//     const agent = createAgentFromFile('3_dummy.js');
+//     const newAgent = createAgentFromFile('4_dummy.js');
+//     agent.requestTask(board, newAgent.id, 'do something')
+// });
+
 // test('agent spawns another agent successfully', () => {
 //     const agent = createAgentFromFile('3_dummy.js');
 //     newAgent = agent.spawnSubAgent();
 //     console.log(newAgent);
 // });
-//
+
 test('agent can read requests for itself', () => {
     const agent = createAgentFromFile('3_dummy.js');
     const requests = agent.readRequests(board);
-    // console.log(requests);
+    console.log(requests);
 });
 
 // test('new id can be generated based on number of files in folder', () => {
@@ -57,7 +68,7 @@ test('agent can read requests for itself', () => {
 //     expect(newAgentId).toBe(5);
 //     expect(newMessageId).toBe(2);
 // });
-//
+
 test('agent can create message', () => {
     const agent = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
     const board = new MessageBoard();
