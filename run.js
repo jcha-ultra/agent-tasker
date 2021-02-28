@@ -23,6 +23,7 @@ function genNewId(path) {
 class Agent {
     constructor(id) {
         this.id = id;
+        this.tasks = {};
     }
 
     act() {
@@ -68,6 +69,18 @@ class Agent {
         const subAgent = new Agent(genNewId(AGENT_PATH));
         subAgent.save(dataPath);
         return `${dataPath}/${subAgent.id}.js`;
+    }
+
+    takeNewTasks(board) {
+        const selfRequestsList = this.readRequests(board);
+        const taskList = Object.keys(this.tasks);
+        function addTaskFromRequest(tasks, nextRequest) {
+            tasks[nextRequest.taskName] = [];
+            return tasks;
+        }
+        const newTasks = selfRequestsList.filter(request => !taskList.includes(request.taskName))
+                                         .reduce(addTaskFromRequest, {});
+        this.tasks = { ...this.tasks, ...newTasks };
     }
 }
 
