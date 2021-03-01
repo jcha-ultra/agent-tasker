@@ -45,7 +45,7 @@ class Agent {
             subtype: 'task',
             taskName: task
         }
-        this.postRequest(board, contents);
+        return this.postRequest(board, contents);
     }
 
     setData(dataPath) {
@@ -75,7 +75,11 @@ class Agent {
         const selfRequestsList = this.readRequests(board);
         const taskList = Object.keys(this.tasks);
         function addTaskFromRequest(tasks, nextRequest) {
-            tasks[nextRequest.taskName] = [];
+            tasks[nextRequest.taskName] = {
+                requestId: nextRequest.msgId,
+                status: 'taken',
+                subrequestsIds: []
+            };
             return tasks;
         }
         const newTasks = selfRequestsList.filter(request => !taskList.includes(request.taskName))
@@ -115,8 +119,8 @@ class MessageBoard {
     }
 
     getMessagesForAgent(agentID) {
-        return this.msgList.map(msgID => {
-            return require(`${this.messagePath}/${msgID}.js`);
+        return this.msgList.map(msgId => {
+            return require(`${this.messagePath}/${msgId}.js`);
         })
         .filter(message => message.recipientID === agentID);
     }
@@ -130,6 +134,7 @@ class MessageBoard {
         const msgId = genNewId(MESSAGE_PATH);
         postedContents.msgType = msgType;
         saveData(postedContents, `${this.messagePath}/${msgId}.js`);
+        return msgId;
     }
 
 }
