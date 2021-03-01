@@ -29,12 +29,11 @@ Messages:
 // Agent: act()
 // Agent: Respond to request to perform task
 // Agent: assignTasks(): Assign any unassigned tasks to either existing agent, or new spawned subagent
-// Agent: Refactor tasklist to be request list instead: key is requestId, value is {status, subrequests}
-// Agent: Refactor getRequestsForAgent() to use getMessagesForAgent() instead
+
+// Pass 18:
 
 // Pass 17:
-
-// Pass 16:
+// Agent: Refactor tasklist to be request list instead: key is requestId, value is {status, subrequests}
 
 
 

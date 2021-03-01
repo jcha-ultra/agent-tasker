@@ -114,13 +114,15 @@ class MessageBoard {
         return fs.readdirSync(this.messagePath).map(fileName => fileName.replace('.js', ''));
     }
 
-    getRequestsForAgent(agentID) {
+    getMessagesForAgent(agentID) {
         return this.msgList.map(msgID => {
             return require(`${this.messagePath}/${msgID}.js`);
         })
-        .filter(message => {
-            return message.recipientID === agentID && message.msgType === 'request';
-        });
+        .filter(message => message.recipientID === agentID);
+    }
+
+    getRequestsForAgent(agentID) {
+        return this.getMessagesForAgent(agentID).filter(message => message.msgType === 'request');
     }
 
     postMessage(msgType, givenContents) {
