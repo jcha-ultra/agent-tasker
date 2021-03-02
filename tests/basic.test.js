@@ -37,22 +37,19 @@ Messages:
 // Implement Priority System (priority = importance * urgency * delay)
 // Agents: Order tasks by ease
 // > ---MVP---
+// Make sure request statuses are updated correctly
 // Human-Agent: Post processing request
 // Request Reader: Display task chain (trace back to parent tasks)
 // Request Reader: Translates request json to human readable format
 // Request Reader: Print out how many human requests vs machine requests
 // Agent: act(): Check requests for self
 // Agent: Respond to request to perform task
-// Agent: assignTasks(): Assign any unassigned tasks to either existing agent, or new spawned subagent
+
+// Pass 19:
 
 // Pass 18:
+// Agent: assignTasks(): Assign any unassigned tasks to either existing agent, or new spawned subagent
 
-// Pass 17:
-// Agent: Refactor tasklist: key is requestId, value is {status, subrequests}
-
-
-
-// ....
 
 
 
@@ -61,24 +58,28 @@ Messages:
 
 
 
+
+// ....
+
+
+
+test('messages have ids', () => {
+    const agent = createAgentFromFile('4_dummy.js');
+    agent.takeNewTasks(board);
+    // console.log(agent);
+    expect(agent.tasks['do something 2'].requestId).toBe(4);
+});
 
 test('agent can take task', () => {
     const agent = createAgentFromFile('4_dummy.js');
     agent.tasks['do something'] = [];
     expect(agent.tasks['do something'].toString()).toBe('');
-
-
-    // > nextRequest.msgId
-    // > [story: pass for status updates for tasks]
-
-
     expect(agent.tasks['do something 2']).toBeUndefined();
     expect(Object.keys(agent.tasks).length).toBe(1);
     agent.takeNewTasks(board);
     expect(agent.tasks['do something'].toString()).toBe('');
-    expect(agent.tasks['do something 2'].toString()).toBe('');
+    expect(agent.tasks['do something 2'].status).toBe('taken');
     expect(Object.keys(agent.tasks).length).toBe(2);
-    console.log(agent);
 });
 
 // test('agent can ask another to perform task', () => {

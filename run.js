@@ -133,6 +133,7 @@ class MessageBoard {
         const postedContents = givenContents;
         const msgId = genNewId(MESSAGE_PATH);
         postedContents.msgType = msgType;
+        postedContents.msgId = msgId;
         saveData(postedContents, `${this.messagePath}/${msgId}.js`);
         return msgId;
     }
