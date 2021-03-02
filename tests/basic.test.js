@@ -44,22 +44,31 @@ Messages:
 // Request Reader: Print out how many human requests vs machine requests
 // Agent: act(): Check requests for self
 // Agent: Respond to request to perform task
+// Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
+// Agent: Split task after getting response for task splitting
+// Agent: Send response to split task
+// Agent: Sending responses
 
 // Pass 19:
 
 // Pass 18:
-// Agent: assignTasks(): Assign any unassigned tasks to either existing agent, or new spawned subagent
 
+
+
+
+// ....
 
 
 
 
 // ....
 
-
-
-
-// ....
+test('agents can assign unassigned tasks', () => {
+    const agent = createAgentFromFile('4_dummy.js');
+    agent.takeNewTasks(board);
+    // console.log(agent);
+    expect(agent.tasks['do something 2'].requestId).toBe(4);
+});
 
 
 
@@ -78,7 +87,7 @@ test('agent can take task', () => {
     expect(Object.keys(agent.tasks).length).toBe(1);
     agent.takeNewTasks(board);
     expect(agent.tasks['do something'].toString()).toBe('');
-    expect(agent.tasks['do something 2'].status).toBe('taken');
+    expect(agent.tasks['do something 2'].status).toBe('new');
     expect(Object.keys(agent.tasks).length).toBe(2);
 });
 

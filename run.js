@@ -77,7 +77,7 @@ class Agent {
         function addTaskFromRequest(tasks, nextRequest) {
             tasks[nextRequest.taskName] = {
                 requestId: nextRequest.msgId,
-                status: 'taken',
+                status: 'new',
                 subrequestsIds: []
             };
             return tasks;
