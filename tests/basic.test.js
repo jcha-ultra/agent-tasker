@@ -47,21 +47,31 @@ Messages:
 // Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
 // Agent: Split task after getting response for task splitting
 // Agent: Send response to split task
-// Agent: Sending responses
+// > [poster id]
+
+// Pass 20:
 
 // Pass 19:
 
-// Pass 18:
+
+
+
+// ....
 
 
 
 
 // ....
 
-
-
-
-// ....
+// test('agents can send responses', () => {
+//     const agent = createAgentFromFile('4_dummy.js');
+//     const board = new MessageBoard();
+//     const requestId = 4;
+//     const responseData = {
+//         response: 'task_complete'
+//     }
+//     agent.respond(board, requestId, responseData);
+// });
 
 test('agents can assign unassigned tasks', () => {
     const agent = createAgentFromFile('4_dummy.js');
@@ -69,8 +79,6 @@ test('agents can assign unassigned tasks', () => {
     // console.log(agent);
     expect(agent.tasks['do something 2'].requestId).toBe(4);
 });
-
-
 
 test('messages have ids', () => {
     const agent = createAgentFromFile('4_dummy.js');

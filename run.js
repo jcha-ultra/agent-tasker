@@ -48,6 +48,11 @@ class Agent {
         return this.postRequest(board, contents);
     }
 
+    respond(board, requestId, responseData) {
+        const responseId = board.postMessage('response', responseData);
+        return responseId;
+    }
+
     setData(dataPath) {
         const agentData = require(dataPath);
         for (const dataItem in agentData) {
