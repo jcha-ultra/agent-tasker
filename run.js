@@ -123,6 +123,11 @@ class MessageBoard {
         return fs.readdirSync(this.messagePath).map(fileName => fileName.replace('.js', ''));
     }
 
+    getMessage(id) {
+        return this.msgList.filter(msgId => msgId === id.toString())
+                           .map(msgId => require(`${this.messagePath}/${msgId}.js`))[0];
+    }
+
     getMessagesForAgent(agentID) {
         return this.msgList.map(msgId => {
             return require(`${this.messagePath}/${msgId}.js`);

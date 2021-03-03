@@ -47,11 +47,16 @@ Messages:
 // Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
 // Agent: Split task after getting response for task splitting
 // Agent: Send response to split task
-// > [poster id]
 
 // Pass 20:
+// Board: Include Poster Id
 
 // Pass 19:
+// Board: Can get specific message
+
+
+
+// ....
 
 
 
@@ -59,9 +64,15 @@ Messages:
 // ....
 
 
+// test('posterId exists', () => {
+// });
 
-
-// ....
+test('board can retrieve specific message', () => {
+    const board = new MessageBoard();
+    id = 4;
+    const taskName = board.getMessage(id).taskName;
+    expect(taskName).toBe('do something 2');
+});
 
 // test('agents can send responses', () => {
 //     const agent = createAgentFromFile('4_dummy.js');
