@@ -48,12 +48,11 @@ Messages:
 // Agent: Split task after getting response for task splitting
 // Agent: Send response to split task
 
+// Pass 21:
+
 // Pass 20:
 // Board: Include Poster Id
 
-// Pass 19:
-// Board: Can get specific message
-
 
 
 // ....
@@ -64,12 +63,15 @@ Messages:
 // ....
 
 
-// test('posterId exists', () => {
-// });
+test('posterId exists', () => {
+    const board = new MessageBoard();
+    const agent = createAgentFromFile('4_dummy.js');
+    const msgId = agent.requestTask(board, '3_dummy', "do something 3");
+});
 
 test('board can retrieve specific message', () => {
     const board = new MessageBoard();
-    id = 4;
+    const id = 4;
     const taskName = board.getMessage(id).taskName;
     expect(taskName).toBe('do something 2');
 });

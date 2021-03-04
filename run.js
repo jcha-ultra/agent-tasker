@@ -5,7 +5,6 @@ const MESSAGE_PATH = './messages';
 
 function saveData(contents, dataPath) {
     const selfExport = 'module.exports = ' + JSON.stringify(contents, null, 4);
-    console.log(selfExport)
     fs.writeFile(dataPath, selfExport, err => {
         if (err) {
             console.error(err);
@@ -31,7 +30,9 @@ class Agent {
     }
 
     postRequest(board, contents) {
-        const requestID = board.postMessage('request', contents);
+        const postedContents = contents;
+        postedContents.msgType = 'request';
+        const requestID = this.sendMessage(board, postedContents);
         return requestID;
     }
 
@@ -49,8 +50,17 @@ class Agent {
     }
 
     respond(board, requestId, responseData) {
-        const responseId = board.postMessage('response', responseData);
+        const postedContents = responseData;
+        postedContents.msgType = 'response';
+        const responseId = this.sendMessage(board, postedContents);
         return responseId;
+    }
+
+    sendMessage(board, contents)  {
+        const postedContents = contents;
+        postedContents.posterId = this.id;
+        const requestID = board.postMessage(postedContents);
+        return requestID;
     }
 
     setData(dataPath) {
@@ -124,6 +134,9 @@ class MessageBoard {
     }
 
     getMessage(id) {
+        console.warn(`${this.messagePath}/${id}.js`)
+
+        console.warn(require('./messages/active/6.js'))
         return this.msgList.filter(msgId => msgId === id.toString())
                            .map(msgId => require(`${this.messagePath}/${msgId}.js`))[0];
     }
@@ -139,10 +152,9 @@ class MessageBoard {
         return this.getMessagesForAgent(agentID).filter(message => message.msgType === 'request');
     }
 
-    postMessage(msgType, givenContents) {
+    postMessage(givenContents) {
         const postedContents = givenContents;
         const msgId = genNewId(MESSAGE_PATH);
-        postedContents.msgType = msgType;
         postedContents.msgId = msgId;
         saveData(postedContents, `${this.messagePath}/${msgId}.js`);
         return msgId;
