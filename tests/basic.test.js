@@ -45,15 +45,12 @@ Messages:
 // Agent: act(): Check requests for self
 // Agent: Respond to request to perform task
 // Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
+
+// Pass 23:
 // Agent: Split task after getting response for task splitting
-// Agent: Send response to split task
 
-// Pass 21:
-
-// Pass 20:
-// Board: Include Poster Id
-
-
+// Pass 22:
+// Test: Integration: agent takes request, replies with response, and then we check that the response was correct
 
 // ....
 
@@ -63,12 +60,24 @@ Messages:
 // ....
 
 
-test('posterId exists', () => {
-    const board = new MessageBoard();
-    const agent = createAgentFromFile('4_dummy.js');
-    const msgId = agent.requestTask(board, '3_dummy', "do something 3");
-});
 
+
+// test('responses must include original message id', () => {
+//     const agent = createAgentFromFile('6.js');
+//     const board = new MessageBoard();
+//     const requestId = 6;
+//     const responseData = {
+//         response: 'split_task'
+//     }
+//     agent.respond(board, requestId, responseData);
+// });
+//
+// test('senderId exists', () => {
+//     const board = new MessageBoard();
+//     const agent = createAgentFromFile('4_dummy.js');
+//     const msgId = agent.requestTask(board, '3_dummy', "do something 3");
+// });
+//
 test('board can retrieve specific message', () => {
     const board = new MessageBoard();
     const id = 4;

@@ -52,13 +52,14 @@ class Agent {
     respond(board, requestId, responseData) {
         const postedContents = responseData;
         postedContents.msgType = 'response';
+        postedContents.requestId = requestId;
         const responseId = this.sendMessage(board, postedContents);
         return responseId;
     }
 
     sendMessage(board, contents)  {
         const postedContents = contents;
-        postedContents.posterId = this.id;
+        postedContents.senderId = this.id;
         const requestID = board.postMessage(postedContents);
         return requestID;
     }
@@ -134,9 +135,6 @@ class MessageBoard {
     }
 
     getMessage(id) {
-        console.warn(`${this.messagePath}/${id}.js`)
-
-        console.warn(require('./messages/active/6.js'))
         return this.msgList.filter(msgId => msgId === id.toString())
                            .map(msgId => require(`${this.messagePath}/${msgId}.js`))[0];
     }
