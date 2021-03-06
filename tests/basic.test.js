@@ -61,6 +61,17 @@ Messages:
 
 
 
+test('integration: agent creates request, agent 2 takes request, replies with response', () => {
+    const board = new MessageBoard();
+    const agent = createAgentFromFile('4_dummy.js');
+    const agent2 = createAgentFromFile('3_dummy.js');
+    // agent.requestTask(board, '3_dummy', 'do something 4');
+    agent2.takeNewTasks(board);
+    responseData = {
+        response: 'split_task'
+    }
+    agent2.respond(board, 'do something 4', responseData);
+});
 
 // test('responses must include original message id', () => {
 //     const agent = createAgentFromFile('6.js');
