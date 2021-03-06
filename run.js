@@ -36,6 +36,10 @@ class Agent {
         return requestID;
     }
 
+    processMessages(board) {
+        
+    }
+
     readRequests(board) {
         return board.getRequestsForAgent(this.id);
     }

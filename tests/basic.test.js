@@ -1,5 +1,6 @@
 const {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId} = require('../run.js');
 const AGENT_PATH = './agents';
+const AGENT_PATH_ACTIVE = './agents/active';
 const MESSAGE_PATH = './messages';
 const board = new MessageBoard();
 
@@ -47,12 +48,13 @@ Messages:
 // Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
 
 // Pass 23:
+// > [refactor getting requests to getting messages]
+// > [message processing architecture: processing responses]
 // Agent: Split task after getting response for task splitting
+// [msg id and agent id should be string instead]
 
 // Pass 22:
-// Test: Integration: agent takes request, replies with response, and then we check that the response was correct
-
-// ....
+// Agent: Add message processing architecture
 
 
 
@@ -61,17 +63,32 @@ Messages:
 
 
 
-test('integration: agent creates request, agent 2 takes request, replies with response', () => {
+
+// ....
+
+// do: Agent: Update takeNewTasks to return something instead of setting this.tasks
+
+test('message processing architecture: processing requests only', () => {
     const board = new MessageBoard();
-    const agent = createAgentFromFile('4_dummy.js');
-    const agent2 = createAgentFromFile('3_dummy.js');
-    // agent.requestTask(board, '3_dummy', 'do something 4');
-    agent2.takeNewTasks(board);
-    responseData = {
-        response: 'split_task'
-    }
-    agent2.respond(board, 'do something 4', responseData);
+    const agent = createAgentFromFile('6.js');
+    agent.processMessages(board);
+    agent.save(AGENT_PATH_ACTIVE);
+    expect(agent.tasks['do something 3'].msgId).toBe(6);
+    console.warn(`Manual Check Needed: ${AGENT_PATH_ACTIVE}/6.js should have correct tasks`)
 });
+
+
+// test('integration: agent creates request, agent 2 takes request, replies with response', () => {
+//     const board = new MessageBoard();
+//     const agent = createAgentFromFile('4_dummy.js');
+//     const agent2 = createAgentFromFile('3_dummy.js');
+//     // agent.requestTask(board, '3_dummy', 'do something 4');
+//     agent2.takeNewTasks(board);
+//     responseData = {
+//         response: 'split_task'
+//     }
+//     agent2.respond(board, 'do something 4', responseData);
+// });
 
 // test('responses must include original message id', () => {
 //     const agent = createAgentFromFile('6.js');
