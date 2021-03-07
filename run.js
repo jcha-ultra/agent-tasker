@@ -36,8 +36,44 @@ class Agent {
         return requestID;
     }
 
+    processRequest(request) {
+        const taskList = Object.keys(this.tasks);
+        if (!taskList.includes(request.taskName)) {
+            this.tasks[request.taskName] = {
+                requestId: request.msgId,
+                status: 'new',
+                subrequestsIds: []
+            };
+        }
+    }
+
+
+    // ....
+
+    // processResponse(response) {
+    //     // ....
+    //
+    //     // ....
+    //
+    //     [split]
+    //     // ....
+    // }
+    // do: this.processResponse(message);
+
+    // ....
+
+
     processMessages(board) {
-        
+        const msgsForAgent = board.getMessagesForAgent(this.id);
+        msgsForAgent.forEach(message => {
+            if (message.msgType === 'request') {
+                this.processRequest(message);
+            } else if (message.msgType === 'response') {
+                this.processResponse(message);
+            } else {
+                throw `Error: unknown message type: ${message.msgType}`;
+            }
+        });
     }
 
     readRequests(board) {
@@ -86,7 +122,7 @@ class Agent {
     }
 
     spawnSubAgent(dataPath = `${AGENT_PATH}/active`) {
-        const subAgent = new Agent(genNewId(AGENT_PATH));
+        const subAgent = new Agent('agent_' + genNewId(AGENT_PATH));
         subAgent.save(dataPath);
         return `${dataPath}/${subAgent.id}.js`;
     }
@@ -156,12 +192,11 @@ class MessageBoard {
 
     postMessage(givenContents) {
         const postedContents = givenContents;
-        const msgId = genNewId(MESSAGE_PATH);
+        const msgId = 'message_' + genNewId(MESSAGE_PATH);
         postedContents.msgId = msgId;
         saveData(postedContents, `${this.messagePath}/${msgId}.js`);
         return msgId;
     }
-
 }
 
 

@@ -47,36 +47,29 @@ Messages:
 // Agent: Respond to request to perform task
 // Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
 
+// Pass 24:
+
 // Pass 23:
-// > [refactor getting requests to getting messages]
-// > [message processing architecture: processing responses]
 // Agent: Split task after getting response for task splitting
-// [msg id and agent id should be string instead]
-
-// Pass 22:
-// Agent: Add message processing architecture
+// Agent: Message processing architecture: processing responses also
 
 
 
 
-// ....
 
 
 
 
-// ....
 
-// do: Agent: Update takeNewTasks to return something instead of setting this.tasks
 
 test('message processing architecture: processing requests only', () => {
     const board = new MessageBoard();
     const agent = createAgentFromFile('6.js');
     agent.processMessages(board);
     agent.save(AGENT_PATH_ACTIVE);
-    expect(agent.tasks['do something 3'].msgId).toBe(6);
+    expect(agent.tasks['do something 3'].requestId).toBe('message_6');
     console.warn(`Manual Check Needed: ${AGENT_PATH_ACTIVE}/6.js should have correct tasks`)
 });
-
 
 // test('integration: agent creates request, agent 2 takes request, replies with response', () => {
 //     const board = new MessageBoard();

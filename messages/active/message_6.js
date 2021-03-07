@@ -1,5 +1,5 @@
 module.exports = {
-    "msgId": 6,
+    "msgId": 'message_6',
     "recipientID": "6",
     "subtype": "task",
     "taskName": "do something 3",
