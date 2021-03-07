@@ -47,21 +47,18 @@ class Agent {
         }
     }
 
-
-    // ....
-
-    // processResponse(response) {
-    //     // ....
-    //
-    //     // ....
-    //
-    //     [split]
-    //     // ....
-    // }
-    // do: this.processResponse(message);
-
-    // ....
-
+    processResponse(response, board) {
+        if (response.response === 'split_task') {
+            const freeSubAgents = createFreeSubagents();
+            const taskname = getTaskByRequestId(response.requestId);
+            response.data.subtasks.forEach((subtask, i) => {
+                const subagent = freeSubAgents[i];
+                const recipientId = subagent.id;
+                const requestId = this.requestTask(board, recipientId, subtask);
+                this.tasks[taskname].subrequestsIds.push(requestId);
+            });
+        }
+    }
 
     processMessages(board) {
         const msgsForAgent = board.getMessagesForAgent(this.id);
