@@ -29,6 +29,33 @@ class Agent {
         // console.log("Agent acted!");
     }
 
+    allocateSubagents(numAgentsNeeded) {
+        const freeSubAgents = this.subagents.filter(subagent => subagent.isFree());
+        const numNewSubagentsNeeded = Math.max(0, numAgentsNeeded - freeSubAgents.length);
+        let newSubagents = [];
+        if (numNewSubagentsNeeded > 0) {
+            const newSubagents = spawnSubAgents(numNewSubagentsNeeded);
+        }
+        return [...freeSubAgents, ...newSubagents];
+        // ....
+        // ....
+        // do: update: createFreeSubagents() -> allocateSubagents(numAgentsNeeded)
+        // ....
+        // do: create this.subagents
+        // do: create this.superagent
+        // do: create spawnSubAgents(n)
+        // do: set superagent after spawning
+        // do: spawnSubAgents need to add to subagent list
+        // do: create subagent.isFree();
+        // do: update task status after sending out subrequests ('waiting for subtasks')
+
+
+
+
+    getTaskByRequestId(id) {
+        return Object.keys(this.tasks).find(taskname => this.tasks[taskname].requestId === id);
+    }
+
     postRequest(board, contents) {
         const postedContents = contents;
         postedContents.msgType = 'request';
@@ -66,7 +93,7 @@ class Agent {
             if (message.msgType === 'request') {
                 this.processRequest(message);
             } else if (message.msgType === 'response') {
-                this.processResponse(message);
+                this.processResponse(message, board);
             } else {
                 throw `Error: unknown message type: ${message.msgType}`;
             }
