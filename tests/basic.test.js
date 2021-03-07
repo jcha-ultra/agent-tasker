@@ -59,8 +59,13 @@ Messages:
 
 
 
-
-
+test('message processing architecture: processing split_task responses', () => {
+    const board = new MessageBoard();
+    const agent = createAgentFromFile('6.js');
+    agent.processMessages(board);
+    agent.save(AGENT_PATH_ACTIVE);
+    expect(agent.tasks['do something 3'].subrequestsIds[0]).toBe('subtask_1');
+});
 
 test('message processing architecture: processing requests only', () => {
     const board = new MessageBoard();
@@ -68,7 +73,7 @@ test('message processing architecture: processing requests only', () => {
     agent.processMessages(board);
     agent.save(AGENT_PATH_ACTIVE);
     expect(agent.tasks['do something 3'].requestId).toBe('message_6');
-    console.warn(`Manual Check Needed: ${AGENT_PATH_ACTIVE}/6.js should have correct tasks`)
+    // console.warn(`Manual Check Needed: ${AGENT_PATH_ACTIVE}/6.js should have "do something 3" as a task`)
 });
 
 // test('integration: agent creates request, agent 2 takes request, replies with response', () => {
