@@ -24,6 +24,8 @@ Guiding Principles:
 Agents:
 - Agents can only send tasks to either its own subagents, or to agents that are explicitly able to receive requests from any agent
 - Agents _can_ post priority updates to non-subagents
+- When splitting tasks, each task must be split into items that are independent of each other
+
 
 Messages:
 - Priority Updates: Increases or decreases priority on tasks
@@ -44,6 +46,7 @@ Messages:
 // Request Reader: Translates request json to human readable format
 // Request Reader: Print out how many human requests vs machine requests
 // Agent: act(): Check requests for self
+// Agent: Flow: Subagent reports that a subtask is done (reminder: set subagents to free)
 // Agent: Respond to request to perform task
 // Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
 
@@ -53,11 +56,10 @@ Messages:
 // Agent: Split task after getting response for task splitting
 // Agent: Message processing architecture: processing responses also
 
-
-
-
-
-
+// ....
+// ....
+// Testing
+// ....
 
 test('message processing architecture: processing split_task responses', () => {
     const board = new MessageBoard();

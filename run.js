@@ -23,6 +23,14 @@ class Agent {
     constructor(id) {
         this.id = id;
         this.tasks = {};
+        this.subagents = {
+            free: [],
+            busy: []
+        };
+    }
+
+    get freeSubAgents() {
+        return this.subagents.free;
     }
 
     act() {
@@ -30,27 +38,21 @@ class Agent {
     }
 
     allocateSubagents(numAgentsNeeded) {
-        const freeSubAgents = this.subagents.filter(subagent => subagent.isFree());
-        const numNewSubagentsNeeded = Math.max(0, numAgentsNeeded - freeSubAgents.length);
+        const numNewSubagentsNeeded = Math.max(0, numAgentsNeeded - this.freeSubAgents.length);
         let newSubagents = [];
         if (numNewSubagentsNeeded > 0) {
-            const newSubagents = spawnSubAgents(numNewSubagentsNeeded);
+            spawnSubAgents(numNewSubagentsNeeded);
         }
-        return [...freeSubAgents, ...newSubagents];
-        // ....
-        // ....
-        // do: update: createFreeSubagents() -> allocateSubagents(numAgentsNeeded)
-        // ....
-        // do: create this.subagents
-        // do: create this.superagent
-        // do: create spawnSubAgents(n)
-        // do: set superagent after spawning
-        // do: spawnSubAgents need to add to subagent list
-        // do: create subagent.isFree();
-        // do: update task status after sending out subrequests ('waiting for subtasks')
+        return this.freeSubAgents;
+    }
 
-
-
+    assignSubtask(taskname, subtask, subagent) {
+        const recipientId = subagent.id;
+        const requestId = this.requestTask(board, recipientId, subtask);
+        this.tasks[taskname].subrequestsIds.push(requestId);
+        this.setSubagentStatus(subagent.id, 'busy');
+        this.tasks[taskname].status = 'waiting_for_subtasks';
+    }
 
     getTaskByRequestId(id) {
         return Object.keys(this.tasks).find(taskname => this.tasks[taskname].requestId === id);
@@ -61,6 +63,19 @@ class Agent {
         postedContents.msgType = 'request';
         const requestID = this.sendMessage(board, postedContents);
         return requestID;
+    }
+
+    processMessages(board) {
+        const msgsForAgent = board.getMessagesForAgent(this.id);
+        msgsForAgent.forEach(message => {
+            if (message.msgType === 'request') {
+                this.processRequest(message);
+            } else if (message.msgType === 'response') {
+                this.processResponse(message, board);
+            } else {
+                throw `Error: unknown message type: ${message.msgType}`;
+            }
+        });
     }
 
     processRequest(request) {
@@ -76,28 +91,11 @@ class Agent {
 
     processResponse(response, board) {
         if (response.response === 'split_task') {
-            const freeSubAgents = createFreeSubagents();
+            const numAgentsNeeded = response.data.subtasks.length;
+            const freeSubAgents = allocateSubagents(numAgentsNeeded);
             const taskname = getTaskByRequestId(response.requestId);
-            response.data.subtasks.forEach((subtask, i) => {
-                const subagent = freeSubAgents[i];
-                const recipientId = subagent.id;
-                const requestId = this.requestTask(board, recipientId, subtask);
-                this.tasks[taskname].subrequestsIds.push(requestId);
-            });
+            response.data.subtasks.forEach((subtask, i) => assignSubtask(taskname, subtask, freeSubAgents[i]));
         }
-    }
-
-    processMessages(board) {
-        const msgsForAgent = board.getMessagesForAgent(this.id);
-        msgsForAgent.forEach(message => {
-            if (message.msgType === 'request') {
-                this.processRequest(message);
-            } else if (message.msgType === 'response') {
-                this.processResponse(message, board);
-            } else {
-                throw `Error: unknown message type: ${message.msgType}`;
-            }
-        });
     }
 
     readRequests(board) {
@@ -145,10 +143,26 @@ class Agent {
         })
     }
 
+    setSubagentStatus(subagentId, newStatus) {
+        if (newStatus === 'busy') {
+            this.subagents.free = this.subagents.free.filter(freeSubagentId => freeSubagentId !== subagentId);
+            this.subagents.busy.push(subagentId);
+        } else if (newStatus === 'busy') {
+            this.subagents.busy = this.subagents.busy.filter(busySubagentId => busySubagentId !== subagentId);
+            this.subagents.free.push(subagentId);
+        }
+    }
+
     spawnSubAgent(dataPath = `${AGENT_PATH}/active`) {
         const subAgent = new Agent('agent_' + genNewId(AGENT_PATH));
+        subAgent.superagent = this.id;
+        this.subagents.free.push(subAgent.id);
         subAgent.save(dataPath);
         return `${dataPath}/${subAgent.id}.js`;
+    }
+
+    spawnSubAgents(numSubagents, dataPath = `${AGENT_PATH}/active`) {
+        return Array(numSubagents).map(() => this.spawnSubAgent(dataPath));
     }
 
     takeNewTasks(board) {
