@@ -39,14 +39,13 @@ class Agent {
 
     allocateSubagents(numAgentsNeeded) {
         const numNewSubagentsNeeded = Math.max(0, numAgentsNeeded - this.freeSubAgents.length);
-        let newSubagents = [];
         if (numNewSubagentsNeeded > 0) {
-            spawnSubAgents(numNewSubagentsNeeded);
+            this.spawnSubAgents(numNewSubagentsNeeded);
         }
         return this.freeSubAgents;
     }
 
-    assignSubtask(taskname, subtask, subagent) {
+    assignSubtask(taskname, subtask, subagent, board) {
         const recipientId = subagent.id;
         const requestId = this.requestTask(board, recipientId, subtask);
         this.tasks[taskname].subrequestsIds.push(requestId);
@@ -92,9 +91,9 @@ class Agent {
     processResponse(response, board) {
         if (response.response === 'split_task') {
             const numAgentsNeeded = response.data.subtasks.length;
-            const freeSubAgents = allocateSubagents(numAgentsNeeded);
-            const taskname = getTaskByRequestId(response.requestId);
-            response.data.subtasks.forEach((subtask, i) => assignSubtask(taskname, subtask, freeSubAgents[i]));
+            const freeSubAgents = this.allocateSubagents(numAgentsNeeded);
+            const taskname = this.getTaskByRequestId(response.requestId);
+            response.data.subtasks.forEach((subtask, i) => this.assignSubtask(taskname, subtask, freeSubAgents[i], board));
         }
     }
 
@@ -111,10 +110,11 @@ class Agent {
         return this.postRequest(board, contents);
     }
 
-    respond(board, requestId, responseData) {
+    postResponse(board, requestId, responseData) {
         const postedContents = responseData;
         postedContents.msgType = 'response';
         postedContents.requestId = requestId;
+        postedContents.recipientID = board.getMessage(requestId).senderId;
         const responseId = this.sendMessage(board, postedContents);
         return responseId;
     }
@@ -162,7 +162,7 @@ class Agent {
     }
 
     spawnSubAgents(numSubagents, dataPath = `${AGENT_PATH}/active`) {
-        return Array(numSubagents).map(() => this.spawnSubAgent(dataPath));
+        return Array(numSubagents).fill('0').map(slot => this.spawnSubAgent(dataPath));
     }
 
     takeNewTasks(board) {

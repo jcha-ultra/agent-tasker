@@ -39,7 +39,7 @@ Messages:
 // Create new agent that doesn't have a data path
 // Implement Priority System (priority = importance * urgency * delay)
 // Agents: Order tasks by ease
-// > ---MVP---
+// ---MVP---
 // Make sure request statuses are updated correctly
 // Human-Agent: Post processing request
 // Request Reader: Display task chain (trace back to parent tasks)
@@ -58,15 +58,19 @@ Messages:
 
 // ....
 // ....
-// Testing
+// do: testing
 // ....
+// > bug: only single agent is created
+// > bug: creates subagents even if there are enough free ones
+// > bug: subagent tasklist is empty
+// > bug: subagents are not marked as busy
 
-test('message processing architecture: processing split_task responses', () => {
+test.only('message processing architecture: processing split_task responses', () => {
     const board = new MessageBoard();
     const agent = createAgentFromFile('6.js');
     agent.processMessages(board);
     agent.save(AGENT_PATH_ACTIVE);
-    expect(agent.tasks['do something 3'].subrequestsIds[0]).toBe('subtask_1');
+    expect(agent.tasks['do something 3'].subrequestsIds[0]).toBe('message_10');
 });
 
 test('message processing architecture: processing requests only', () => {
