@@ -9,5 +9,6 @@ module.exports = {
     "msgType": "response",
     "requestId": "message_6",
     "senderId": "3_dummy",
-    "msgId": 'message_9'
+    "msgId": "message_9",
+    "recipientID": "6"
 }

@@ -49,6 +49,7 @@ Messages:
 // Agent: Flow: Subagent reports that a subtask is done (reminder: set subagents to free)
 // Agent: Respond to request to perform task
 // Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
+// Agent: Make it so that agents don't keep on repeating actions from messages they've already handled, i.e. move messages to archive
 
 // Pass 24:
 
@@ -58,12 +59,20 @@ Messages:
 
 // ....
 // ....
-// do: testing
+
+// [problem seems to be that agent count is not updated quickly enough]
+
+// bug: only single agent is created
 // ....
-// > bug: only single agent is created
-// > bug: creates subagents even if there are enough free ones
-// > bug: subagent tasklist is empty
-// > bug: subagents are not marked as busy
+
+// bug: duplicate subrequest ids
+// bug: subagents are not marked as busy
+// bug: creates subagents even if there are enough free ones
+// bug: subagent tasklist is empty
+// bug: no subtask 2 subrequest created
+// bug: subtask subrequest has no ids
+// do: testing
+
 
 test.only('message processing architecture: processing split_task responses', () => {
     const board = new MessageBoard();

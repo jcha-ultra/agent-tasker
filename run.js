@@ -13,10 +13,12 @@ function saveData(contents, dataPath) {
     })
 }
 
+let id_suffix = 0;
 function genNewId(path) {
     const activeNum = fs.readdirSync(`${path}/active`).length;
     const inactiveNum = fs.readdirSync(`${path}/inactive`).length;
-    return activeNum + inactiveNum;
+    id_suffix = id_suffix + 1;
+    return (activeNum + inactiveNum) + '_' + id_suffix;
 }
 
 class Agent {
@@ -162,7 +164,10 @@ class Agent {
     }
 
     spawnSubAgents(numSubagents, dataPath = `${AGENT_PATH}/active`) {
-        return Array(numSubagents).fill('0').map(slot => this.spawnSubAgent(dataPath));
+        for (let i = 0; i < numSubagents; i++) {
+            this.spawnSubAgent(dataPath);
+        }
+        // Array(numSubagents).fill('0').forEach(slot => this.spawnSubAgent(dataPath));
     }
 
     takeNewTasks(board) {
