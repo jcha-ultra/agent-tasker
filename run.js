@@ -47,11 +47,11 @@ class Agent {
         return this.freeSubAgents;
     }
 
-    assignSubtask(taskname, subtask, subagent, board) {
-        const recipientId = subagent.id;
+    assignSubtask(taskname, subtask, subagentId, board) {
+        const recipientId = subagentId;
         const requestId = this.requestTask(board, recipientId, subtask);
         this.tasks[taskname].subrequestsIds.push(requestId);
-        this.setSubagentStatus(subagent.id, 'busy');
+        this.setSubagentStatus(subagentId, 'busy');
         this.tasks[taskname].status = 'waiting_for_subtasks';
     }
 
@@ -121,6 +121,16 @@ class Agent {
         return responseId;
     }
 
+    save(dataPath = `${AGENT_PATH}/active`) {
+        const selfExport = 'module.exports = ' + JSON.stringify(this, null, 4);
+        fs.writeFile(`${dataPath}/${this.id}.js`, selfExport, err => {
+            if (err) {
+                console.error(err)
+                return
+            }
+        })
+    }
+
     sendMessage(board, contents)  {
         const postedContents = contents;
         postedContents.senderId = this.id;
@@ -135,21 +145,11 @@ class Agent {
         }
     }
 
-    save(dataPath = `${AGENT_PATH}/active`) {
-        const selfExport = 'module.exports = ' + JSON.stringify(this, null, 4);
-        fs.writeFile(`${dataPath}/${this.id}.js`, selfExport, err => {
-            if (err) {
-                console.error(err)
-                return
-            }
-        })
-    }
-
     setSubagentStatus(subagentId, newStatus) {
         if (newStatus === 'busy') {
             this.subagents.free = this.subagents.free.filter(freeSubagentId => freeSubagentId !== subagentId);
             this.subagents.busy.push(subagentId);
-        } else if (newStatus === 'busy') {
+        } else if (newStatus === 'free') {
             this.subagents.busy = this.subagents.busy.filter(busySubagentId => busySubagentId !== subagentId);
             this.subagents.free.push(subagentId);
         }

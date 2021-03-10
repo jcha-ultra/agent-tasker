@@ -60,14 +60,9 @@ Messages:
 // ....
 // ....
 
-// [problem seems to be that agent count is not updated quickly enough]
-
-// bug: only single agent is created
+// bug: creates subagents even if there are enough free ones
 // ....
 
-// bug: duplicate subrequest ids
-// bug: subagents are not marked as busy
-// bug: creates subagents even if there are enough free ones
 // bug: subagent tasklist is empty
 // bug: no subtask 2 subrequest created
 // bug: subtask subrequest has no ids
