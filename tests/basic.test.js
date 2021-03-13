@@ -30,6 +30,24 @@ Agents:
 Messages:
 - Priority Updates: Increases or decreases priority on tasks
 
+Task Workflows:
+
+✅[request placed on board:]
+✅[agent reads request and adds it to tasklist]
+[agent posts subrequest(s) for executor agent(s)]
+[executor agent responds: done, dependencies, or split]
+[agent performs follow-up based on response:]
+    ✅[split: send subrequests to subagents to perform the subtasks of the tasks]
+    [dependencies: send dependency messages to appropriate agents who are handling the dependencies]
+    [done: close out task; respond to messages that are related to this task (dependents and source request)]
+[agent evaluates status of task:]
+    [dependencies left: do nothing]
+    [no dependencies remaining: send message to executor agent]
+
+[agent receives dependency message:]
+[add to dependent list]
+
+
 **************/
 
 // BACKLOG:
@@ -49,34 +67,39 @@ Messages:
 // Agent: Move messages to archive after being done with them
 // Agent: Flow: Subagent reports that a subtask is done (reminder: set subagents to free)
 // Agent: Respond to request to perform task
-// Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
 
-// Pass 25:
+// Pass 27:
+> [agent: close out original request when response is received]
+> [add taskid for each agent's tasks]
+> [response: task has dependencies]
+> [response: task is done]
+> [update waiting_for_subtasks to waiting_for_dependencies]
+> [update: change subrequestsIds to dependencyIds]
+> [go through task workflow]
 
-// Pass 24:
-// Agent: Make it so that agents don't keep on repeating actions from messages they're already handling: tasks and splitting
+// Pass 26:
+
+// ....
+
 
 // ....
 
 
+// do: create task workflow
 // ....
 
-
-// ....
-
-// ....
 
 
 
 test.skip('agents do not keep performing actions from already-handled requests and responses', () => {
-        const board = new MessageBoard();
-        const agent = createAgentFromFile('6.js');
-        agent.processMessages(board);
-        agent.save(AGENT_PATH_ACTIVE);
-        expect(agent.subagents.free.length + agent.subagents.busy.length).toBe(2);
-        expect(Object.keys(agent.tasks).length).toBe(1);
-        expect(agent.tasks['do something 3'].subrequestsIds.length).toBe(2);
-        console.warn('Manual Test: Response message_9 should now be archived!');
+    const board = new MessageBoard();
+    const agent = createAgentFromFile('6.js');
+    agent.processMessages(board);
+    agent.save(AGENT_PATH_ACTIVE);
+    expect(agent.subagents.free.length + agent.subagents.busy.length).toBe(2);
+    expect(Object.keys(agent.tasks).length).toBe(1);
+    expect(agent.tasks['do something 3'].subrequestsIds.length).toBe(2);
+    console.warn('Manual Test: Response message_9 should now be archived!');
 });
 
 test.skip('message processing architecture: processing split_task responses', () => {
