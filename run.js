@@ -124,12 +124,11 @@ class Agent {
 
     save(dataPath = `${AGENT_PATH}/active`) {
         const selfExport = 'module.exports = ' + JSON.stringify(this, null, 4);
-        fs.writeFile(`${dataPath}/${this.id}.js`, selfExport, err => {
-            if (err) {
-                console.error(err)
-                return
-            }
-        })
+        try {
+            fs.writeFileSync(`${dataPath}/${this.id}.js`, selfExport);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     sendMessage(board, contents)  {
