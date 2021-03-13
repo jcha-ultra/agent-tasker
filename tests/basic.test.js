@@ -46,38 +46,48 @@ Messages:
 // Request Reader: Translates request json to human readable format
 // Request Reader: Print out how many human requests vs machine requests
 // Agent: act(): Check requests for self
+// Agent: Move messages to archive after being done with them
 // Agent: Flow: Subagent reports that a subtask is done (reminder: set subagents to free)
 // Agent: Respond to request to perform task
 // Agent: sendSubRequests():  Create subrequests for tasks for either existing agent, or new spawned subagent
-// Agent: Make it so that agents don't keep on repeating actions from messages they've already handled, i.e. move messages to archive
+
+// Pass 25:
 
 // Pass 24:
-
-// Pass 23:
-// Agent: Split task after getting response for task splitting
-// Agent: Message processing architecture: processing responses also
+// Agent: Make it so that agents don't keep on repeating actions from messages they're already handling: tasks and splitting
 
 // ....
+
+
 // ....
 
-// bug: creates subagents even if there are enough free ones
+
 // ....
 
-// bug: subagent tasklist is empty
-// bug: no subtask 2 subrequest created
-// bug: subtask subrequest has no ids
-// do: testing
+// ....
 
 
-test.only('message processing architecture: processing split_task responses', () => {
+
+test.skip('agents do not keep performing actions from already-handled requests and responses', () => {
+        const board = new MessageBoard();
+        const agent = createAgentFromFile('6.js');
+        agent.processMessages(board);
+        agent.save(AGENT_PATH_ACTIVE);
+        expect(agent.subagents.free.length + agent.subagents.busy.length).toBe(2);
+        expect(Object.keys(agent.tasks).length).toBe(1);
+        expect(agent.tasks['do something 3'].subrequestsIds.length).toBe(2);
+        console.warn('Manual Test: Response message_9 should now be archived!');
+});
+
+test.skip('message processing architecture: processing split_task responses', () => {
     const board = new MessageBoard();
     const agent = createAgentFromFile('6.js');
     agent.processMessages(board);
     agent.save(AGENT_PATH_ACTIVE);
-    expect(agent.tasks['do something 3'].subrequestsIds[0]).toBe('message_10');
+    expect(agent.tasks['do something 3'].subrequestsIds[0]).toBe('message_10_3');
 });
 
-test('message processing architecture: processing requests only', () => {
+test.skip('message processing architecture: processing requests only', () => {
     const board = new MessageBoard();
     const agent = createAgentFromFile('6.js');
     agent.processMessages(board);
@@ -86,34 +96,34 @@ test('message processing architecture: processing requests only', () => {
     // console.warn(`Manual Check Needed: ${AGENT_PATH_ACTIVE}/6.js should have "do something 3" as a task`)
 });
 
-// test('integration: agent creates request, agent 2 takes request, replies with response', () => {
-//     const board = new MessageBoard();
-//     const agent = createAgentFromFile('4_dummy.js');
-//     const agent2 = createAgentFromFile('3_dummy.js');
-//     // agent.requestTask(board, '3_dummy', 'do something 4');
-//     agent2.takeNewTasks(board);
-//     responseData = {
-//         response: 'split_task'
-//     }
-//     agent2.respond(board, 'do something 4', responseData);
-// });
+test.skip('integration: agent creates request, agent 2 takes request, replies with response', () => {
+    const board = new MessageBoard();
+    const agent = createAgentFromFile('4_dummy.js');
+    const agent2 = createAgentFromFile('3_dummy.js');
+    // agent.requestTask(board, '3_dummy', 'do something 4');
+    agent2.takeNewTasks(board);
+    responseData = {
+        response: 'split_task'
+    }
+    agent2.respond(board, 'do something 4', responseData);
+});
 
-// test('responses must include original message id', () => {
-//     const agent = createAgentFromFile('6.js');
-//     const board = new MessageBoard();
-//     const requestId = 6;
-//     const responseData = {
-//         response: 'split_task'
-//     }
-//     agent.respond(board, requestId, responseData);
-// });
-//
-// test('senderId exists', () => {
-//     const board = new MessageBoard();
-//     const agent = createAgentFromFile('4_dummy.js');
-//     const msgId = agent.requestTask(board, '3_dummy', "do something 3");
-// });
-//
+test.skip('responses must include original message id', () => {
+    const agent = createAgentFromFile('6.js');
+    const board = new MessageBoard();
+    const requestId = 6;
+    const responseData = {
+        response: 'split_task'
+    }
+    agent.respond(board, requestId, responseData);
+});
+
+test.skip('senderId exists', () => {
+    const board = new MessageBoard();
+    const agent = createAgentFromFile('4_dummy.js');
+    const msgId = agent.requestTask(board, '3_dummy', "do something 3");
+});
+
 test('board can retrieve specific message', () => {
     const board = new MessageBoard();
     const id = 4;
@@ -121,15 +131,15 @@ test('board can retrieve specific message', () => {
     expect(taskName).toBe('do something 2');
 });
 
-// test('agents can send responses', () => {
-//     const agent = createAgentFromFile('4_dummy.js');
-//     const board = new MessageBoard();
-//     const requestId = 4;
-//     const responseData = {
-//         response: 'task_complete'
-//     }
-//     agent.respond(board, requestId, responseData);
-// });
+test.skip('agents can send responses', () => {
+    const agent = createAgentFromFile('4_dummy.js');
+    const board = new MessageBoard();
+    const requestId = 4;
+    const responseData = {
+        response: 'task_complete'
+    }
+    agent.respond(board, requestId, responseData);
+});
 
 test('agents can assign unassigned tasks', () => {
     const agent = createAgentFromFile('4_dummy.js');
@@ -157,17 +167,17 @@ test('agent can take task', () => {
     expect(Object.keys(agent.tasks).length).toBe(2);
 });
 
-// test('agent can ask another to perform task', () => {
-//     const agent = createAgentFromFile('3_dummy.js');
-//     const newAgent = createAgentFromFile('4_dummy.js');
-//     agent.requestTask(board, newAgent.id, 'do something')
-// });
+test.skip('agent can ask another to perform task', () => {
+    const agent = createAgentFromFile('3_dummy.js');
+    const newAgent = createAgentFromFile('4_dummy.js');
+    agent.requestTask(board, newAgent.id, 'do something')
+});
 
-// test('agent spawns another agent successfully', () => {
-//     const agent = createAgentFromFile('3_dummy.js');
-//     newAgent = agent.spawnSubAgent();
-//     console.log(newAgent);
-// });
+test.skip('agent spawns another agent successfully', () => {
+    const agent = createAgentFromFile('3_dummy.js');
+    newAgent = agent.spawnSubAgent();
+    console.log(newAgent);
+});
 
 test('agent can read requests for itself', () => {
     const agent = createAgentFromFile('3_dummy.js');
@@ -175,19 +185,19 @@ test('agent can read requests for itself', () => {
     // console.log(requests);
 });
 
-// test('new id can be generated based on number of files in folder', () => {
-//     const newAgentId = genNewId(AGENT_PATH);
-//     const newMessageId = genNewId(MESSAGE_PATH);
-//     expect(newAgentId).toBe(5);
-//     expect(newMessageId).toBe(2);
-// });
+test.skip('new id can be generated based on number of files in folder', () => {
+    const newAgentId = genNewId(AGENT_PATH);
+    const newMessageId = genNewId(MESSAGE_PATH);
+    expect(newAgentId).toBe(5);
+    expect(newMessageId).toBe(2);
+});
 
-// test('agent can create message', () => {
-//     const agent = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
-//     const board = new MessageBoard();
-//     agent.postRequest(board, {blah: 'blah!'});
-// });
-//
+test.skip('agent can create message', () => {
+    const agent = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
+    const board = new MessageBoard();
+    agent.postRequest(board, {blah: 'blah!'});
+});
+
 test('agent can be saved', () => {
     const agent = createAgentFromFile('3_dummy.js', `${AGENT_PATH}/active`);
     agent.save(`${AGENT_PATH}/active`);
@@ -205,7 +215,7 @@ test('agent runner loops through agent files', () => {
     runner.runRound();
 });
 
-// test('able to create new agent from file', () => {
-//     const agent = createAgentFromFile(`3_dummy.js`, `${AGENT_PATH}/active`);
-//     expect(Object.keys(agent).length).toBe(5);
-// });
+test.skip('able to create new agent from file', () => {
+    const agent = createAgentFromFile(`3_dummy.js`, `${AGENT_PATH}/active`);
+    expect(Object.keys(agent).length).toBe(5);
+});
