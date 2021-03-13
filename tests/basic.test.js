@@ -32,20 +32,58 @@ Messages:
 
 Task Workflows:
 
-✅[request placed on board:]
-✅[agent reads request and adds it to tasklist]
-[agent posts subrequest(s) for executor agent(s)]
+
+[request placed on board:]
+[agent reads request and adds it to tasklist]
+[agent posts request for executor agent]
 [executor agent responds: done, dependencies, or split]
 [agent performs follow-up based on response:]
-    ✅[split: send subrequests to subagents to perform the subtasks of the tasks]
+    [split: send subrequests to subagents to perform the subtasks of the tasks]
     [dependencies: send dependency messages to appropriate agents who are handling the dependencies]
     [done: close out task; respond to messages that are related to this task (dependents and source request)]
 [agent evaluates status of task:]
     [dependencies left: do nothing]
     [no dependencies remaining: send message to executor agent]
 
-[agent receives dependency message:]
-[add to dependent list]
+
+....
+
+....
+
+[agent processes messages:]
+    ✅[requests: ADD to tasklist]
+    [dependency notes: ADD to task's dependents list]
+    [responses:]
+        [for dependency note:]
+            [done:]
+                [ARCHIVE dependency NOTE]
+                [REMOVE from dependencies list]
+        [for dependency request:]
+            [done:]
+                [ARCHIVE dependency REQUEST]
+                [REMOVE from dependencies list]
+                [de-allocate subagents]
+        [for execution request:]
+            [done:]
+                [ARCHIVE execution REQUEST]
+                [REMOVE from tasklist]
+                [SEND done RESPONSE to dependency notes on dependents list]
+                [SEND done RESPONSE to source request]
+            [split:]
+                [ARCHIVE execution REQUEST]
+                ✅[ADD to dependencies list]
+                ✅[SEND dependency REQUEST to subagents]
+                ✅[allocate subagents]
+            [dependencies:]
+                [ARCHIVE execution REQUEST]
+                [ADD to dependencies list]
+                [SEND dependencies NOTE to agents]
+    [evaluate tasks in tasklist:]
+        [dependencies list empty: SEND execution REQUEST]
+
+
+
+....
 
 
 **************/
