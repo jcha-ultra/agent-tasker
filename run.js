@@ -96,6 +96,7 @@ class Agent {
             const freeSubAgents = this.allocateSubagents(numAgentsNeeded);
             const taskname = this.getTaskByRequestId(response.requestId);
             response.data.subtasks.forEach((subtask, i) => this.assignSubtask(taskname, subtask, freeSubAgents[i], board));
+            board.archive(response);
         }
     }
 
@@ -215,6 +216,11 @@ class MessageBoard {
 
     get msgList() {
         return fs.readdirSync(this.messagePath).map(fileName => fileName.replace('.js', ''));
+    }
+
+    archive(message) {
+        saveData(message, `${MESSAGE_PATH}/inactive/${message.msgId}.js`);
+        fs.unlinkSync(`${this.messagePath}/${message.msgId}.js`);
     }
 
     getMessage(id) {
