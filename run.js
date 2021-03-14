@@ -52,7 +52,6 @@ class Agent {
         const requestId = this.requestTask(board, recipientId, subtask);
         this.tasks[taskname].dependencyIds.push(requestId);
         this.setSubagentStatus(subagentId, 'busy');
-        this.tasks[taskname].status = 'waiting_for_subtasks';
     }
 
     getTaskByRequestId(id) {
@@ -84,7 +83,6 @@ class Agent {
         if (!taskList.includes(request.taskName)) {
             this.tasks[request.taskName] = {
                 requestId: request.msgId,
-                status: 'new',
                 dependencyIds: []
             };
         }
