@@ -54,6 +54,15 @@ class Agent {
         this.setSubagentStatus(subagentId, 'busy');
     }
 
+    // Check if any tasks require action
+    evaluateTasks(postBoard) {
+        Object.keys(this.tasks).forEach(taskName => {
+            if (this.tasks[taskName].dependencyIds.length === 0) {
+                this.requestTask(postBoard, '0_human', taskName);
+            }
+        });
+    }
+
     getTaskByRequestId(id) {
         return Object.keys(this.tasks).find(taskname => this.tasks[taskname].requestId === id);
     }

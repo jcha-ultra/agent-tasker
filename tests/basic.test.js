@@ -111,7 +111,7 @@ Task Workflows:
 //                 [SEND done RESPONSE to dependency notes on dependents list]
 //                 [SEND done RESPONSE to source request]
 //             [split:]
-//                 [ARCHIVE execution REQUEST]
+//                 🚧[ARCHIVE execution REQUEST]
 //                 ✅[ADD to dependencies list]
 //                 ✅[SEND dependency REQUEST to subagents]
 //                 ✅[allocate subagents]
@@ -119,15 +119,15 @@ Task Workflows:
 //                 [ARCHIVE execution REQUEST]
 //                 [ADD to dependencies list]
 //                 [SEND dependencies NOTE to agents]
-//     [evaluate tasks in tasklist:]
-//         [dependencies list empty:]
-//                [SEND execution REQUEST]
+// [agent evaluates tasks in tasklist:]
+//     [dependencies list empty:]
+//            ✅[SEND execution REQUEST]
 
 
 // Pass 29:
 
 // Pass 28:
-// [SEND execution REQUEST]
+// Task flow
 
 // ....
 
@@ -135,8 +135,18 @@ Task Workflows:
 // ....
 
 describe('task can go through full flow', () => {
-    const taskerAgent = createAgentFromFile('10_11.js');
-    const doerAgent = createAgentFromFile('11_12.js');
+    const board = new MessageBoard();
+    const taskAgent = createAgentFromFile('10_13.js');
+    const doAgent = createAgentFromFile('11_14.js');
+    test('agent reads task', () => {
+        doAgent.processMessages(board);
+        expect(Object.keys(doAgent.tasks).length).toBe(1);
+        doAgent.save();
+    });
+    test('agent sends execution request', () => {
+        doAgent.evaluateTasks(board);
+        console.warn(`check that execution request for agent ${doAgent.id}'s tasks has been posted`);
+    });
     test('', () => {
         console.warn(taskerAgent);
         console.warn(doerAgent);
