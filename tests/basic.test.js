@@ -120,8 +120,9 @@ Task Workflows:
 //                 [ADD to dependencies list]
 //                 [SEND dependencies NOTE to agents]
 // [agent evaluates tasks in tasklist:]
-//     [dependencies list empty:]
+//     [dependencies list empty and execution ids list empty:]
 //            ✅[SEND execution REQUEST]
+//            🚧[ADD to execution ids list]
 
 
 // Pass 29:
@@ -138,18 +139,24 @@ describe('task can go through full flow', () => {
     const board = new MessageBoard();
     const taskAgent = createAgentFromFile('10_13.js');
     const doAgent = createAgentFromFile('11_14.js');
+    afterEach(() => {
+        doAgent.save();
+    });
     test('agent reads task', () => {
         doAgent.processMessages(board);
         expect(Object.keys(doAgent.tasks).length).toBe(1);
-        doAgent.save();
     });
     test('agent sends execution request', () => {
         doAgent.evaluateTasks(board);
-        console.warn(`check that execution request for agent ${doAgent.id}'s tasks has been posted`);
+        expect(doAgent.tasks['do something 4'].executionIds.length).toBe(1);
+        console.warn(`MANUAL TEST: check that execution request for agent ${doAgent.id}'s tasks has been posted`);
     });
-    test('', () => {
-        console.warn(taskerAgent);
-        console.warn(doerAgent);
+    test.skip('agent processes split_task responses', () => {
+        // [create split_task response];
+        doAgent.processMessages(board);
+    });
+
+    test.skip('', () => {
     });
 });
 
@@ -248,7 +255,7 @@ test('messages have ids', () => {
     expect(agent.tasks['do something 2'].requestId).toBe(4);
 });
 
-test('agent can take task', () => {
+test.skip('agent can take task', () => {
     const agent = createAgentFromFile('4_dummy.js');
     agent.tasks['do something'] = [];
     expect(agent.tasks['do something'].toString()).toBe('');

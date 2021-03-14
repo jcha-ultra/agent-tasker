@@ -57,8 +57,9 @@ class Agent {
     // Check if any tasks require action
     evaluateTasks(postBoard) {
         Object.keys(this.tasks).forEach(taskName => {
-            if (this.tasks[taskName].dependencyIds.length === 0) {
-                this.requestTask(postBoard, '0_human', taskName);
+            if (this.tasks[taskName].dependencyIds.length === 0 && this.tasks[taskName].executionIds.length === 0) {
+                const requestId = this.requestTask(postBoard, '0_human', taskName);
+                this.tasks[taskName].executionIds.push(requestId);
             }
         });
     }
@@ -92,7 +93,8 @@ class Agent {
         if (!taskList.includes(request.taskName)) {
             this.tasks[request.taskName] = {
                 requestId: request.msgId,
-                dependencyIds: []
+                dependencyIds: [],
+                executionIds: []
             };
         }
     }
@@ -183,8 +185,8 @@ class Agent {
         function addTaskFromRequest(tasks, nextRequest) {
             tasks[nextRequest.taskName] = {
                 requestId: nextRequest.msgId,
-                status: 'new',
-                dependencyIds: []
+                dependencyIds: [],
+                executionIds: []
             };
             return tasks;
         }
