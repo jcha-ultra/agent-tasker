@@ -4,6 +4,20 @@ const AGENT_PATH_ACTIVE = './agents/active';
 const MESSAGE_PATH = './messages';
 const board = new MessageBoard();
 
+function createTestAgent() {
+    const agent = new Agent();
+    agent.id = genNewId(AGENT_PATH);
+    agent.save();
+    return agent.id;
+}
+
+function createTestRequest(taskText) {
+    const originAgentId = createTestAgent();
+    const originAgent = createAgentFromFile(`${originAgentId}.js`);
+    const recipientAgentId = createTestAgent();
+    originAgent.requestTask(board, recipientAgentId, taskText);
+}
+
 beforeAll(() => {
 });
 
@@ -50,36 +64,7 @@ Task Workflows:
 
 ....
 
-[agent processes messages:]
-    ✅[requests: ADD to tasklist]
-    [dependency notes: ADD to task's dependents list]
-    [responses:]
-        [for dependency note:]
-            [done:]
-                [ARCHIVE dependency NOTE]
-                [REMOVE from dependencies list]
-        [for dependency request:]
-            [done:]
-                [ARCHIVE dependency REQUEST]
-                [REMOVE from dependencies list]
-                [de-allocate subagents]
-        [for execution request:]
-            [done:]
-                [ARCHIVE execution REQUEST]
-                [REMOVE from tasklist]
-                [SEND done RESPONSE to dependency notes on dependents list]
-                [SEND done RESPONSE to source request]
-            [split:]
-                [ARCHIVE execution REQUEST]
-                ✅[ADD to dependencies list]
-                ✅[SEND dependency REQUEST to subagents]
-                ✅[allocate subagents]
-            [dependencies:]
-                [ARCHIVE execution REQUEST]
-                [ADD to dependencies list]
-                [SEND dependencies NOTE to agents]
-    [evaluate tasks in tasklist:]
-        [dependencies list empty: SEND execution REQUEST]
+
 
 
 
@@ -106,24 +91,61 @@ Task Workflows:
 // Agent: Flow: Subagent reports that a subtask is done (reminder: set subagents to free)
 // Agent: Respond to request to perform task
 
-// Pass 27:
-> [agent: close out original request when response is received]
-> [add taskid for each agent's tasks]
-> [response: task has dependencies]
-> [response: task is done]
-> [update waiting_for_subtasks to waiting_for_dependencies]
-> [update: change subrequestsIds to dependencyIds]
-> [go through task workflow]
+// [agent processes messages:]
+//     ✅[requests: ADD to tasklist]
+//     [dependency notes: ADD to task's dependents list]
+//     [responses:]
+//         [for dependency note:]
+//             [done:]
+//                 [ARCHIVE dependency NOTE]
+//                 [REMOVE from dependencies list]
+//         [for dependency request:]
+//             [done:]
+//                 [ARCHIVE dependency REQUEST]
+//                 [REMOVE from dependencies list]
+//                 [de-allocate subagents]
+//         [for execution request:]
+//             [done:]
+//                 [ARCHIVE execution REQUEST]
+//                 [REMOVE from tasklist]
+//                 [SEND done RESPONSE to dependency notes on dependents list]
+//                 [SEND done RESPONSE to source request]
+//             [split:]
+//                 [ARCHIVE execution REQUEST]
+//                 ✅[ADD to dependencies list]
+//                 ✅[SEND dependency REQUEST to subagents]
+//                 ✅[allocate subagents]
+//             [dependencies:]
+//                 [ARCHIVE execution REQUEST]
+//                 [ADD to dependencies list]
+//                 [SEND dependencies NOTE to agents]
+//     [evaluate tasks in tasklist:]
+//         [dependencies list empty:]
+//                [SEND execution REQUEST]
 
-// Pass 26:
+
+// Pass 29:
+
+// Pass 28:
+// [SEND execution REQUEST]
 
 // ....
 
 
 // ....
 
+describe('task can go through full flow', () => {
+    const taskerAgent = createAgentFromFile('10_11.js');
+    const doerAgent = createAgentFromFile('11_12.js');
+    test('', () => {
+        console.warn(taskerAgent);
+        console.warn(doerAgent);
+    });
+});
 
-// do: create task workflow
+
+// [do: create full flow test]
+// [SEND execution REQUEST]
 // ....
 
 
