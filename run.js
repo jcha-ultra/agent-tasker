@@ -50,7 +50,7 @@ class Agent {
     assignSubtask(taskname, subtask, subagentId, board) {
         const recipientId = subagentId;
         const requestId = this.requestTask(board, recipientId, subtask);
-        this.tasks[taskname].subrequestsIds.push(requestId);
+        this.tasks[taskname].dependencyIds.push(requestId);
         this.setSubagentStatus(subagentId, 'busy');
         this.tasks[taskname].status = 'waiting_for_subtasks';
     }
@@ -85,7 +85,7 @@ class Agent {
             this.tasks[request.taskName] = {
                 requestId: request.msgId,
                 status: 'new',
-                subrequestsIds: []
+                dependencyIds: []
             };
         }
     }
@@ -177,7 +177,7 @@ class Agent {
             tasks[nextRequest.taskName] = {
                 requestId: nextRequest.msgId,
                 status: 'new',
-                subrequestsIds: []
+                dependencyIds: []
             };
             return tasks;
         }
