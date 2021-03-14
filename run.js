@@ -227,7 +227,7 @@ class MessageBoard {
     }
 
     archive(message) {
-        saveData(message, `${MESSAGE_PATH}/inactive/${message.msgId}.js`);
+        saveData(message, `${this.messagePath}/inactive/${message.msgId}.js`);
         fs.unlinkSync(`${this.messagePath}/${message.msgId}.js`);
     }
 
