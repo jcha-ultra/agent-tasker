@@ -68,6 +68,10 @@ class Agent {
         return Object.keys(this.tasks).find(taskname => this.tasks[taskname].requestId === id);
     }
 
+    getTaskByExecutionId(id) {
+        return Object.keys(this.tasks).find(taskname => this.tasks[taskname].executionIds.includes(id));
+    }
+
     postRequest(board, contents) {
         const postedContents = contents;
         postedContents.msgType = 'request';
