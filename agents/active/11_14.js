@@ -4,15 +4,17 @@ module.exports = {
         "do something 4": {
             "requestId": "message_12_15",
             "dependencyIds": [
+                "message_15_3",
+                "message_16_4"
             ],
-            "executionIds": [
-                "message_13_1"
-            ]
+            "executionIds": []
         }
     },
     "subagents": {
         "free": [],
         "busy": [
+            "agent_12_1",
+            "agent_13_2"
         ]
     }
 }
