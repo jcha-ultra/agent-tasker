@@ -106,23 +106,24 @@ Task Workflows:
 //                 [de-allocate subagents]
 //         [for execution request:]
 //             [done:]
+//                 🚧[SEND done RESPONSE to source request]
+//                 [SEND done RESPONSE to dependency notes on dependents list]
 //                 [ARCHIVE execution REQUEST]
 //                 [REMOVE from tasklist]
-//                 [SEND done RESPONSE to dependency notes on dependents list]
-//                 [SEND done RESPONSE to source request]
-//             [split:]
-//                 🚧[ARCHIVE execution REQUEST]
+//             ✅[split:]
 //                 ✅[ADD to dependencies list]
 //                 ✅[SEND dependency REQUEST to subagents]
 //                 ✅[allocate subagents]
+//                 ✅[ARCHIVE execution REQUEST]
+//                 ✅[REMOVE from execution ids list]
 //             [dependencies:]
-//                 [ARCHIVE execution REQUEST]
 //                 [ADD to dependencies list]
 //                 [SEND dependencies NOTE to agents]
-// [agent evaluates tasks in tasklist:]
-//     [dependencies list empty and execution ids list empty:]
+//                 [ARCHIVE execution REQUEST]
+// ✅[agent evaluates tasks in tasklist:]
+//     ✅[dependencies list empty and execution ids list empty:]
 //            ✅[SEND execution REQUEST]
-//            🚧[ADD to execution ids list]
+//            ✅[ADD to execution ids list]
 
 
 // Pass 29:
@@ -139,6 +140,7 @@ describe('task can go through full flow', () => {
     const board = new MessageBoard();
     const taskAgent = createAgentFromFile('10_13.js');
     const doAgent = createAgentFromFile('11_14.js');
+    const humanAgent = createAgentFromFile('0_human.js');
     afterEach(() => {
         doAgent.save();
     });
@@ -149,11 +151,26 @@ describe('task can go through full flow', () => {
     test('agent sends execution request', () => {
         doAgent.evaluateTasks(board);
         expect(doAgent.tasks['do something 4'].executionIds.length).toBe(1);
-        console.warn(`MANUAL TEST: check that execution request for agent ${doAgent.id}'s tasks has been posted`);
+        // console.warn(`MANUAL TEST: verify that execution request for agent ${doAgent.id}'s tasks has been posted`);
     });
-    test.skip('agent processes split_task responses', () => {
-        // [create split_task response];
+    test('human agent posts split task response', () => {
+        const requestId = doAgent.tasks['do something 4'].executionIds[0];
+        humanAgent.postResponse(board, requestId, {
+            response: 'split_task',
+            data: {
+                subtasks: [
+                    'subtask_1',
+                    'subtask_2'
+                ]
+            }
+        });
+    });
+    test.only('agent processes split_task responses', () => {
         doAgent.processMessages(board);
+        expect(doAgent.tasks['do something 4'].dependencyIds.length).toBe(2);
+        console.warn(`MANUAL TEST: verify that agent ${doAgent.id} has successfully allocated subtasks to subagents`);
+        expect(doAgent.tasks['do something 4'].executionIds.length).toBe(0);
+        console.warn(`MANUAL TEST: verify that execution request has been archived`);
     });
 
     test.skip('', () => {
@@ -162,7 +179,6 @@ describe('task can go through full flow', () => {
 
 
 // [do: create full flow test]
-// [SEND execution REQUEST]
 // ....
 
 
