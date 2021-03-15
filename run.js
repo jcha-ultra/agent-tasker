@@ -103,9 +103,11 @@ class Agent {
         if (response.response === 'split_task') {
             const numAgentsNeeded = response.data.subtasks.length;
             const freeSubAgents = this.allocateSubagents(numAgentsNeeded);
-            const taskname = this.getTaskByRequestId(response.requestId);
+            const taskname = this.getTaskByExecutionId(response.requestId);
             response.data.subtasks.forEach((subtask, i) => this.assignSubtask(taskname, subtask, freeSubAgents[i], board));
-            board.archive(response);
+            board.archive(response.msgId);
+            board.archive(response.requestId);
+            this.tasks[taskname].executionIds = this.tasks[taskname].executionIds.filter(id => id !== response.requestId);
         }
     }
 
@@ -226,9 +228,9 @@ class MessageBoard {
         return fs.readdirSync(this.messagePath).map(fileName => fileName.replace('.js', ''));
     }
 
-    archive(message) {
-        saveData(message, `${this.messagePath}/inactive/${message.msgId}.js`);
-        fs.unlinkSync(`${this.messagePath}/${message.msgId}.js`);
+    archive(id) {
+        saveData(this.getMessage(id), `${MESSAGE_PATH}/inactive/${id}.js`);
+        fs.unlinkSync(`${this.messagePath}/${id}.js`);
     }
 
     getMessage(id) {
