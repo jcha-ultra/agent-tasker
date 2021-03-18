@@ -106,8 +106,8 @@ Task Workflows:
 //                 [de-allocate subagents]
 //         [for execution request:]
 //             [done:]
-//                 🚧[SEND done RESPONSE to source request]
-//                 [SEND done RESPONSE to dependency notes on dependents list]
+//                 ✅[SEND done RESPONSE to source request]
+//                 🚧[SEND done RESPONSE to dependency notes on dependents list]
 //                 [ARCHIVE execution REQUEST]
 //                 [REMOVE from tasklist]
 //             ✅[split:]
@@ -165,7 +165,7 @@ describe('task can go through full flow', () => {
             }
         });
     });
-    test.only('agent processes split_task responses', () => {
+    test('agent processes split_task responses', () => {
         doAgent.processMessages(board);
         expect(doAgent.tasks['do something 4'].dependencyIds.length).toBe(2);
         console.warn(`MANUAL TEST: verify that agent ${doAgent.id} has successfully allocated subtasks to subagents`);
@@ -173,7 +173,31 @@ describe('task can go through full flow', () => {
         console.warn(`MANUAL TEST: verify that execution request has been archived`);
     });
 
-    test.skip('', () => {
+    describe('agent behaves correctly after receiving done response for execution request', () => {
+        const doAgent1_1 = createAgentFromFile('agent_12_1.js');
+        const doAgent1_2 = createAgentFromFile('agent_13_2.js');
+
+        beforeEach(() => {
+            doAgent1_1.act(board);
+            doAgent1_2.act(board);
+        });
+        test('human sends done to execution requests', () => {
+            const requestId = doAgent1_1.tasks['subtask_1'].executionIds[0];
+            const requestId2 = doAgent1_2.tasks['subtask_2'].executionIds[0];
+            humanAgent.respond(board, requestId, 'done');
+            humanAgent.respond(board, requestId2, 'done');
+        });
+
+        // ....
+
+        test.only('after receiving done response for execution request, agent sends done to source request', () => {
+            console.warn(`MANUAL TEST: verify that a 'done' message was sent to '11_14' in response to 'message_15_3' and 'message_16_4'`);
+        });
+
+
+        // [bug: sent twice]
+        // [do: run test]
+        // ....
     });
 });
 

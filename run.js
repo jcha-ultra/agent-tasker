@@ -34,8 +34,14 @@ class Agent {
         return this.subagents.free;
     }
 
-    act() {
-        // console.log("Agent acted!");
+    get taskNames() {
+        return Object.keys(this.tasks);
+    }
+
+    act(board) {
+        this.processMessages(board);
+        this.evaluateTasks(board);
+        this.save();
     }
 
     allocateSubagents(numAgentsNeeded) {
@@ -111,6 +117,11 @@ class Agent {
             board.archive(response.msgId);
             board.archive(response.requestId);
             this.tasks[taskname].executionIds = this.tasks[taskname].executionIds.filter(id => id !== response.requestId);
+        } else if (response.response === 'done') {
+            const executionId = response.requestId;
+            const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].executionIds.includes(executionId));
+            const sourceRequestId = this.tasks[correspondingTask].requestId;
+            this.respond(board, sourceRequestId, 'done');
         }
     }
 
@@ -134,6 +145,19 @@ class Agent {
         postedContents.recipientID = board.getMessage(requestId).senderId;
         const responseId = this.sendMessage(board, postedContents);
         return responseId;
+    }
+
+    respond(board, requestId, responseType, data) {
+        if (responseType === 'split') {
+            this.postResponse(board, requestId, {
+                response: 'split_task',
+                data: data
+            });
+        } else if (responseType === 'done') {
+            this.postResponse(board, requestId, {
+                response: 'done'
+            });
+        }
     }
 
     save(dataPath = `${AGENT_PATH}/active`) {
