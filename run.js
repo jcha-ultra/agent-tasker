@@ -120,6 +120,7 @@ class Agent {
             const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].executionIds.includes(executionId));
             const sourceRequestId = this.tasks[correspondingTask].requestId;
             this.respond(board, sourceRequestId, 'done');
+            delete this.tasks[correspondingTask];
         }
         board.archive(response.msgId);
         board.archive(response.requestId);

@@ -109,7 +109,7 @@ Task Workflows:
 //                 ✅[SEND done RESPONSE to source request]
 //                 [SEND done RESPONSE to dependency notes on dependents list]
 //                 ✅[ARCHIVE execution REQUEST]
-//                 🚧[REMOVE from tasklist]
+//                 ✅[REMOVE from tasklist]
 //             ✅[split:]
 //                 ✅[ADD to dependencies list]
 //                 ✅[SEND dependency REQUEST to subagents]
@@ -117,7 +117,7 @@ Task Workflows:
 //                 ✅[ARCHIVE execution REQUEST]
 //                 ✅[REMOVE from execution ids list]
 //             [dependencies:]
-//                 [ADD to dependencies list]
+//                 🚧[ADD to dependencies list]
 //                 [SEND dependencies NOTE to agents]
 //                 [ARCHIVE execution REQUEST]
 // ✅[agent evaluates tasks in tasklist:]
@@ -190,11 +190,16 @@ describe('task can go through full flow', () => {
         test('after receiving done response for execution request, agent sends done to source request', () => {
             console.warn(`MANUAL TEST: verify that a 'done' message was sent to '11_14' in response to 'message_15_3' and 'message_16_4'`);
         });
-        test.only('execution request is archived after done response', () => {
+        test('execution request is archived after done response', () => {
             console.warn(`MANUAL TEST: verify that the 'done' responses (19_1 and 19_2) to the subtasks are archived`);
             console.warn(`MANUAL TEST: verify that original execution requests (17_1, 18_2) are archived`)
         });
+        test('task is removed from tasklist after receiving done response', () => {
+            expect(doAgent1_1.taskNames.length).toBe(0);
+            expect(doAgent1_2.taskNames.length).toBe(0);
+        });
     });
+    describe('agent processes dependency responses', () => {
 });
 
 
