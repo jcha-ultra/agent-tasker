@@ -107,9 +107,9 @@ Task Workflows:
 //         [for execution request:]
 //             [done:]
 //                 ✅[SEND done RESPONSE to source request]
-//                 🚧[SEND done RESPONSE to dependency notes on dependents list]
-//                 [ARCHIVE execution REQUEST]
-//                 [REMOVE from tasklist]
+//                 [SEND done RESPONSE to dependency notes on dependents list]
+//                 ✅[ARCHIVE execution REQUEST]
+//                 🚧[REMOVE from tasklist]
 //             ✅[split:]
 //                 ✅[ADD to dependencies list]
 //                 ✅[SEND dependency REQUEST to subagents]
@@ -187,20 +187,18 @@ describe('task can go through full flow', () => {
             humanAgent.respond(board, requestId, 'done');
             humanAgent.respond(board, requestId2, 'done');
         });
-
-        // ....
-
-        test.only('after receiving done response for execution request, agent sends done to source request', () => {
+        test('after receiving done response for execution request, agent sends done to source request', () => {
             console.warn(`MANUAL TEST: verify that a 'done' message was sent to '11_14' in response to 'message_15_3' and 'message_16_4'`);
         });
-
-
-        // [bug: sent twice]
-        // [do: run test]
-        // ....
+        test.only('execution request is archived after done response', () => {
+            console.warn(`MANUAL TEST: verify that the 'done' responses (19_1 and 19_2) to the subtasks are archived`);
+            console.warn(`MANUAL TEST: verify that original execution requests (17_1, 18_2) are archived`)
+        });
     });
 });
 
+
+// ....
 
 // [do: create full flow test]
 // ....
