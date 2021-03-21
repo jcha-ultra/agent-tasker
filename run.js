@@ -114,8 +114,6 @@ class Agent {
             const freeSubAgents = this.allocateSubagents(numAgentsNeeded);
             const taskname = this.getTaskByExecutionId(response.requestId);
             response.data.subtasks.forEach((subtask, i) => this.assignSubtask(taskname, subtask, freeSubAgents[i], board));
-            board.archive(response.msgId);
-            board.archive(response.requestId);
             this.tasks[taskname].executionIds = this.tasks[taskname].executionIds.filter(id => id !== response.requestId);
         } else if (response.response === 'done') {
             const executionId = response.requestId;
@@ -123,6 +121,8 @@ class Agent {
             const sourceRequestId = this.tasks[correspondingTask].requestId;
             this.respond(board, sourceRequestId, 'done');
         }
+        board.archive(response.msgId);
+        board.archive(response.requestId);
     }
 
     readRequests(board) {
