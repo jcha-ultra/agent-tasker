@@ -3,11 +3,10 @@ module.exports = {
     "tasks": {
         "do something 4": {
             "requestId": "message_12_15",
-            "dependencyIds": [
-                "message_15_3",
-                "message_16_4"
-            ],
-            "executionIds": []
+            "dependencyIds": [],
+            "executionIds": [
+                "message_23_1"
+            ]
         }
     },
     "subagents": {
