@@ -1,6 +1,6 @@
 module.exports = {
     "recipientID": "agent_13_2",
-    "subtype": "task",
+    "subtype": "dependency",
     "taskName": "subtask_2",
     "msgType": "request",
     "senderId": "11_14",
