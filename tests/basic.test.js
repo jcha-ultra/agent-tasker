@@ -194,7 +194,26 @@ describe('task can go through full flow', () => {
             expect(doAgent1_2.taskNames.length).toBe(0);
         });
     });
-    describe('agent processes dependency responses', () => {
+
+    describe('agent goes through dependency workflow', () => {
+        beforeEach(() => {
+        });
+
+        test('agent archives dependency requests based on done response', () => {
+            doAgent.act(board);
+            doAgent.save();
+            expect(doAgent.tasks['do something 4'].dependencyIds.length).toBe(0);
+            console.warn('MANUAL TEST: verify that dependency request for 11_14 are archived');
+            console.warn('MANUAL TEST: verify that dependency response for 11_14 are archived');
+            console.warn('MANUAL TEST: verify that 11_14 sends out a new execution message');
+        });
+
+        test.only('agent processes dependency response', () => {
+            // [do: commit]
+            // [do: send dependency response]
+        });
+
+    });
 });
 
 
