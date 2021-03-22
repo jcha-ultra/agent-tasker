@@ -120,11 +120,17 @@ class Agent {
             response.data.subtasks.forEach((subtask, i) => this.assignSubtask(taskname, subtask, freeSubAgents[i], board));
             this.tasks[taskname].executionIds = this.tasks[taskname].executionIds.filter(id => id !== response.requestId);
         } else if (response.response === 'done') {
-            const executionId = response.requestId;
-            const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].executionIds.includes(executionId));
-            const sourceRequestId = this.tasks[correspondingTask].requestId;
-            this.respond(board, sourceRequestId, 'done');
-            delete this.tasks[correspondingTask];
+            const requestId = response.requestId;
+            if (response.subtype === 'execution') {
+                const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].executionIds.includes(requestId));
+                const sourceRequestId = this.tasks[correspondingTask].requestId;
+                this.respond(board, sourceRequestId, 'done');
+                delete this.tasks[correspondingTask];
+            } else if (response.subtype === 'dependency') {
+                const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].dependencyIds.includes(requestId));
+                const sourceRequestId = this.tasks[correspondingTask].requestId;
+                this.tasks[correspondingTask].dependencyIds = removeFromArray(this.tasks[correspondingTask].dependencyIds, response.requestId); // removes from dependencyIds of task
+            }
         }
         board.archive(response.msgId);
         board.archive(response.requestId);
