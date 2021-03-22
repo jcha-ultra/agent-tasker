@@ -12,6 +12,10 @@ function saveData(contents, dataPath) {
     })
 }
 
+function removeFromArray(array, elementToRemove) {
+    return array.filter(element => element !== elementToRemove);
+}
+
 let id_suffix = 0;
 function genNewId(path) {
     const activeNum = fs.readdirSync(`${path}/active`).length;
