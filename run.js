@@ -58,7 +58,7 @@ class Agent {
 
     assignSubtask(taskname, subtask, subagentId, board) {
         const recipientId = subagentId;
-        const requestId = this.requestTask(board, recipientId, subtask);
+        const requestId = this.requestTask(board, recipientId, subtask, { subtype: 'dependency' });
         this.tasks[taskname].dependencyIds.push(requestId);
         this.setSubagentStatus(subagentId, 'busy');
     }
@@ -67,7 +67,7 @@ class Agent {
     evaluateTasks(postBoard) {
         Object.keys(this.tasks).forEach(taskName => {
             if (this.tasks[taskName].dependencyIds.length === 0 && this.tasks[taskName].executionIds.length === 0) {
-                const requestId = this.requestTask(postBoard, '0_human', taskName);
+                const requestId = this.requestTask(postBoard, '0_human', taskName, { subtype: 'execution' });
                 this.tasks[taskName].executionIds.push(requestId);
             }
         });
@@ -134,20 +134,22 @@ class Agent {
         return board.getRequestsForAgent(this.id);
     }
 
-    requestTask(board, recipientID, task) {
+    requestTask(board, recipientID, task, otherContents) {
         const contents = {
             recipientID: recipientID,
-            subtype: 'task',
-            taskName: task
+            taskName: task,
+            ...otherContents
         }
         return this.postRequest(board, contents);
     }
 
     postResponse(board, requestId, responseData) {
         const postedContents = responseData;
+        const originalRequest = board.getMessage(requestId);
         postedContents.msgType = 'response';
+        postedContents.subtype = originalRequest.subtype;
         postedContents.requestId = requestId;
-        postedContents.recipientID = board.getMessage(requestId).senderId;
+        postedContents.recipientID = originalRequest.senderId;
         const responseId = this.sendMessage(board, postedContents);
         return responseId;
     }
