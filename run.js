@@ -160,13 +160,13 @@ class Agent {
         return responseId;
     }
 
-    respond(board, requestId, responseType, data) {
-        if (responseType === 'split') {
+    respond(board, requestId, responseMsg, data) {
+        if (responseMsg === 'split') {
             this.postResponse(board, requestId, {
                 response: 'split_task',
                 data: data
             });
-        } else if (responseType === 'done') {
+        } else if (responseMsg === 'done') {
             this.postResponse(board, requestId, {
                 response: 'done'
             });
