@@ -95,15 +95,11 @@ Task Workflows:
 //     ✅[requests: ADD to tasklist]
 //     [dependency notes: ADD to task's dependents list]
 //     [responses:]
-//         [for dependency note:]
-//             [done:]
-//                 [ARCHIVE dependency NOTE]
-//                 [REMOVE from dependencies list]
-//         [for dependency request:]
-//             [done:]
-//                 [ARCHIVE dependency REQUEST]
-//                 [REMOVE from dependencies list]
-//                 [de-allocate subagents]
+//         ✅[for dependencies:]
+//             ✅[done:]
+//                 ✅[ARCHIVE dependency NOTE/REQUEST]
+//                 ✅[ARCHIVE done RESPONSE]
+//                 ✅[REMOVE from dependencies list]
 //         [for execution request:]
 //             [done:]
 //                 ✅[SEND done RESPONSE to source request]
@@ -117,13 +113,13 @@ Task Workflows:
 //                 ✅[ARCHIVE execution REQUEST]
 //                 ✅[REMOVE from execution ids list]
 //             [dependencies:]
-//                 🚧[ADD to dependencies list]
+//                 [ADD to dependencies list]
 //                 [SEND dependencies NOTE to agents]
 //                 [ARCHIVE execution REQUEST]
 // ✅[agent evaluates tasks in tasklist:]
 //     ✅[dependencies list empty and execution ids list empty:]
-//            ✅[SEND execution REQUEST]
-//            ✅[ADD to execution ids list]
+//         ✅[SEND execution REQUEST]
+//         ✅[ADD to execution ids list]
 
 
 // Pass 29:
@@ -132,7 +128,6 @@ Task Workflows:
 // Task flow
 
 // ....
-
 
 // ....
 
