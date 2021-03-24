@@ -65,7 +65,7 @@ class Agent {
 
     // Check if any tasks require action
     evaluateTasks(postBoard) {
-        Object.keys(this.tasks).forEach(taskName => {
+        this.taskNames.forEach(taskName => {
             if (this.tasks[taskName].dependencyIds.length === 0 && this.tasks[taskName].executionIds.length === 0) {
                 const requestId = this.requestTask(postBoard, '0_human', taskName, { subtype: 'execution' });
                 this.tasks[taskName].executionIds.push(requestId);
@@ -74,11 +74,11 @@ class Agent {
     }
 
     getTaskByRequestId(id) {
-        return Object.keys(this.tasks).find(taskname => this.tasks[taskname].requestId === id);
+        return this.taskNames.find(taskname => this.tasks[taskname].requestId === id);
     }
 
     getTaskByExecutionId(id) {
-        return Object.keys(this.tasks).find(taskname => this.tasks[taskname].executionIds.includes(id));
+        return this.taskNames.find(taskname => this.tasks[taskname].executionIds.includes(id));
     }
 
     postRequest(board, contents) {
@@ -102,7 +102,7 @@ class Agent {
     }
 
     processRequest(request) {
-        const taskList = Object.keys(this.tasks);
+        const taskList = this.taskNames;
         if (!taskList.includes(request.taskName)) {
             this.tasks[request.taskName] = {
                 requestId: request.msgId,
@@ -223,7 +223,7 @@ class Agent {
 
     takeNewTasks(board) {
         const selfRequestsList = this.readRequests(board);
-        const taskList = Object.keys(this.tasks);
+        const taskList = this.taskNames;
         function addTaskFromRequest(tasks, nextRequest) {
             tasks[nextRequest.taskName] = {
                 requestId: nextRequest.msgId,
