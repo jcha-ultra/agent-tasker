@@ -144,6 +144,9 @@ class Agent {
                 const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].dependencyIds.includes(requestId));
                 const sourceRequestId = this.tasks[correspondingTask].requestId;
                 this.tasks[correspondingTask].dependencyIds = removeFromArray(this.tasks[correspondingTask].dependencyIds, response.requestId); // removes from dependencyIds of task
+                if (this.subagents.busy.includes(response.senderId)) {
+                    this.setSubagentStatus(response.senderId, 'free') // de-allocate subagent
+                }
             }
         }
         board.archive(response.msgId);
