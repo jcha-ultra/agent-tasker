@@ -48,6 +48,10 @@ class Agent {
         this.save();
     }
 
+    addToDependencyList(taskName, id) {
+        this.tasks[taskName].dependencyIds.push(id);
+    }
+
     allocateSubagents(numAgentsNeeded) {
         const numNewSubagentsNeeded = Math.max(0, numAgentsNeeded - this.freeSubAgents.length);
         if (numNewSubagentsNeeded > 0) {
@@ -121,6 +125,7 @@ class Agent {
             this.tasks[taskname].executionIds = this.tasks[taskname].executionIds.filter(id => id !== response.requestId);
         } else if (response.response === 'dependencies_needed') {
             const recipientIds = Object.keys(response.data.dependencies);
+            const taskName = board.getMessage(response.requestId).taskName;
             const note = 'add_dependent';
             recipientIds.forEach(recipientId => {
                 const dependencyTaskName = response.data.dependencies[recipientId];
@@ -131,7 +136,8 @@ class Agent {
                         taskValue: 'tbd' // used to determine task priority
                     }
                 };
-                this.sendNote(board, recipientId, note, otherContents);
+                const noteId = this.sendNote(board, recipientId, note, otherContents);
+                this.addToDependencyList(taskName, noteId);
             });
         } else if (response.response === 'done') {
             const requestId = response.requestId;
@@ -185,7 +191,7 @@ class Agent {
         } else if (responseMsg === 'dependencies_needed') {
             responseData.data = data;
         }
-        this.postResponse(board, requestId, responseData);
+        return this.postResponse(board, requestId, responseData);
     }
 
     save(dataPath = `${AGENT_PATH}/active`) {
@@ -211,7 +217,7 @@ class Agent {
             note: note,
             ...otherContents
         };
-        this.sendMessage(board, contents)
+        return this.sendMessage(board, contents);
     }
 
     setData(dataPath) {
