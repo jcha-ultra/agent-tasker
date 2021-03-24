@@ -3,7 +3,9 @@ module.exports = {
     "tasks": {
         "do something 4": {
             "requestId": "message_12_15",
-            "dependencyIds": [],
+            "dependencyIds": [
+                "message_27_1"
+            ],
             "executionIds": [
                 "message_23_1"
             ]
