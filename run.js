@@ -175,15 +175,10 @@ class Agent {
     }
 
     respond(board, requestId, responseMsg, data) {
-        if (responseMsg === 'split') {
-            this.postResponse(board, requestId, {
-                response: 'split_task',
-                data: data
-            });
+        const responseData = { response: responseMsg };
+        if (responseMsg === 'split_task') {
+            responseData.data = data;
         } else if (responseMsg === 'done') {
-            this.postResponse(board, requestId, {
-                response: 'done'
-            });
         } else if (responseMsg === 'dependencies_needed') {
             responseData.data = data;
         }
