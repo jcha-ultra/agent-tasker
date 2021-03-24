@@ -100,6 +100,7 @@ Task Workflows:
 //                 ✅[ARCHIVE dependency NOTE/REQUEST]
 //                 ✅[ARCHIVE done RESPONSE]
 //                 ✅[REMOVE from dependencies list]
+//                 ✅[deallocate subagents]
 //         [for execution request:]
 //             [done:]
 //                 ✅[SEND done RESPONSE to source request]
@@ -112,10 +113,10 @@ Task Workflows:
 //                 ✅[allocate subagents]
 //                 ✅[ARCHIVE execution REQUEST]
 //                 ✅[REMOVE from execution ids list]
-//             [dependencies:]
-//                 [ADD to dependencies list]
-//                 [SEND dependencies NOTE to agents]
-//                 [ARCHIVE execution REQUEST]
+//             ✅[dependencies:]
+//                 ✅[SEND dependencies NOTE to agents]
+//                 ✅[ADD to dependencies list]
+//                 ✅[ARCHIVE execution REQUEST]
 // ✅[agent evaluates tasks in tasklist:]
 //     ✅[dependencies list empty and execution ids list empty:]
 //         ✅[SEND execution REQUEST]
@@ -123,6 +124,7 @@ Task Workflows:
 
 
 // Pass 29:
+// > [model other people as agents too]
 
 // Pass 28:
 // Task flow
@@ -193,12 +195,6 @@ describe('task can go through full flow', () => {
             expect(doAgent1_1.taskNames.length).toBe(0);
             expect(doAgent1_2.taskNames.length).toBe(0);
         });
-    });
-
-    describe('agent goes through dependency workflow', () => {
-        beforeEach(() => {
-        });
-
         test('agent archives dependency requests based on done response', () => {
             doAgent.act(board);
             doAgent.save();
@@ -208,20 +204,57 @@ describe('task can go through full flow', () => {
             console.warn('MANUAL TEST: verify that 11_14 sends out a new execution message');
         });
 
-        test.only('agent processes dependency response', () => {
-            // [do: commit]
-            // [do: send dependency response]
+
+    });
+
+    describe('agent goes through dependency workflow', () => {
+        dependencyTaskAskAgent = createAgentFromFile('agent_14.js');
+        dependencyTaskDoAgent = createAgentFromFile('agent_15.js');
+
+        beforeEach(() => {
         });
+
+        test('create request that will serve as a dependency for another task', () => {
+            dependencyTaskAskAgent.requestTask(board, 'agent_15', 'dependency_test_task', { subtype: 'execution'});
+            console.warn('MANUAL TEST: verify that request has been created');
+        });
+        test('dependency agent reads task', () => {
+            dependencyTaskDoAgent.act(board);
+            console.warn('MANUAL TEST: verify that dependency agent read in task and sends out execution request');
+        });
+        test('human agent responds with dependency response', () => {
+            const requestId = doAgent.tasks['do something 4'].executionIds[0];
+            humanAgent.respond(board, requestId, 'dependencies_needed', { dependencies: { agent_15: 'dependency_test_task' }});
+            console.warn('MANUAL TEST: verify that the response is posted');
+        });
+
+        test.only('agent processes dependency response', () => {
+            doAgent.act(board);
+            console.warn('MANUAL TEST: verify that dependency note has been sent to dependencyTaskDoAgent');
+            console.warn('MANUAL TEST: verify that dependencies list for doAgent has been updated');
+            console.warn('MANUAL TEST: verify that original execution request (23_1) has been archived');
+        });
+
+
+        // ....
+
+
+        // [do: commit updates]
+        // ....
+
+        // [do: write test]
+        // [message processing: dependency notes: ADD to task's dependents list]
 
     });
 });
+
 
 
 // ....
 
 // [do: create full flow test]
 // ....
-
+// > [change tasks into objects]
 
 
 
