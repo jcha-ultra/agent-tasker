@@ -119,6 +119,20 @@ class Agent {
             const taskname = this.getTaskByExecutionId(response.requestId);
             response.data.subtasks.forEach((subtask, i) => this.assignSubtask(taskname, subtask, freeSubAgents[i], board));
             this.tasks[taskname].executionIds = this.tasks[taskname].executionIds.filter(id => id !== response.requestId);
+        } else if (response.response === 'dependencies_needed') {
+            const recipientIds = Object.keys(response.data.dependencies);
+            const note = 'add_dependent';
+            recipientIds.forEach(recipientId => {
+                const dependencyTaskName = response.data.dependencies[recipientId];
+                const otherContents = {
+                    subtype: 'dependency',
+                    data: {
+                        dependencyTask: dependencyTaskName,
+                        taskValue: 'tbd' // used to determine task priority
+                    }
+                };
+                this.sendNote(board, recipientId, note, otherContents);
+            });
         } else if (response.response === 'done') {
             const requestId = response.requestId;
             if (response.subtype === 'execution') {
@@ -170,7 +184,10 @@ class Agent {
             this.postResponse(board, requestId, {
                 response: 'done'
             });
+        } else if (responseMsg === 'dependencies_needed') {
+            responseData.data = data;
         }
+        this.postResponse(board, requestId, responseData);
     }
 
     save(dataPath = `${AGENT_PATH}/active`) {
@@ -187,6 +204,16 @@ class Agent {
         postedContents.senderId = this.id;
         const requestID = board.postMessage(postedContents);
         return requestID;
+    }
+
+    sendNote(board, recipientId, note, otherContents) {
+        const contents = {
+            recipientID: recipientId,
+            msgType: 'note',
+            note: note,
+            ...otherContents
+        };
+        this.sendMessage(board, contents)
     }
 
     setData(dataPath) {
