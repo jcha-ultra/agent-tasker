@@ -2,7 +2,6 @@ const fs = require('fs');
 const AGENT_PATH = './agents';
 const MESSAGE_PATH = './messages';
 
-
 function saveData(contents, dataPath) {
     const selfExport = 'module.exports = ' + JSON.stringify(contents, null, 4);
     fs.writeFile(dataPath, selfExport, err => {
@@ -328,9 +327,5 @@ class MessageBoard {
         return msgId;
     }
 }
-
-
-
-
 
 module.exports = {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId};
