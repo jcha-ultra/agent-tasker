@@ -86,14 +86,11 @@ Task Workflows:
 // Request Reader: Display task chain (trace back to parent tasks)
 // Request Reader: Translates request json to human readable format
 // Request Reader: Print out how many human requests vs machine requests
-// Agent: act(): Check requests for self
-// Agent: Move messages to archive after being done with them
-// Agent: Flow: Subagent reports that a subtask is done (reminder: set subagents to free)
-// Agent: Respond to request to perform task
+// > [model other people as agents too]
 
-// [agent processes messages:]
+// ✅[agent processes messages:]
 //     ✅[requests: ADD to tasklist]
-//     [dependency notes: ADD to task's dependents list]
+//     ✅[dependency notes: ADD to task's dependents list]
 //     [responses:]
 //         ✅[for dependencies:]
 //             ✅[done:]
@@ -104,7 +101,7 @@ Task Workflows:
 //         [for execution request:]
 //             [done:]
 //                 ✅[SEND done RESPONSE to source request]
-//                 [SEND done RESPONSE to dependency notes on dependents list]
+//                 🚧[SEND done RESPONSE to dependency notes on dependents list]
 //                 ✅[ARCHIVE execution REQUEST]
 //                 ✅[REMOVE from tasklist]
 //             ✅[split:]
@@ -124,7 +121,6 @@ Task Workflows:
 
 
 // Pass 29:
-// > [model other people as agents too]
 
 // Pass 28:
 // Task flow
@@ -203,8 +199,6 @@ describe('task can go through full flow', () => {
             console.warn('MANUAL TEST: verify that dependency response for 11_14 are archived');
             console.warn('MANUAL TEST: verify that 11_14 sends out a new execution message');
         });
-
-
     });
 
     describe('agent goes through dependency workflow', () => {
@@ -224,27 +218,38 @@ describe('task can go through full flow', () => {
         });
         test('human agent responds with dependency response', () => {
             const requestId = doAgent.tasks['do something 4'].executionIds[0];
-            humanAgent.respond(board, requestId, 'dependencies_needed', { dependencies: { agent_15: 'dependency_test_task' }});
+            humanAgent.respond(board, requestId, 'dependencies_needed', { dependencies: { agent_15: ['dependency_test_task'] }});
             console.warn('MANUAL TEST: verify that the response is posted');
         });
 
-        test.only('agent processes dependency response', () => {
+        test('agent processes dependency response', () => {
             doAgent.act(board);
             console.warn('MANUAL TEST: verify that dependency note has been sent to dependencyTaskDoAgent');
             console.warn('MANUAL TEST: verify that dependencies list for doAgent has been updated');
             console.warn('MANUAL TEST: verify that original execution request (23_1) has been archived');
         });
 
+        test('dependency agent can process dependency note', () => {
+            dependencyTaskDoAgent.act(board);
+            console.warn('MANUAL TEST: verify that dependent has been added');
+        });
 
-        // ....
+        test.only('dependency agent can process dependency note', () => {
 
+        });
 
-        // [do: commit updates]
         // ....
 
         // [do: write test]
-        // [message processing: dependency notes: ADD to task's dependents list]
+        // ....
 
+        // [do: set up test conditions]
+        // [do: write code]
+        // [do: debug code]
+        // ....
+
+        // [SEND done RESPONSE to dependency notes on dependents list]
+        // ....
     });
 });
 
@@ -254,7 +259,6 @@ describe('task can go through full flow', () => {
 
 // [do: create full flow test]
 // ....
-// > [change tasks into objects]
 
 
 
