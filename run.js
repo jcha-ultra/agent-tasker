@@ -121,8 +121,8 @@ class Agent {
     processNote(note) {
         if (note.note === 'add_dependent') {
             const dependencyTask = note.data.dependencyTask;
-            if (!this.tasks[dependencyTask].dependents.includes(note.msgId)) {
-                this.tasks[dependencyTask].dependents.push(note.msgId);
+            if (!this.tasks[dependencyTask].dependentIds.includes(note.msgId)) {
+                this.tasks[dependencyTask].dependentIds.push(note.msgId);
             }
         }
     }
