@@ -193,7 +193,6 @@ describe('task can go through full flow', () => {
         });
         test('agent archives dependency requests based on done response', () => {
             doAgent.act(board);
-            doAgent.save();
             expect(doAgent.tasks['do something 4'].dependencyIds.length).toBe(0);
             console.warn('MANUAL TEST: verify that dependency request for 11_14 are archived');
             console.warn('MANUAL TEST: verify that dependency response for 11_14 are archived');
@@ -234,22 +233,16 @@ describe('task can go through full flow', () => {
             console.warn('MANUAL TEST: verify that dependent has been added');
         });
 
-        test.only('dependency agent can process dependency note', () => {
-
+        test('human agent tells dependency agent task is complete', () => {
+            const requestId = dependencyTaskDoAgent.tasks['dependency_test_task'].executionIds[0];
+            humanAgent.respond(board, requestId, 'done');
+            console.warn('MANUAL TEST: verify that human agent message has been sent');
         });
 
-        // ....
-
-        // [do: write test]
-        // ....
-
-        // [do: set up test conditions]
-        // [do: write code]
-        // [do: debug code]
-        // ....
-
-        // [SEND done RESPONSE to dependency notes on dependents list]
-        // ....
+        test('dependency agent sends done response to dependents for task after task is done', () => {
+            dependencyTaskDoAgent.act(board);
+            console.warn('MANUAL TEST: verify that dependency agent has sent done response');
+        });
     });
 });
 
