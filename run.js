@@ -142,15 +142,17 @@ class Agent {
             const note = 'add_dependent';
             recipientIds.forEach(recipientId => {
                 const dependencyTaskName = response.data.dependencies[recipientId];
-                const otherContents = {
-                    subtype: 'dependency',
-                    data: {
-                        dependencyTask: dependencyTaskName,
-                        taskValue: 'tbd' // used to determine task priority
-                    }
-                };
-                const noteId = this.sendNote(board, recipientId, note, otherContents);
-                this.addToDependencyList(taskName, noteId);
+                dependencyTaskName.forEach(dependencyTask => {
+                    const otherContents = {
+                        subtype: 'dependency',
+                        data: {
+                            dependencyTask: dependencyTask,
+                            taskValue: 'tbd' // used to determine task priority
+                        }
+                    };
+                    const noteId = this.sendNote(board, recipientId, note, otherContents);
+                    this.addToDependencyList(taskName, noteId);
+                });
             });
         } else if (response.response === 'done') {
             const requestId = response.requestId;
