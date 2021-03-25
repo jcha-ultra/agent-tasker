@@ -98,8 +98,10 @@ class Agent {
                 this.processRequest(message);
             } else if (message.msgType === 'response') {
                 this.processResponse(message, board);
+            } else if (message.msgType === 'note') {
+                this.processNote(message, board);
             } else {
-                throw `Error: unknown message type: ${message.msgType}`;
+                throw `Error: unknown message type: '${message.msgType}'`;
             }
         });
     }
@@ -112,6 +114,18 @@ class Agent {
                 dependencyIds: [],
                 executionIds: []
             };
+        }
+    }
+
+    processNote(note) {
+        if (note.note === 'add_dependent') {
+            const dependencyTask = note.data.dependencyTask;
+            if (!this.tasks[dependencyTask].dependents) {
+                this.tasks[dependencyTask].dependents = [];
+            }
+            if (!this.tasks[dependencyTask].dependents.includes(note.msgId)) {
+                this.tasks[dependencyTask].dependents.push(note.msgId);
+            }
         }
     }
 
