@@ -12,10 +12,11 @@ module.exports = {
         }
     },
     "subagents": {
-        "free": [],
-        "busy": [
+        "free": [
             "agent_12_1",
             "agent_13_2"
+        ],
+        "busy": [
         ]
     }
 }
