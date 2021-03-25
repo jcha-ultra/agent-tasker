@@ -158,6 +158,9 @@ class Agent {
                 const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].executionIds.includes(requestId));
                 const sourceRequestId = this.tasks[correspondingTask].requestId;
                 this.respond(board, sourceRequestId, 'done');
+                this.tasks[correspondingTask].dependentIds.forEach(dependentId => { // tell any dependents that task is done
+                    this.respond(board, dependentId, 'done');
+                });
                 delete this.tasks[correspondingTask];
             } else if (response.subtype === 'dependency') {
                 const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].dependencyIds.includes(requestId));
