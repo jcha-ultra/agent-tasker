@@ -1,7 +1,8 @@
 const {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId} = require('../run.js');
-const AGENT_PATH = './agents';
-const AGENT_PATH_ACTIVE = './agents/active';
-const MESSAGE_PATH = './messages';
+const Raika = require('../raika.js');
+const AGENT_PATH = './boards/test2/agents';
+const AGENT_PATH_ACTIVE = './boards/test2/agents/active';
+const MESSAGE_PATH = './boards/test2/messages';
 const board = new MessageBoard();
 
 function createTestAgent() {
@@ -46,7 +47,6 @@ Messages:
 
 Task Workflows:
 
-
 [request placed on board:]
 [agent reads request and adds it to tasklist]
 [agent posts request for executor agent]
@@ -59,75 +59,129 @@ Task Workflows:
     [dependencies left: do nothing]
     [no dependencies remaining: send message to executor agent]
 
-
-....
-
-....
-
-
-
-
-
-....
+    // ✅[agent processes messages:]
+    //     ✅[requests: ADD to tasklist]
+    //     ✅[dependency notes: ADD to task's dependents list]
+    //     ✅[responses:]
+    //         ✅[for dependencies:]
+    //             ✅[done:]
+    //                 ✅[ARCHIVE dependency NOTE/REQUEST]
+    //                 ✅[ARCHIVE done RESPONSE]
+    //                 ✅[REMOVE from dependencies list]
+    //                 ✅[deallocate subagents]
+    //         ✅[for execution request:]
+    //             ✅[done:]
+    //                 ✅[SEND done RESPONSE to source request]
+    //                 ✅[SEND done RESPONSE to dependency notes on dependents list]
+    //                 ✅[ARCHIVE execution REQUEST]
+    //                 ✅[REMOVE from tasklist]
+    //             ✅[split:]
+    //                 ✅[ADD to dependencies list]
+    //                 ✅[SEND dependency REQUEST to subagents]
+    //                 ✅[allocate subagents]
+    //                 ✅[ARCHIVE execution REQUEST]
+    //                 ✅[REMOVE from execution ids list]
+    //             ✅[dependencies:]
+    //                 ✅[SEND dependencies NOTE to agents]
+    //                 ✅[ADD to dependencies list]
+    //                 ✅[ARCHIVE execution REQUEST]
+    // ✅[agent evaluates tasks in tasklist:]
+    //     ✅[dependencies list empty and execution ids list empty:]
+    //         ✅[SEND execution REQUEST]
+    //         ✅[ADD to execution ids list]
 
 
 **************/
 
 // BACKLOG:
 // Implement TypeScript
-// Orphaned Agents: Neither requests or responses outstanding for it
-// Timer Agent
+// Timer Task
+// Model Other Humans Agents
 // Create new agent that doesn't have a data path
-// Implement Priority System (priority = importance * urgency * delay)
-// Agents: Order tasks by ease
-// ---MVP---
-// Make sure request statuses are updated correctly
-// Human-Agent: Post processing request
+// Implement Priority System (value, effort, urgency)
 // Request Reader: Display task chain (trace back to parent tasks)
-// Request Reader: Translates request json to human readable format
-// Request Reader: Print out how many human requests vs machine requests
-// > [model other people as agents too]
+// User can send processing_needed messages
+// ---MVP---
 
-// ✅[agent processes messages:]
-//     ✅[requests: ADD to tasklist]
-//     ✅[dependency notes: ADD to task's dependents list]
-//     [responses:]
-//         ✅[for dependencies:]
-//             ✅[done:]
-//                 ✅[ARCHIVE dependency NOTE/REQUEST]
-//                 ✅[ARCHIVE done RESPONSE]
-//                 ✅[REMOVE from dependencies list]
-//                 ✅[deallocate subagents]
-//         [for execution request:]
-//             [done:]
-//                 ✅[SEND done RESPONSE to source request]
-//                 🚧[SEND done RESPONSE to dependency notes on dependents list]
-//                 ✅[ARCHIVE execution REQUEST]
-//                 ✅[REMOVE from tasklist]
-//             ✅[split:]
-//                 ✅[ADD to dependencies list]
-//                 ✅[SEND dependency REQUEST to subagents]
-//                 ✅[allocate subagents]
-//                 ✅[ARCHIVE execution REQUEST]
-//                 ✅[REMOVE from execution ids list]
-//             ✅[dependencies:]
-//                 ✅[SEND dependencies NOTE to agents]
-//                 ✅[ADD to dependencies list]
-//                 ✅[ARCHIVE execution REQUEST]
-// ✅[agent evaluates tasks in tasklist:]
-//     ✅[dependencies list empty and execution ids list empty:]
-//         ✅[SEND execution REQUEST]
-//         ✅[ADD to execution ids list]
-
+// Pass 30:
 
 // Pass 29:
 
-// Pass 28:
-// Task flow
+describe('user can perform task end-to-end', () => {
+    // task: buy new earphones
+    const board = new MessageBoard();
+    const raika = new Raika(board);
 
-// ....
+    beforeAll(() => {
+    });
 
-// ....
+    afterAll(() => {
+    });
+
+    test('raika asks user what they would like to do upon startup', () => {
+        console.warn(`MANUAL TEST: verify that raika asks user what they would like to do`);
+        raika.start();
+    });
+
+    test('raika prompts user to reply', async () => {
+        console.warn(`MANUAL TEST: verify that user can enter input`);
+        await raika.start();
+    });
+
+    test('raika exits when prompted', async () => {
+        console.warn(`MANUAL TEST: verify that raika exits after selecting exit option`);
+        await raika.start();
+    });
+
+    test('raika loops', async () => {
+        console.warn(`MANUAL TEST: verify that raika loops`);
+        await raika.start();
+    });
+
+
+    describe('raika can add a task', () => {
+        test('raika can ask user for a task to add', async () => {
+            console.warn(`MANUAL TEST: verify that raika can prompt user to add a task`);
+            await raika.start();
+        });
+        test('raika sends task adding message', async () => {
+            console.warn(`MANUAL TEST: verify that raika sends a message to the source agent to add a task`);
+            await raika.start();
+        });
+    });
+
+    test('raika can wait for a round to be run', async () => {
+        console.warn(`MANUAL TEST: verify that you can select the option to run a round, and that it works`);
+        await raika.start();
+    });
+
+    test('raika can pull out list of tasks for a human agent', async () => {
+        console.warn(`MANUAL TEST: verify that you can select option to get tasks for a user, and it works`);
+        await raika.start();
+    });
+
+    // ....
+    describe('human agent can send messages back', () => {
+        test.only('raika can display tasklist as options for user to select', async () => {
+            console.warn(`MANUAL TEST: verify that when you select to display tasklist, tasklist displays as options you can select`);
+            await raika.start();
+        });
+
+
+        // test.only('selecting a task option allows additional options for split_task, dependencies_needed, and done', async () => {});
+        // test.only('user can select done', async () => {});
+        // test.only('user can select split_task', async () => {});
+        // test.only('user can select dependencies_needed', async () => {});
+    });
+
+
+    // [do: next step in flow]
+    // ....
+
+    // test.only('', async () => {});
+    // test.only('', async () => {});
+});
+
 
 describe('task can go through full flow', () => {
     const board = new MessageBoard();
@@ -245,15 +299,6 @@ describe('task can go through full flow', () => {
         });
     });
 });
-
-
-
-// ....
-
-// [do: create full flow test]
-// ....
-
-
 
 test.skip('agents do not keep performing actions from already-handled requests and responses', () => {
     const board = new MessageBoard();
