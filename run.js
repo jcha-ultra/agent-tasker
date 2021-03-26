@@ -1,6 +1,6 @@
 const fs = require('fs');
-const AGENT_PATH = './agents';
-const MESSAGE_PATH = './messages';
+const AGENT_PATH = './boards/test2/agents';
+const MESSAGE_PATH = './boards/test2/messages';
 
 function saveData(contents, dataPath) {
     const selfExport = 'module.exports = ' + JSON.stringify(contents, null, 4);
