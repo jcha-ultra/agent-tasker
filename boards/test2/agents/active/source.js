@@ -24,6 +24,14 @@ module.exports = {
                 "message_4_4"
             ],
             "dependentIds": []
+        },
+        "example 4": {
+            "requestId": "message_6_1",
+            "dependencyIds": [],
+            "executionIds": [
+                "message_7_2"
+            ],
+            "dependentIds": []
         }
     },
     "subagents": {
