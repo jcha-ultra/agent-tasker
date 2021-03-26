@@ -337,11 +337,15 @@ function createAgentFromFile(fileName, dataPath = `${AGENT_PATH}/active`) {
 }
 
 class AgentRunner {
-    runRound() {
+    constructor(board) {
+        this.board = board;
+    }
+
+    runRound(board = this.board) {
         const agentList = fs.readdirSync(`${AGENT_PATH}/active`);
         for (const agentFileName of agentList) {
             const agent = createAgentFromFile(agentFileName, `${AGENT_PATH}/active`);
-            agent.act();
+            agent.act(board);
         }
     }
 }
