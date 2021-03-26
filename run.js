@@ -70,7 +70,7 @@ class Agent {
     evaluateTasks(postBoard) {
         this.taskNames.forEach(taskName => {
             if (this.tasks[taskName].dependencyIds.length === 0 && this.tasks[taskName].executionIds.length === 0) {
-                const requestId = this.requestTask(postBoard, '0_human', taskName, { subtype: 'execution' });
+                const requestId = this.requestTask(postBoard, 'jcha', taskName, { subtype: 'execution' });
                 this.tasks[taskName].executionIds.push(requestId);
             }
         });
