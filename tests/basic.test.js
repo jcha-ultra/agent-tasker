@@ -162,16 +162,22 @@ describe('user can perform task end-to-end', () => {
 
     // ....
     describe('human agent can send messages back', () => {
-        test.only('raika can display tasklist as options for user to select', async () => {
+        test('raika can display tasklist as options for user to select', async () => {
             console.warn(`MANUAL TEST: verify that when you select to display tasklist, tasklist displays as options you can select`);
             await raika.start();
         });
+        test('selecting a task option allows additional options for split_task, dependencies_needed, process, and done', async () => {
+            console.warn(`MANUAL TEST: verify that when you select a task, a list of action for that task pops up`);
+            await raika.start();
+        });
 
+        // do: commit updates
 
-        // test.only('selecting a task option allows additional options for split_task, dependencies_needed, and done', async () => {});
-        // test.only('user can select done', async () => {});
+        test.only('user can select done', async () => {});
+
         // test.only('user can select split_task', async () => {});
         // test.only('user can select dependencies_needed', async () => {});
+        // test.only('user can select process', async () => {});
     });
 
 
