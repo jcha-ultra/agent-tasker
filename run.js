@@ -285,8 +285,53 @@ class Agent {
     }
 }
 
+class EndpointAgent extends Agent {
+    act(board) {
+        this.processMessages(board);
+        this.save();
+    }
+
+    processMessages(board) {
+        const msgsForAgent = board.getMessagesForAgent(this.id);
+        msgsForAgent.forEach(message => {
+            if (message.msgType === 'response' && message.response === 'done') {
+                board.archive(message.msgId);
+                board.archive(message.requestId);
+            } else {
+                throw `Error: Agent '${this.id}' with subtype '${this.subtype} cannot process message: '${message}'`;
+            }
+        });
+    }
+}
+
+class HumanAgent extends Agent {
+    act(board) {
+        this.processMessages(board);
+        this.save();
+    }
+
+    processMessages(board) {
+        const msgsForAgent = board.getMessagesForAgent(this.id);
+        msgsForAgent.forEach(message => {
+            if (message.msgType === 'request') {
+                this.processRequest(message);
+            } else {
+                throw `Error: Agent '${this.id}' with subtype '${this.subtype} cannot process message: '${message}'`;
+            }
+        });
+    }
+}
+
 function createAgentFromFile(fileName, dataPath = `${AGENT_PATH}/active`) {
-    const agent = new Agent();
+    const agentData = require(`${dataPath}/${fileName}`);
+    let agent;
+    if (agentData.subtype === 'endpoint') {
+        agent = new EndpointAgent();
+    } else if (agentData.subtype === 'human') {
+        agent = new HumanAgent();
+    } else {
+        agent = new Agent();
+    }
     agent.setData(`${dataPath}/${fileName}`);
     return agent;
 }
