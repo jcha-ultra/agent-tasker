@@ -98,8 +98,8 @@ Task Workflows:
 // Timer Task
 // Model Other Humans Agents
 // Create new agent that doesn't have a data path
-// Implement Priority System (value, effort, urgency)
 // Request Reader: Display task chain (trace back to parent tasks)
+// Implement Priority System (value, effort, urgency)
 // User can send processing_needed messages
 // ---MVP---
 
@@ -171,11 +171,13 @@ describe('user can perform task end-to-end', () => {
             await raika.start();
         });
 
+        test('user can select done', async () => {
+            console.warn(`MANUAL TEST: verify that when you set a task as done, that it is set as done`);
+            await raika.start();
+        });
+
         // do: commit updates
-
-        test.only('user can select done', async () => {});
-
-        // test.only('user can select split_task', async () => {});
+        test.only('user can select split_task', async () => {});
         // test.only('user can select dependencies_needed', async () => {});
         // test.only('user can select process', async () => {});
     });
