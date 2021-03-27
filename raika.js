@@ -115,6 +115,13 @@ class Raika {
                     `What do you want to do with the task '${taskChosen}'?`,
                     'choice',
                     {
+                        done: {
+                            displayedCopy: 'mark the task as done',
+                            perform: (data) => {
+                                sendDone(getHumanAgent().getRequestIdByTaskName(taskChosen));
+                                return initialStep;
+                            }
+                        },
                         process: {
                             displayedCopy: 'add processing information to the task',
                             perform: () => initialStep
@@ -125,10 +132,6 @@ class Raika {
                         },
                         dependencies_needed: {
                             displayedCopy: 'add dependencies to the task',
-                            perform: () => initialStep
-                        },
-                        done: {
-                            displayedCopy: 'mark the task as done',
                             perform: () => initialStep
                         },
                     }
