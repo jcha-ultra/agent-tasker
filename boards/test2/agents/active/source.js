@@ -1,14 +1,6 @@
 module.exports = {
     "id": "source",
     "tasks": {
-        "asdfasdf": {
-            "requestId": "message_0_1",
-            "dependencyIds": [],
-            "executionIds": [
-                "message_3_2"
-            ],
-            "dependentIds": []
-        },
         "blasphemy": {
             "requestId": "message_1_2",
             "dependencyIds": [],
