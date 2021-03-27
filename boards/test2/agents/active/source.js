@@ -1,14 +1,6 @@
 module.exports = {
     "id": "source",
     "tasks": {
-        "blasphemy": {
-            "requestId": "message_1_2",
-            "dependencyIds": [],
-            "executionIds": [
-                "message_3_3"
-            ],
-            "dependentIds": []
-        },
         "task 3": {
             "requestId": "message_2_1",
             "dependencyIds": [],
