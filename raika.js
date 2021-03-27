@@ -6,11 +6,16 @@ class Raika {
     constructor(board) {
         this.board = board;
         this.agentRunner = new AgentRunner(board);
+        this.raikaAgent = createAgentFromFile('raika_agent.js');
     }
 
     start() {
         return new Promise((resolve, reject) => {
             const agentRunner = this.agentRunner;
+            const raikaAgent = this.raikaAgent;
+            const jcha = this.jcha;
+            const board = this.board;
+
             const rl = readline.createInterface({
                 input: process.stdin,
                 output: process.stdout
@@ -22,13 +27,21 @@ class Raika {
             });
 
             const addTask = (function (newTask, board = this.board) {
-                const raikaAgent = createAgentFromFile('raika_agent.js');
                 raikaAgent.requestTask(board, 'source', newTask, { subtype: 'execution'});
             }).bind(this);
 
-            const getHumanTasks = (function (agentName) {
+            const getHumanAgent = (function (agentName = 'jcha') {
                 const humanAgent = createAgentFromFile(`${agentName}.js`);
-                return humanAgent.taskNames;
+                return humanAgent;
+            }).bind(this);
+
+            const getHumanTasks = (function (agentName = 'jcha') {
+                return getHumanAgent(agentName).taskNames;
+            }).bind(this);
+
+            const sendDone = (function (requestId, board = this.board, agentName = 'jcha') {
+                const humanAgent = createAgentFromFile(`${agentName}.js`);
+                humanAgent.respond(board, requestId, 'done');
             }).bind(this);
 
             class FlowStep {
