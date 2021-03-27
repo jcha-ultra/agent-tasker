@@ -1,12 +1,6 @@
 module.exports = {
     "id": "jcha",
     "tasks": {
-        "asdfasdf": {
-            "requestId": "message_3_2",
-            "dependencyIds": [],
-            "executionIds": [],
-            "dependentIds": []
-        },
         "blasphemy": {
             "requestId": "message_3_3",
             "dependencyIds": [],
