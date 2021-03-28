@@ -1,6 +1,6 @@
 const fs = require('fs');
-const AGENT_PATH = './boards/test2/agents';
-const MESSAGE_PATH = './boards/test2/messages';
+const AGENT_PATH = './boards/prod/agents';
+const MESSAGE_PATH = './boards/prod/messages';
 function requireNoCache(filePath) {
     let _invalidateRequireCacheForFile = function(filePath) {
     	delete require.cache[require.resolve(filePath)];
