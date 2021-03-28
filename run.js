@@ -1,6 +1,13 @@
 const fs = require('fs');
 const AGENT_PATH = './boards/test2/agents';
 const MESSAGE_PATH = './boards/test2/messages';
+function requireNoCache(filePath) {
+    let _invalidateRequireCacheForFile = function(filePath) {
+    	delete require.cache[require.resolve(filePath)];
+    };
+    _invalidateRequireCacheForFile(filePath);
+	return require(filePath);
+}
 
 function saveData(contents, dataPath) {
     const selfExport = 'module.exports = ' + JSON.stringify(contents, null, 4);
@@ -242,7 +249,7 @@ class Agent {
     }
 
     setData(dataPath) {
-        const agentData = require(dataPath);
+        const agentData = requireNoCache(dataPath);
         for (const dataItem in agentData) {
             this[dataItem] = agentData[dataItem];
         }
@@ -346,7 +353,7 @@ class HumanAgent extends Agent {
 }
 
 function createAgentFromFile(fileName, dataPath = `${AGENT_PATH}/active`) {
-    const agentData = require(`${dataPath}/${fileName}`);
+    const agentData = requireNoCache(`${dataPath}/${fileName}`);
     let agent;
     if (agentData.subtype === 'endpoint') {
         agent = new EndpointAgent();
@@ -394,12 +401,12 @@ class MessageBoard {
 
     getMessage(id) {
         return this.msgList.filter(msgId => msgId === id.toString())
-                           .map(msgId => require(`${this.messagePath}/${msgId}.js`))[0];
+                           .map(msgId => requireNoCache(`${this.messagePath}/${msgId}.js`))[0];
     }
 
     getMessagesForAgent(agentID) {
         return this.msgList.map(msgId => {
-            return require(`${this.messagePath}/${msgId}.js`);
+            return requireNoCache(`${this.messagePath}/${msgId}.js`);
         })
         .filter(message => message.recipientID === agentID);
     }
