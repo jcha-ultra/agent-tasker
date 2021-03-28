@@ -213,4 +213,8 @@ class Raika {
     }
 }
 
-module.exports = Raika;
+const {MessageBoard} = require('./run.js');
+const board = new MessageBoard();
+const raika = new Raika(board);
+raika.start();
+// module.exports = Raika;
