@@ -53,13 +53,13 @@ class Raika {
                     if (this.inputType === 'choice') {
                         this.performAction = (choiceNum, data) => {
                             const chosenAction = Object.keys(this.actions)[parseInt(choiceNum) - 1];
-                            data.chosenAction = chosenAction;
-                            data.nextStep = this.actions[chosenAction].perform(data);
+                            // data.chosenAction = chosenAction;
+                            data.nextStep = this.actions[chosenAction].perform(chosenAction, data);
                             return data;
                         }
                     } else if (this.inputType === 'freeform') {
                         this.performAction = (input, data) => {
-                            data.input = input;
+                            // data.input = input;
                             data.nextStep = this.actions.action.perform(input, data);
                             return data;
                         }
@@ -99,8 +99,8 @@ class Raika {
             }).bind(this);
 
             const createTaskSelectionStep = (function (tasks) {
-                const performFunc = (data) => {
-                    const taskChosen = data.chosenAction;
+                const performFunc = (chosenAction, data) => {
+                    const taskChosen = chosenAction;
                     return createTaskActionsStep(taskChosen);
                 }
                 return new FlowStep(
@@ -117,7 +117,7 @@ class Raika {
                     {
                         done: {
                             displayedCopy: 'mark the task as done',
-                            perform: (data) => {
+                            perform: () => {
                                 sendDone(getHumanAgent().getRequestIdByTaskName(taskChosen));
                                 return initialStep;
                             }
@@ -128,7 +128,10 @@ class Raika {
                         },
                         split_task: {
                             displayedCopy: 'split the task',
-                            perform: () => initialStep
+                            perform: (chosenAction, data) => {
+                                data.taskChosen = taskChosen;
+                                return taskSplitStep;
+                            }
                         },
                         dependencies_needed: {
                             displayedCopy: 'add dependencies to the task',
@@ -188,6 +191,21 @@ class Raika {
                 }
             );
 
+            const taskSplitStep = new FlowStep(
+                'How do you want to split the task? Separate each subtask by an \'&\' character.',
+                'freeform',
+                {
+                    action: {
+                        perform: (splitInput, data) => {
+                            const subtasks = splitInput.split(' &');
+                            const humanAgent = getHumanAgent();
+                            const requestId = humanAgent.getRequestIdByTaskName(data.taskChosen);
+                            humanAgent.respondSplit(board, requestId, subtasks);
+                            return initialStep;
+                        }
+                    }
+                }
+            );
 
             initialStep.execute();
 
