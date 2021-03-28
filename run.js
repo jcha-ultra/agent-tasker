@@ -1,6 +1,9 @@
 const fs = require('fs');
 const AGENT_PATH = './boards/prod/agents';
 const MESSAGE_PATH = './boards/prod/messages';
+
+const requestIgnoreList = [];
+
 function requireNoCache(filePath) {
     let _invalidateRequireCacheForFile = function(filePath) {
     	delete require.cache[require.resolve(filePath)];
@@ -57,6 +60,10 @@ class Agent {
 
     addToDependencyList(taskName, id) {
         this.tasks[taskName].dependencyIds.push(id);
+    }
+
+    addToRequestIgnoreList(id) {
+        requestIgnoreList.push(id);
     }
 
     allocateSubagents(numAgentsNeeded) {
@@ -120,7 +127,7 @@ class Agent {
 
     processRequest(request) {
         const taskList = this.taskNames;
-        if (!taskList.includes(request.taskName)) {
+        if (!taskList.includes(request.taskName) && !requestIgnoreList.includes(request.msgId)) {
             this.tasks[request.taskName] = {
                 requestId: request.msgId,
                 dependencyIds: [],
@@ -173,6 +180,7 @@ class Agent {
                 this.tasks[correspondingTask].dependentIds.forEach(dependentId => { // tell any dependents that task is done
                     this.respond(board, dependentId, 'done');
                 });
+                this.addToRequestIgnoreList(sourceRequestId); // adds source request id to ignore list
                 delete this.tasks[correspondingTask];
             } else if (response.subtype === 'dependency') {
                 const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].dependencyIds.includes(requestId));
