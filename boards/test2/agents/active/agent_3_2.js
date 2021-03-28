@@ -1,9 +1,9 @@
 module.exports = {
-    "id": "jcha",
+    "id": "agent_3_2",
     "tasks": {},
     "subagents": {
         "free": [],
         "busy": []
     },
-    "subtype": "human"
+    "superagent": "source"
 }
