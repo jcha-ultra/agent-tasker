@@ -41,7 +41,7 @@ class Raika {
 
             const sendDone = (function (requestId, board = this.board, agentName = 'jcha') {
                 const humanAgent = createAgentFromFile(`${agentName}.js`);
-                humanAgent.respond(board, requestId, 'done');
+                humanAgent.respondDone(board, requestId);
             }).bind(this);
 
             class FlowStep {

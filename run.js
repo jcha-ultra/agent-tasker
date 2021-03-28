@@ -324,6 +324,22 @@ class HumanAgent extends Agent {
             }
         });
     }
+
+    respondDone(board, requestId) {
+        this.respond(board, requestId, 'done');
+        this.addToRequestIgnoreList(requestId); // adds source request id to ignore list
+        delete this.tasks[this.getTaskByRequestId(requestId)];
+        this.save();
+    }
+
+    respondSplit(board, requestId, subtasks) {
+        const responseMsg = 'split_task';
+        const data = { subtasks };
+        this.respond(board, requestId, responseMsg, data);
+        this.addToRequestIgnoreList(requestId); // adds source request id to ignore list
+        delete this.tasks[this.getTaskByRequestId(requestId)];
+        this.save();
+    }
 }
 
 function createAgentFromFile(fileName, dataPath = `${AGENT_PATH}/active`) {
