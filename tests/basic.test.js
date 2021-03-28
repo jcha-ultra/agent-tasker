@@ -99,13 +99,32 @@ Task Workflows:
 // Model Other Humans Agents
 // Create new agent that doesn't have a data path
 // Request Reader: Display task chain (trace back to parent tasks)
-// Implement Priority System (value, effort, urgency)
-// User can send processing_needed messages
-// ---MVP---
+// Implement Priority System (value = importance/effort, urgency = effort/time, 2-day urgency)
 
 // Pass 30:
 
 // Pass 29:
+
+
+
+// do: commit updates
+// ....
+
+// > [priority system: user can set importance rating in flow]
+// > [priority system: user can set effort rating in flow]
+// > [priority system: user can set target date in flow]
+// > [priority system: system can organize tasks by value (undefined first)]
+// > [priority system: system can organize tasks by urgency (undefined first)]
+// > [priority system: system can automatically switch between doing tasks by urgency vs value]
+// > [priority system: system can send out next highest priority task]
+// > user can send add_priority_info messages
+// > [add back button]
+// > [send dependency_needed]
+// > [implement recurring tasks (option to mark recurring task as done)]
+// > [make it so that if agent already has a task when it receives a request, it will create a subagent to deal with it (change evaluateTasks)]
+// > [save requestIgnoreList in a global file and call it]
+// > [renaming task aliases]
+
 
 describe('user can perform task end-to-end', () => {
     // task: buy new earphones
@@ -160,7 +179,6 @@ describe('user can perform task end-to-end', () => {
         await raika.start();
     });
 
-    // ....
     describe('human agent can send messages back', () => {
         test('raika can display tasklist as options for user to select', async () => {
             console.warn(`MANUAL TEST: verify that when you select to display tasklist, tasklist displays as options you can select`);
@@ -176,18 +194,11 @@ describe('user can perform task end-to-end', () => {
             await raika.start();
         });
 
-        // do: commit updates
-        test.only('user can select split_task', async () => {});
-        // test.only('user can select dependencies_needed', async () => {});
-        // test.only('user can select process', async () => {});
+        test.only('user can select split_task', async () => {
+            console.warn(`MANUAL TEST: verify that you can split a task`);
+            await raika.start();
+        });
     });
-
-
-    // [do: next step in flow]
-    // ....
-
-    // test.only('', async () => {});
-    // test.only('', async () => {});
 });
 
 
