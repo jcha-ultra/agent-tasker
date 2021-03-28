@@ -42,6 +42,7 @@ class Agent {
     }
 
     act(board) {
+        this.save();
         this.processMessages(board);
         this.evaluateTasks(board);
         this.save();
@@ -291,6 +292,7 @@ class Agent {
 
 class EndpointAgent extends Agent {
     act(board) {
+        this.save();
         this.processMessages(board);
         this.save();
     }
@@ -310,6 +312,7 @@ class EndpointAgent extends Agent {
 
 class HumanAgent extends Agent {
     act(board) {
+        this.save();
         this.processMessages(board);
         this.save();
     }
