@@ -51,12 +51,18 @@ class Raika {
                     this.actions = actions;
 
                     if (this.inputType === 'choice') {
+                        if (!this.actions.exit) { // add 'back to start' option to choice menus
+                            this.actions.backToStart = {
+                                displayedCopy: 'back to start',
+                                perform: () => initialStep
+                            };
+                        }
                         this.performAction = (choiceNum, data) => {
                             const chosenAction = Object.keys(this.actions)[parseInt(choiceNum) - 1];
                             // data.chosenAction = chosenAction;
                             data.nextStep = this.actions[chosenAction].perform(chosenAction, data);
                             return data;
-                        }
+                        };
                     } else if (this.inputType === 'freeform') {
                         this.performAction = (input, data) => {
                             // data.input = input;
