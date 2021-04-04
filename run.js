@@ -80,14 +80,30 @@ class Agent {
         const requestId = this.requestTask(board, recipientId, subtask, { subtype: 'dependency' });
         this.tasks[taskname].dependencyIds.push(requestId);
         this.setSubagentStatus(subagentId, 'busy');
+        return requestId;
+    }
+
+    assignTaskToSubagent(taskName, board) {
+        const freeSubAgents = this.allocateSubagents(1);
+        const subagentId = freeSubAgents[0];
+        const requestId = this.requestTask(board, subagentId, taskName, { subtype: 'execution' });
+        this.tasks[taskName].executionIds.push(requestId);
+        this.setSubagentStatus(subagentId, 'busy');
+        return requestId;
     }
 
     // Check if any tasks require action
     evaluateTasks(postBoard) {
-        this.taskNames.forEach(taskName => {
+        this.taskNames.forEach((taskName, idx) => {
             if (this.tasks[taskName].dependencyIds.length === 0 && this.tasks[taskName].executionIds.length === 0) {
-                const requestId = this.requestTask(postBoard, 'jcha', taskName, { subtype: 'execution' });
-                this.tasks[taskName].executionIds.push(requestId);
+                if (idx === 0) { // If it's the first task, then agent deals with it itself
+                    const requestId = this.requestTask(postBoard, 'jcha', taskName, { subtype: 'execution' });
+                    this.tasks[taskName].executionIds.push(requestId);
+                } else {
+                    this.assignTaskToSubagent(taskName, postBoard);
+                }
+                // const requestId = this.requestTask(postBoard, 'jcha', taskName, { subtype: 'execution' });
+                // this.tasks[taskName].executionIds.push(requestId);
             }
         });
     }
@@ -187,9 +203,9 @@ class Agent {
                 const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].dependencyIds.includes(requestId));
                 const sourceRequestId = this.tasks[correspondingTask].requestId;
                 this.tasks[correspondingTask].dependencyIds = removeFromArray(this.tasks[correspondingTask].dependencyIds, response.requestId); // removes from dependencyIds of task
-                if (this.subagents.busy.includes(response.senderId)) {
-                    this.setSubagentStatus(response.senderId, 'free') // de-allocate subagent
-                }
+            }
+            if (this.subagents.busy.includes(response.senderId)) { // de-allocate subagent
+                this.setSubagentStatus(response.senderId, 'free');
             }
         }
         board.archive(response.msgId);
