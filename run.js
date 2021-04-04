@@ -1,6 +1,7 @@
 const fs = require('fs');
-const AGENT_PATH = './boards/prod/agents';
-const MESSAGE_PATH = './boards/prod/messages';
+const ENV = process.argv[2] || 'prod';
+const AGENT_PATH = `./boards/${ENV}/agents`;
+const MESSAGE_PATH = `./boards/${ENV}/messages`;
 
 const requestIgnoreList = [];
 
