@@ -94,40 +94,55 @@ Task Workflows:
 **************/
 
 // BACKLOG:
-// Implement TypeScript
-// Timer Task
-// Model Other Humans Agents
-// Create new agent that doesn't have a data path
-// Request Reader: Display task chain (trace back to parent tasks)
-// Implement Priority System (value = importance/effort, urgency = effort/time, 2-day urgency)
+// do: implement TypeScript
+// do: model other humans agents
+// do: add time dependencies (dependency resolves as done when time passes)
+// do: priority system: system automatically switches between modes: urgency -> value -> age
+// do: implement priority system (value = importance/effort, urgency = effort/time, 2-day urgency)
+// do: implement recurring tasks (add new option to mark recurring task as done)
+// do: priority system: system can send out next most urgent task
+// do: priority system: system can organize tasks by urgency (undefined first)
+// do: priority system: user can set target time during processing
+// do: request reader: display task chain (trace back to parent tasks)
+// do: add ability to rename task aliases
+// do: keyword system: user can set keywords during processing
+// do: priority system: system can send out next oldest task
+// do: priority system: system can send out next most valuable task
+// do: priority system: system can organize tasks by value (undefined first)
+// do: add ability for agents to filter/reorder their tasklists
+// do: priority system: user can set effort rating during processing
+// do: priority system: user can set importance rating during processing
+// do: user can send add_processing_info messages
+// do: user can set dependencies
+// do: automatically run round of agent actions after every user action
+// do: add ability to clean up inactive files and replace it with a number instead
+
+// Pass 31:
+// do: instead  of requestIgnoreList, use a function (messageRespondedTo) that checks if agent has already responded to a message
 
 // Pass 30:
+// do: make it so that if agent already has a task when it receives a request, it will create a subagent to deal with it (change evaluateTasks)
 
-// Pass 29:
+
+
+// ....
 
 
 
 // do: commit updates
 // ....
 
-// > [priority system: user can set importance rating in flow]
-// > [priority system: user can set effort rating in flow]
-// > [priority system: user can set target date in flow]
-// > [priority system: system can organize tasks by value (undefined first)]
-// > [priority system: system can organize tasks by urgency (undefined first)]
-// > [priority system: system can automatically switch between doing tasks by urgency vs value]
-// > [priority system: system can send out next highest priority task]
-// > user can send add_priority_info messages
-// > [add back button]
-// > [send dependency_needed]
-// > [implement recurring tasks (option to mark recurring task as done)]
-// > [make it so that if agent already has a task when it receives a request, it will create a subagent to deal with it (change evaluateTasks)]
-// > [save requestIgnoreList in a global file and call it]
-// > [renaming task aliases]
+test('agent will create subagents to deal with tasks beyond its first', () => {
+    console.warn(`MANUAL TEST: create multiple tasks and verify that there are multiple agents created to deal with those tasks`);
+    raika.start();
+});
 
+test('choice interactions have a "back to start" option', () => {
+    console.warn(`MANUAL TEST: verify that choice menus have a 'back to start' option and that it works`);
+    raika.start();
+});
 
 describe('user can perform task end-to-end', () => {
-    // task: buy new earphones
     const board = new MessageBoard();
     const raika = new Raika(board);
 
