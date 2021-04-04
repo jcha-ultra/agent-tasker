@@ -212,9 +212,7 @@ class Raika {
                     }
                 }
             );
-
             initialStep.execute();
-
         });
     }
 }
