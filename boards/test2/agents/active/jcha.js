@@ -1,7 +1,6 @@
 module.exports = {
     "id": "jcha",
-    "tasks": {
-    },
+    "tasks": {},
     "subagents": {
         "free": [],
         "busy": []
