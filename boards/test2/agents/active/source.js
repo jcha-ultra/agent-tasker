@@ -1,19 +1,11 @@
 module.exports = {
     "id": "source",
-    "tasks": {
-        "ex2": {
-            "requestId": "message_5_3",
-            "dependencyIds": [],
-            "executionIds": [
-                "message_7_6"
-            ],
-            "dependentIds": []
-        }
-    },
+    "tasks": {},
     "subagents": {
-        "free": [],
-        "busy": [
-            "agent_3_5"
-        ]
+        "free": [
+            "agent_3_5",
+            "agent_4_6"
+        ],
+        "busy": []
     }
 }
