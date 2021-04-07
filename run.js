@@ -430,14 +430,30 @@ class MessageBoard {
 
     getMessage(id) {
         return this.msgList.filter(msgId => msgId === id.toString())
-                           .map(msgId => requireNoCache(`${this.messagePath}/${msgId}.js`))[0];
+                           .map(msgId => require(`${this.messagePath}/${msgId}.js`))[0];
     }
 
-    getMessagesForAgent(agentID) {
+    getMessagesForAgent(agentId) {
+
         return this.msgList.map(msgId => {
+            let messageCached = require(`${this.messagePath}/${msgId}.js`);
+            if (Object.keys(messageCached).length !== 0) { // If the cached require works, then return it, otherwise return the no-cache version
+                return messageCached;
+            }
             return requireNoCache(`${this.messagePath}/${msgId}.js`);
         })
-        .filter(message => message.recipientID === agentID);
+            .filter(message => message.recipientID === agentId);
+    }
+
+    getMessagesFromAgent(agentId) {
+        return this.msgList.map(msgId => {
+            let messageCached = require(`${this.messagePath}/${msgId}.js`);
+            if (Object.keys(messageCached).length !== 0) { // If the cached require works, then return it, otherwise return the no-cache version
+                return messageCached;
+            }
+            return requireNoCache(`${this.messagePath}/${msgId}.js`);
+        })
+            .filter(message => message.senderId === agentId);
     }
 
     getRequestsForAgent(agentID) {
