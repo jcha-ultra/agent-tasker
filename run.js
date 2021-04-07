@@ -128,7 +128,13 @@ class Agent {
     }
 
     processMessages(board) {
-        const msgsForAgent = board.getMessagesForAgent(this.id);
+        const responsesFromAgent = board.getMessagesFromAgent(this.id).filter(message => message.msgType === 'response');
+        const msgsForAgent = board.getMessagesForAgent(this.id).filter(message => { // Filter out messages that have already been responded to by self
+            const hasResponseFromSelf = message =>
+                responsesFromAgent.some(response => response.requestId === message.msgId)
+            return message.msgType === 'response' || !hasResponseFromSelf(message);
+        });
+
         msgsForAgent.forEach(message => {
             if (message.msgType === 'request') {
                 this.processRequest(message);
