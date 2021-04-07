@@ -203,7 +203,6 @@ class Agent {
                 this.tasks[correspondingTask].dependentIds.forEach(dependentId => { // tell any dependents that task is done
                     this.respond(board, dependentId, 'done');
                 });
-                this.addToRequestIgnoreList(sourceRequestId); // adds source request id to ignore list
                 delete this.tasks[correspondingTask];
             } else if (response.subtype === 'dependency') {
                 const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].dependencyIds.includes(requestId));
@@ -250,6 +249,7 @@ class Agent {
         } else if (responseMsg === 'dependencies_needed') {
             responseData.data = data;
         }
+        this.addToRequestIgnoreList(requestId);
         return this.postResponse(board, requestId, responseData);
     }
 
@@ -368,7 +368,6 @@ class HumanAgent extends Agent {
 
     respondDone(board, requestId) {
         this.respond(board, requestId, 'done');
-        this.addToRequestIgnoreList(requestId); // adds source request id to ignore list
         delete this.tasks[this.getTaskByRequestId(requestId)];
         this.save();
     }
@@ -377,7 +376,6 @@ class HumanAgent extends Agent {
         const responseMsg = 'split_task';
         const data = { subtasks };
         this.respond(board, requestId, responseMsg, data);
-        this.addToRequestIgnoreList(requestId); // adds source request id to ignore list
         delete this.tasks[this.getTaskByRequestId(requestId)];
         this.save();
     }
