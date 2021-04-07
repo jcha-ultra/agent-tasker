@@ -113,24 +113,29 @@ Task Workflows:
 // do: priority system: user can set effort rating during processing
 // do: priority system: user can set importance rating during processing
 // do: user can send add_processing_info messages
-// do: user can set dependencies
-// do: automatically run round of agent actions after every user action
 // do: add ability to clean up inactive files and replace it with a number instead
+// do: user can set dependencies
+
+// Pass 32:
+// > [create process folder to hold process steps]
+// > [concept of a sequence of tasks]
 
 // Pass 31:
 // do: instead  of requestIgnoreList, use a function (messageRespondedTo) that checks if agent has already responded to a message
 
-// Pass 30:
-// do: make it so that if agent already has a task when it receives a request, it will create a subagent to deal with it (change evaluateTasks)
-
 
 
 // ....
-
-
 
 // do: commit updates
 // ....
+
+// do: instead  of requestIgnoreList, use a function (messageRespondedTo) that checks if agent has already responded to a message
+// ....
+
+test('agent can figure out if a message needs to be responded to without using requestIgnoreList', () => {
+    console.warn(`MANUAL TEST: set a task to done, then exit; verify that when you come back and then get the tasklist, then the old task doesn't appear again`);
+});
 
 test('agent will create subagents to deal with tasks beyond its first', () => {
     console.warn(`MANUAL TEST: create multiple tasks and verify that there are multiple agents created to deal with those tasks`);
