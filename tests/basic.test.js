@@ -95,8 +95,8 @@ Task Workflows:
 
 // BACKLOG:
 // do: implement TypeScript
-// do: model other humans agents
-// do: add time dependencies (dependency resolves as done when time passes)
+// do: model other humans agents as sources
+// do: model other humans agents as recipients
 // do: priority system: system automatically switches between modes: urgency -> value -> age
 // do: implement priority system (value = importance/effort, urgency = effort/time, 2-day urgency)
 // do: implement recurring tasks (add new option to mark recurring task as done)
@@ -112,16 +112,21 @@ Task Workflows:
 // do: add ability for agents to filter/reorder their tasklists
 // do: priority system: user can set effort rating during processing
 // do: priority system: user can set importance rating during processing
+// do: add ability to execute task sequences
 // do: user can send add_processing_info messages
+// do: add ability to distinguish between task atoms and sequences (no functionality)
+// do: add time tasks (task resolves as done when time passes)
 // do: add ability to clean up inactive files and replace it with a number instead
-// do: user can set dependencies
 
-// Pass 32:
+// Pass 33:
+// > [ability to filter by context term (i.e. slack:)]
+// > [menu option: 'filters': slack, weekend]
 // > [create process folder to hold process steps]
 // > [concept of a sequence of tasks]
+// > [rename run.js]
 
-// Pass 31:
-// do: instead  of requestIgnoreList, use a function (messageRespondedTo) that checks if agent has already responded to a message
+// Pass 32:
+// do: user can set dependencies
 
 
 
@@ -130,8 +135,16 @@ Task Workflows:
 // do: commit updates
 // ....
 
-// do: instead  of requestIgnoreList, use a function (messageRespondedTo) that checks if agent has already responded to a message
+// do: user can set dependencies
 // ....
+
+test('user can set dependencies', () => {
+    `1. Create 2 tasks
+     2. Add one task as a dependency of the other
+     3. Verify that dependent task disappears
+     4. Complete the dependency
+     5. Verify that the dependent reappears`
+});
 
 test('agent can figure out if a message needs to be responded to without using requestIgnoreList', () => {
     console.warn(`MANUAL TEST: set a task to done, then exit; verify that when you come back and then get the tasklist, then the old task doesn't appear again`);
