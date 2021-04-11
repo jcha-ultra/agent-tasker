@@ -260,6 +260,14 @@ class Agent {
         return this.postResponse(board, requestId, responseData);
     }
 
+    respondDependency(board, requestId, dependencies) {
+        const responseMsg = 'dependencies_needed';
+        const data = { dependencies };
+        this.respond(board, requestId, responseMsg, data);
+        delete this.tasks[this.getTaskByRequestId(requestId)];
+        this.save();
+    }
+
     respondDone(board, requestId) {
         this.respond(board, requestId, 'done');
         delete this.tasks[this.getTaskByRequestId(requestId)];
