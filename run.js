@@ -200,6 +200,7 @@ class Agent {
                     this.addToDependencyList(taskName, noteId);
                 });
             });
+            this.tasks[taskName].executionIds = removeFromArray(this.tasks[taskName].executionIds, response.requestId);
         } else if (response.response === 'done') {
             const requestId = response.requestId;
             if (response.subtype === 'execution') {
