@@ -259,6 +259,20 @@ class Agent {
         return this.postResponse(board, requestId, responseData);
     }
 
+    respondDone(board, requestId) {
+        this.respond(board, requestId, 'done');
+        delete this.tasks[this.getTaskByRequestId(requestId)];
+        this.save();
+    }
+
+    respondSplit(board, requestId, subtasks) {
+        const responseMsg = 'split_task';
+        const data = { subtasks };
+        this.respond(board, requestId, responseMsg, data);
+        delete this.tasks[this.getTaskByRequestId(requestId)];
+        this.save();
+    }
+
     save(dataPath = `${AGENT_PATH}/active`) {
         const selfExport = 'module.exports = ' + JSON.stringify(this, null, 4);
         try {
@@ -372,19 +386,6 @@ class HumanAgent extends Agent {
     //     });
     // }
 
-    respondDone(board, requestId) {
-        this.respond(board, requestId, 'done');
-        delete this.tasks[this.getTaskByRequestId(requestId)];
-        this.save();
-    }
-
-    respondSplit(board, requestId, subtasks) {
-        const responseMsg = 'split_task';
-        const data = { subtasks };
-        this.respond(board, requestId, responseMsg, data);
-        delete this.tasks[this.getTaskByRequestId(requestId)];
-        this.save();
-    }
 }
 
 function createAgentFromFile(fileName, dataPath = `${AGENT_PATH}/active`) {
@@ -440,7 +441,6 @@ class MessageBoard {
     }
 
     getMessagesForAgent(agentId) {
-
         return this.msgList.map(msgId => {
             let messageCached = require(`${this.messagePath}/${msgId}.js`);
             if (Object.keys(messageCached).length !== 0) { // If the cached require works, then return it, otherwise return the no-cache version
