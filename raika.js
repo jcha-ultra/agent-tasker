@@ -93,7 +93,7 @@ class Raika {
                 }
             }
 
-            const createChoiceStep = (function (choiceList, performFunc) {
+            const createChoiceStepActions = (function (choiceList, performFunc) {
                 const createdChoices = choiceList.reduce((choicesObj, choice) => {
                     choicesObj[choice] = {
                         displayedCopy: choice,
@@ -112,7 +112,7 @@ class Raika {
                 return new FlowStep(
                     'Tasks for jcha:',
                     'choice',
-                    createChoiceStep(tasks, performFunc)
+                    createChoiceStepActions(tasks, performFunc)
                 );
             }).bind(this);
 
@@ -140,8 +140,24 @@ class Raika {
                             }
                         },
                         dependencies_needed: {
-                            displayedCopy: 'add dependencies to the task',
-                            perform: () => initialStep
+                            displayedCopy: 'add dependency to the task',
+                            perform: (chosenAction, data) => {
+                                data.taskChosen = taskChosen;
+                                const performAddDependency = (chosenDependency, data) => { // Action that occurs after dependency is selected from menu
+                                    const humanAgent = getHumanAgent();
+                                    const requestId = humanAgent.getRequestIdByTaskName(data.taskChosen);
+                                    const dependencies = {};
+                                    const dependencyAgentId = humanAgent.getAgentByTaskName(board, chosenDependency);
+                                    dependencies[dependencyAgentId] = [chosenDependency];
+                                    humanAgent.respondDependency(board, requestId, dependencies);
+                                    return initialStep;
+                                }
+                                return new FlowStep(
+                                    `What dependency would you like to add to the task '${data.taskChosen}'?`,
+                                    'choice',
+                                    createChoiceStepActions(getHumanTasks('jcha'), performAddDependency) // Create choice step from list of human tasks
+                                );
+                            }
                         },
                     }
                 );
@@ -157,7 +173,7 @@ class Raika {
                     },
                     getHumanTasks: {
                         displayedCopy: 'get tasks for agent jcha',
-                        perform: (data) => {
+                        perform: (chosenAction, data) => {
                             const tasks = getHumanTasks('jcha');
                             // console.log(`Tasks for jcha:\n${JSON.stringify(tasks, null, '    ')}`);
                             return createTaskSelectionStep(tasks);
@@ -165,7 +181,7 @@ class Raika {
                     },
                     runRound: {
                         displayedCopy: 'run a round of agent actions',
-                        perform: (data) => {
+                        perform: (chosenAction, data) => {
                             agentRunner.runRound();
                             console.log('Ran a round of agent actions');
                             return initialStep;
