@@ -108,6 +108,12 @@ class Agent {
         });
     }
 
+    getAgentByTaskName(board, taskName) {
+        const taskMessageId = this.getRequestIdByTaskName(taskName);
+        const taskMessage = board.getMessage(taskMessageId);
+        return taskMessage.senderId;
+    }
+
     getTaskByRequestId(id) {
         return this.taskNames.find(taskname => this.tasks[taskname].requestId === id);
     }
