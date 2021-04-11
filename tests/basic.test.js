@@ -110,33 +110,31 @@ Task Workflows:
 // do: priority system: system can send out next most valuable task
 // do: priority system: system can organize tasks by value (undefined first)
 // do: add ability for agents to filter/reorder their tasklists
+// do: add ability to execute task sequences
 // do: priority system: user can set effort rating during processing
 // do: priority system: user can set importance rating during processing
-// do: add ability to execute task sequences
 // do: user can send add_processing_info messages
 // do: add ability to distinguish between task atoms and sequences (no functionality)
-// do: add time tasks (task resolves as done when time passes)
 // do: add ability to clean up inactive files and replace it with a number instead
+// do: add time tasks (task resolves as done when time passes)
+// do: add ability to set filter by context term (i.e. slack:, weekend:, etc.)
+// do: add ability to generically filter tasklist in getHumanTasks (i.e. with a filter function)
+// do: add ability for id generation to count across arbitrary folders (recursive counting function)
+// do: rename run.js
+
+// Pass 34:
 
 // Pass 33:
-// > [ability to filter by context term (i.e. slack:)]
-// > [menu option: 'filters': slack, weekend]
-// > [create process folder to hold process steps]
-// > [concept of a sequence of tasks]
-// > [rename run.js]
-
-// Pass 32:
-// do: user can set dependencies
 
 
 
 // ....
 
-// do: commit updates
 // ....
 
-// do: user can set dependencies
 // ....
+
+
 
 test('user can set dependencies', () => {
     `1. Create 2 tasks
