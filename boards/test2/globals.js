@@ -1,0 +1,3 @@
+exports = {
+    "stashedNum": 0
+}
