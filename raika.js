@@ -26,6 +26,10 @@ class Raika {
                 resolve();
             });
 
+            function getTime() {
+                return (new Date()).toTimeString().split(' ')[0];
+            }
+
             const addTask = (function (newTask, board = this.board) {
                 raikaAgent.requestTask(board, 'source', newTask, { subtype: 'execution'});
             }).bind(this);
@@ -77,7 +81,7 @@ class Raika {
                         const choices = Object.keys(this.actions)
                         .map(action => this.actions[action].displayedCopy)
                         .reduce((choiceString, choice, idx) => `${choiceString}${idx + 1}. ${choice}\n`, '');
-                        return `\n${this.promptText}\n${choices}\n`;
+                        return `\n${this.promptText}\n${choices}\nThe current time is ${getTime()}.\n`;
                     } else {
                         return `\n${this.promptText}\n`
                     }
