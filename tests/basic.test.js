@@ -119,12 +119,12 @@ Task Workflows:
 // do: add time tasks (task resolves as done when time passes)
 // do: add ability to set filter by context term (i.e. slack:, weekend:, etc.)
 // do: add ability to generically filter tasklist in getHumanTasks (i.e. with a filter function)
-// do: add ability for id generation to count across arbitrary folders (recursive counting function)
-// do: rename run.js
 
 // Pass 34:
+// > [ability to send notes for tasks]
 
 // Pass 33:
+// do: add ability for id generation to use global variable to count
 
 
 
@@ -135,6 +135,11 @@ Task Workflows:
 // ....
 
 
+test('id generation uses global variable', () => {
+    `1. move inactive messages to a different folder
+     2. generate new id
+     3. verify that id number is sufficiently large`
+});
 
 test('user can set dependencies', () => {
     `1. Create 2 tasks
