@@ -2,6 +2,7 @@ const fs = require('fs');
 const ENV = process.argv[2] || 'prod';
 const AGENT_PATH = `./boards/${ENV}/agents`;
 const MESSAGE_PATH = `./boards/${ENV}/messages`;
+const GLOBALS = require(`./boards/${ENV}/globals.js`)
 
 const requestIgnoreList = [];
 
@@ -30,8 +31,9 @@ let id_suffix = 0;
 function genNewId(path) {
     const activeNum = fs.readdirSync(`${path}/active`).length;
     const inactiveNum = fs.readdirSync(`${path}/inactive`).length;
+    const stashedNum = GLOBALS.stashedNum;
     id_suffix = id_suffix + 1;
-    return (activeNum + inactiveNum) + '_' + id_suffix;
+    return (activeNum + inactiveNum + stashedNum) + '_' + id_suffix;
 }
 
 class Agent {
@@ -437,6 +439,18 @@ class MessageBoard {
 
     get msgList() {
         return fs.readdirSync(this.messagePath).map(fileName => fileName.replace('.js', ''));
+    }
+
+    stashInactiveMsgs() {
+        const msgList = fs.readdirSync(`${MESSAGE_PATH}/inactive`);
+        msgList.forEach(msgName => {
+            const oldPath = `${MESSAGE_PATH}/inactive/${msgName}`;
+            const newPath = `${MESSAGE_PATH}/stashed/${msgName}`;
+            fs.renameSync(oldPath, newPath);
+        });
+        const globalsPath = `./boards/${ENV}/globals.js`;
+        GLOBALS.stashedNum = fs.readdirSync(`${MESSAGE_PATH}/stashed`).length;
+        saveData(GLOBALS, globalsPath);
     }
 
     archive(id) {
