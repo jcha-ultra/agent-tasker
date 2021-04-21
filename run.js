@@ -3,6 +3,7 @@ const ENV = process.argv[2] || 'prod';
 const AGENT_PATH = `./boards/${ENV}/agents`;
 const MESSAGE_PATH = `./boards/${ENV}/messages`;
 const GLOBALS = require(`./boards/${ENV}/globals.js`)
+const workstreams = require('./workstreams.js');
 
 const requestIgnoreList = [];
 
@@ -122,6 +123,10 @@ class Agent {
 
     getTaskByExecutionId(id) {
         return this.taskNames.find(taskname => this.tasks[taskname].executionIds.includes(id));
+    }
+
+    getStreamList(workstreamName) {
+        return workstreams.getWorkstream(this.tasks, workstreamName).streamList;
     }
 
     getRequestIdByTaskName(taskName) {
@@ -498,4 +503,4 @@ class MessageBoard {
     }
 }
 
-module.exports = {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId};
+module.exports = { createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId };

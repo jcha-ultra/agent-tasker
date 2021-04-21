@@ -1,5 +1,6 @@
 const readline = require("readline");
 const { createAgentFromFile, AgentRunner } = require('./run.js');
+const workstreams = require('./workstreams.js');
 
 
 class Raika {
@@ -70,7 +71,11 @@ class Raika {
                     } else if (this.inputType === 'freeform') {
                         this.performAction = (input, data) => {
                             // data.input = input;
-                            data.nextStep = this.actions.action.perform(input, data);
+                            if (input === 'cancel') { // allows user to cancel out of inputs
+                                data.nextStep = initialStep;
+                            } else {
+                                data.nextStep = this.actions.action.perform(input, data);
+                            }
                             return data;
                         }
                     }
@@ -83,7 +88,7 @@ class Raika {
                         .reduce((choiceString, choice, idx) => `${choiceString}${idx + 1}. ${choice}\n`, '');
                         return `\n${this.promptText}\n${choices}\nThe current time is ${getTime()}.\n`;
                     } else {
-                        return `\n${this.promptText}\n`
+                        return `\n${this.promptText}\nThe current time is ${getTime()}.\n`
                     }
                 }
 
@@ -108,13 +113,13 @@ class Raika {
                 return createdChoices;
             }).bind(this);
 
-            const createTaskSelectionStep = (function (tasks) {
+            const createTaskSelectionStep = (function (tasks, copy = 'Tasks for jcha:') {
                 const performFunc = (chosenAction, data) => {
                     const taskChosen = chosenAction;
                     return createTaskActionsStep(taskChosen);
                 }
                 return new FlowStep(
-                    'Tasks for jcha:',
+                    copy,
                     'choice',
                     createChoiceStepActions(tasks, performFunc)
                 );
@@ -162,7 +167,7 @@ class Raika {
                                     createChoiceStepActions(getHumanTasks('jcha'), performAddDependency) // Create choice step from list of human tasks
                                 );
                             }
-                        },
+                        }
                     }
                 );
             }).bind(this);
@@ -191,6 +196,12 @@ class Raika {
                             return initialStep;
                         }
                     },
+                    getWorkstreams: {
+                        displayedCopy: 'get workstreams for agent jcha',
+                        perform: (chosenAction, data) => {
+                            return workstreamSelectionStep;
+                        }
+                    },
                     exit: {
                         displayedCopy: 'exit',
                         perform: () => {
@@ -215,6 +226,17 @@ class Raika {
                         }
                     }
                 }
+            );
+
+            // Step after selecting to view workstreams
+            const workstreamSelectionStep = new FlowStep(
+                'Which workstream do you want to select?',
+                'choice',
+                createChoiceStepActions(workstreams.getWorkstreamList(), (chosenAction, data) => {
+                    const workstreamName = chosenAction;
+                    const workstreamTasks = getHumanAgent().getStreamList(workstreamName)
+                    return createTaskSelectionStep(workstreamTasks, `Tasks for workstream '${workstreamName}'`);
+                })
             );
 
             const taskSplitStep = new FlowStep(
