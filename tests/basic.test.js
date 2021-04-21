@@ -106,34 +106,40 @@ Task Workflows:
 // do: request reader: display task chain (trace back to parent tasks)
 // do: add ability to rename task aliases
 // do: keyword system: user can set keywords during processing
+// do: notes: ability to display notes for tasks
+// do: notes: ability to send notes for tasks
 // do: priority system: system can send out next oldest task
 // do: priority system: system can send out next most valuable task
 // do: priority system: system can organize tasks by value (undefined first)
-// do: add ability for agents to filter/reorder their tasklists
 // do: add ability to execute task sequences
 // do: priority system: user can set effort rating during processing
 // do: priority system: user can set importance rating during processing
+// do: add ability to save completed tasks (save switch is in globals)
 // do: user can send add_processing_info messages
 // do: add ability to distinguish between task atoms and sequences (no functionality)
-// do: add ability to clean up inactive files and replace it with a number instead
 // do: add time tasks (task resolves as done when time passes)
 // do: add ability to set filter by context term (i.e. slack:, weekend:, etc.)
-// do: add ability to generically filter tasklist in getHumanTasks (i.e. with a filter function)
+
+// Pass 35:
+// > [ability to go back to start when doing free input]
+// > [bug: stashedNum is currently applied to agents as well]
+// > [new workstream: jira]
 
 // Pass 34:
-// > [ability to send notes for tasks]
-
-// Pass 33:
-// do: add ability for id generation to use global variable to count
 
 
+
+
+
+
+
+test('raika is able to filter tasks', () => {
+    `1. create a filter for tasks
+     2. check filter works positively
+     3. check filter works negatively`
+});
 
 // ....
-
-// ....
-
-// ....
-
 
 test('id generation uses global variable', () => {
     `1. move inactive messages to a different folder
