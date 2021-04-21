@@ -162,7 +162,7 @@ class Raika {
                                     createChoiceStepActions(getHumanTasks('jcha'), performAddDependency) // Create choice step from list of human tasks
                                 );
                             }
-                        },
+                        }
                     }
                 );
             }).bind(this);
