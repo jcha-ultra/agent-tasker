@@ -83,7 +83,7 @@ class Raika {
                         .reduce((choiceString, choice, idx) => `${choiceString}${idx + 1}. ${choice}\n`, '');
                         return `\n${this.promptText}\n${choices}\nThe current time is ${getTime()}.\n`;
                     } else {
-                        return `\n${this.promptText}\n`
+                        return `\n${this.promptText}\nThe current time is ${getTime()}.\n`
                     }
                 }
 
