@@ -503,4 +503,4 @@ class MessageBoard {
     }
 }
 
-module.exports = {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId};
+module.exports = { createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId };
