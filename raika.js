@@ -1,5 +1,6 @@
 const readline = require("readline");
 const { createAgentFromFile, AgentRunner } = require('./run.js');
+const workstreams = require('./workstreams.js');
 
 
 class Raika {
@@ -195,6 +196,12 @@ class Raika {
                             return initialStep;
                         }
                     },
+                    getWorkstreams: {
+                        displayedCopy: 'get workstreams for agent jcha',
+                        perform: (chosenAction, data) => {
+                            return workstreamSelectionStep;
+                        }
+                    },
                     exit: {
                         displayedCopy: 'exit',
                         perform: () => {
@@ -219,6 +226,17 @@ class Raika {
                         }
                     }
                 }
+            );
+
+            // Step after selecting to view workstreams
+            const workstreamSelectionStep = new FlowStep(
+                'Which workstream do you want to select?',
+                'choice',
+                createChoiceStepActions(workstreams.getWorkstreamList(), (chosenAction, data) => {
+                    const workstreamName = chosenAction;
+                    const workstreamTasks = getHumanAgent().getStreamList(workstreamName)
+                    return createTaskSelectionStep(workstreamTasks, `Tasks for workstream '${workstreamName}'`);
+                })
             );
 
             const taskSplitStep = new FlowStep(
