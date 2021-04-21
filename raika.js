@@ -112,13 +112,13 @@ class Raika {
                 return createdChoices;
             }).bind(this);
 
-            const createTaskSelectionStep = (function (tasks) {
+            const createTaskSelectionStep = (function (tasks, copy = 'Tasks for jcha:') {
                 const performFunc = (chosenAction, data) => {
                     const taskChosen = chosenAction;
                     return createTaskActionsStep(taskChosen);
                 }
                 return new FlowStep(
-                    'Tasks for jcha:',
+                    copy,
                     'choice',
                     createChoiceStepActions(tasks, performFunc)
                 );
