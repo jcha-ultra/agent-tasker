@@ -104,7 +104,6 @@ Task Workflows:
 // do: priority system: system can organize tasks by urgency (undefined first)
 // do: priority system: user can set target time during processing
 // do: request reader: display task chain (trace back to parent tasks)
-// do: add ability to rename task aliases
 // do: keyword system: user can set keywords during processing
 // do: notes: ability to display notes for tasks
 // do: notes: ability to send notes for tasks
@@ -114,23 +113,54 @@ Task Workflows:
 // do: add ability to execute task sequences
 // do: priority system: user can set effort rating during processing
 // do: priority system: user can set importance rating during processing
-// do: add ability to save completed tasks (save switch is in globals)
 // do: user can send add_processing_info messages
-// do: add ability to distinguish between task atoms and sequences (no functionality)
+// do: weavers: create comms weaver (slack, etc.)
+// do: weavers: create side weaver (documentation, etc.)
+// do: weavers: create core weaver
+// do: weavers: update jira weaver to be jira and confluence (documentation)
+// do: weavers: have isActive, and if that's false, its weavelist will be empty
+// do: weavers: weaver file has list of sources
+// do: bots: have type; weaver has type 'weaver'
+// do: update weaver sources to be objects instead of an arrays
+// do: weavers: implement similar system for weavers as exists for agents (each weaver is its own file, each file tracks its own variables)
+// do: add ability to rename task aliases
+// do: add task saver bot (save switch is in globals)
+// do: save completed tasks: raika sends task completion event after receiving task completion
+// do: weaver: create weaver bots
+// do: events: inactivate after round
 // do: add time tasks (task resolves as done when time passes)
-// do: add ability to set filter by context term (i.e. slack:, weekend:, etc.)
+// do: add behavior for agents: if agent receives task that is in isTimeFormat(), then instead of forwarding it to a human agent, it'll send a message to a subagent to wait until timeHasArrived()
+// do: isTimeFormat function
+// do: bots: read off events every round
+// do: events: create events section for boards
+// do: bots: create bot class
 
-// Pass 35:
-// > [ability to go back to start when doing free input]
-// > [bug: stashedNum is currently applied to agents as well]
-// > [new workstream: jira]
+// Pass 38:
 
-// Pass 34:
-
-
-
+// Pass 37:
 
 
+
+
+
+
+
+
+
+
+
+// ....
+
+
+
+
+test('agents can process timed tasks', () => {
+    `1. create timed task
+     2. wait until time passes
+     3. verify that timed task resolves`
+});
+
+// ....
 
 
 test('raika is able to filter tasks', () => {
@@ -138,8 +168,6 @@ test('raika is able to filter tasks', () => {
      2. check filter works positively
      3. check filter works negatively`
 });
-
-// ....
 
 test('id generation uses global variable', () => {
     `1. move inactive messages to a different folder
