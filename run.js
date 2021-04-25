@@ -147,17 +147,23 @@ class Agent {
             return message.msgType === 'response' || !hasResponseFromSelf(message);
         });
 
-        msgsForAgent.forEach(message => {
-            if (message.msgType === 'request') {
-                this.processRequest(message);
-            } else if (message.msgType === 'response') {
-                this.processResponse(message, board);
-            } else if (message.msgType === 'note') {
-                this.processNote(message, board);
-            } else {
-                throw `Error: unknown message type: '${message.msgType}'`;
-            }
-        });
+        try {
+            msgsForAgent.forEach(message => {
+                if (message.msgType === 'request') {
+                    this.processRequest(message);
+                } else if (message.msgType === 'response') {
+                    this.processResponse(message, board);
+                } else if (message.msgType === 'note') {
+                    this.processNote(message, board);
+                } else {
+                    throw `Error: unknown message type: '${message.msgType}'`;
+                }
+            });
+        } catch(e) {
+            console.error('Unable to process messages:');
+            console.error(e);
+            console.debug(msgsForAgent)
+        }
     }
 
     processRequest(request) {
@@ -487,6 +493,12 @@ class MessageBoard {
         postedContents.msgId = msgId;
         saveData(postedContents, `${this.messagePath}/${msgId}.js`);
         return msgId;
+    }
+}
+
+class Bot {
+    constructor(id) {
+        this.id = id;
     }
 }
 
