@@ -197,7 +197,7 @@ class Raika {
                         }
                     },
                     getWorkstreams: {
-                        displayedCopy: 'get workstreams for agent jcha',
+                        displayedCopy: 'get workstreams',
                         perform: (chosenAction, data) => {
                             return workstreamSelectionStep;
                         }

@@ -390,18 +390,6 @@ class HumanAgent extends Agent {
         this.processMessages(board);
         this.save();
     }
-
-    // processMessages(board) {
-    //     const msgsForAgent = board.getMessagesForAgent(this.id);
-    //     msgsForAgent.forEach(message => {
-    //         if (message.msgType === 'request') {
-    //             this.processRequest(message);
-    //         } else {
-    //             throw `Error: Agent '${this.id}' with subtype '${this.subtype} cannot process message: '${message}'`;
-    //         }
-    //     });
-    // }
-
 }
 
 function createAgentFromFile(fileName, dataPath = `${AGENT_PATH}/active`) {
