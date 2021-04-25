@@ -46,7 +46,12 @@ class Workstream {
 // Creates the list of workstreams we use
 function createWorkstreamMap(tasks = {}) {
     const slack = new Workstream(tasks, [Object.keys(tasks)], Workstream.weavePackages.filterByContext('slack'));
-    return { slack };
+    const jira = new Workstream(tasks, [Object.keys(tasks)], Workstream.weavePackages.filterByContext('jira'));
+
+    return {
+        slack,
+        jira
+    };
 }
 
 function getWorkstream(tasks, workstreamName) {
