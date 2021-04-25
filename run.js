@@ -29,10 +29,9 @@ function removeFromArray(array, elementToRemove) {
 }
 
 let id_suffix = 0;
-function genNewId(path) {
+function genNewId(path, stashedNum = 0) {
     const activeNum = fs.readdirSync(`${path}/active`).length;
     const inactiveNum = fs.readdirSync(`${path}/inactive`).length;
-    const stashedNum = GLOBALS.stashedNum;
     id_suffix = id_suffix + 1;
     return (activeNum + inactiveNum + stashedNum) + '_' + id_suffix;
 }
@@ -484,7 +483,7 @@ class MessageBoard {
 
     postMessage(givenContents) {
         const postedContents = givenContents;
-        const msgId = 'message_' + genNewId(MESSAGE_PATH);
+        const msgId = 'message_' + genNewId(MESSAGE_PATH, GLOBALS.stashedNum);
         postedContents.msgId = msgId;
         saveData(postedContents, `${this.messagePath}/${msgId}.js`);
         return msgId;
