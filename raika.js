@@ -73,7 +73,7 @@ class Raika {
                     } else if (this.inputType === 'freeform') {
                         this.performAction = (input, data) => {
                             // data.input = input;
-                            if (input === 'cancel') { // allows user to cancel out of inputs
+                            if (input === 'c') { // allows user to cancel out of inputs
                                 data.nextStep = initialStep;
                             } else {
                                 data.nextStep = this.actions.action.perform(input, data);
