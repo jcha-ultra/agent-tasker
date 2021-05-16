@@ -46,7 +46,7 @@ class Workstream {
     }
 
     get streamList() {
-        return this.weave(this.dictionary, this.sources, this.filter, this.sort)
+        return this.weave(this.dictionary, this.sources, this.filter, this.sort);
     }
 
     next() {
