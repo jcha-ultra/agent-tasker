@@ -1,6 +1,6 @@
 const readline = require("readline");
-const { createAgentFromFile, AgentRunner } = require('./run.js');
-const workstreams = require('./workstreams.js');
+const { createAgentFromFile, AgentRunner, Swarms } = require('./run.js');
+const { getWorkstreamList, getWorkstream } = require('./workstreams.js');
 
 
 class Raika {
@@ -43,6 +43,8 @@ class Raika {
             const getHumanTasks = (function (agentName = 'jcha') {
                 return getHumanAgent(agentName).taskNames;
             }).bind(this);
+
+            const swarms = new Swarms({ dictionary: () => getHumanAgent().tasks });
 
             const sendDone = (function (requestId, board = this.board, agentName = 'jcha') {
                 const humanAgent = createAgentFromFile(`${agentName}.js`);
@@ -232,9 +234,9 @@ class Raika {
             const workstreamSelectionStep = new FlowStep(
                 'Which workstream do you want to select?',
                 'choice',
-                createChoiceStepActions(workstreams.getWorkstreamList(), (chosenAction, data) => {
+                createChoiceStepActions(getWorkstreamList(), (chosenAction, data) => {
                     const workstreamName = chosenAction;
-                    const workstreamTasks = getHumanAgent().getStreamList(workstreamName)
+                    const workstreamTasks = getWorkstream(swarms, workstreamName).streamList;
                     return createTaskSelectionStep(workstreamTasks, `Tasks for workstream '${workstreamName}'`);
                 })
             );
