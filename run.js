@@ -1,5 +1,5 @@
 const fs = require('fs');
-const ENV = process.argv[2] || 'prod';
+const ENV = process.argv[2] || 'test2';
 const AGENT_PATH = `./boards/${ENV}/agents`;
 const MESSAGE_PATH = `./boards/${ENV}/messages`;
 const GLOBALS = require(`./boards/${ENV}/globals.js`)
