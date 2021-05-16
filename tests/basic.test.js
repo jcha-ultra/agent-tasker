@@ -1,6 +1,7 @@
-const {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId} = require('../run.js');
+const {createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId, WeaverBot } = require('../run.js');
 const Raika = require('../raika.js');
 const AGENT_PATH = './boards/test2/agents';
+const BOT_PATH = './boards/test2/agents';
 const AGENT_PATH_ACTIVE = './boards/test2/agents/active';
 const MESSAGE_PATH = './boards/test2/messages';
 const board = new MessageBoard();
@@ -119,40 +120,14 @@ Task Workflows:
 // do: weavers: create core weaver
 // do: weavers: update jira weaver to be jira and confluence (documentation)
 // do: weavers: have isActive, and if that's false, its weavelist will be empty
-// do: weavers: weaver file has list of sources
-// do: bots: have type; weaver has type 'weaver'
-// do: update weaver sources to be objects instead of an arrays
-// do: weavers: implement similar system for weavers as exists for agents (each weaver is its own file, each file tracks its own variables)
 // do: add ability to rename task aliases
-// do: add task saver bot (save switch is in globals)
+// do: workstream: add ability to disable based on time
+// do: save completed tasks: add ability to save completed tasks to a file
 // do: save completed tasks: raika sends task completion event after receiving task completion
-// do: weaver: create weaver bots
+// do: bots: add task saver bot (save switch is in globals)
 // do: events: inactivate after round
-// do: add time tasks (task resolves as done when time passes)
-// do: add behavior for agents: if agent receives task that is in isTimeFormat(), then instead of forwarding it to a human agent, it'll send a message to a subagent to wait until timeHasArrived()
-// do: isTimeFormat function
-// do: bots: read off events every round
-// do: events: create events section for boards
-// do: bots: create bot class
-
-// Pass 38:
-
-// Pass 37:
-
-
-
-
-
-
-
-
-
-
-
-// ....
-
-
-
+// do: convert agent runner to swarm system
+// do: bots: bot.act() reads off events every round
 
 test('agents can process timed tasks', () => {
     `1. create timed task
@@ -160,8 +135,44 @@ test('agents can process timed tasks', () => {
      3. verify that timed task resolves`
 });
 
+// do: add time tasks (task resolves as done when time passes)
+// do: add behavior for agents: if agent receives task that is in isTimeFormat(), then instead of forwarding it to a human agent, it'll send a message to a subagent to wait until timeHasArrived()
+// do: isTimeFormat function
+// do: update weaver sources to be objects instead of an arrays
+// do: weavers: get jira workstream working with weaver solution
+// do: bots: bot.act() saves bot data
+// do: bots: bots fetch data separately each round: requireNoCache(`${dataPath}/${botName}/${botName}_data.js`)
+// do: swarm.act() calls swarmling.act
+// do: color code timestamps
+
+// Pass 40:
+
+// Pass 39:
+
+
 // ....
 
+
+
+
+
+
+
+
+
+// do: commit updates
+// ....
+
+
+
+
+
+// ....
+
+test.only('weaver can construct bot from file', () => {
+    const weaver = WeaverBot.createFromFile(testBot1, dataPath = `${BOT_PATH}/active`)
+    console.log(weaver);
+});
 
 test('raika is able to filter tasks', () => {
     `1. create a filter for tasks
@@ -264,7 +275,7 @@ describe('user can perform task end-to-end', () => {
             await raika.start();
         });
 
-        test.only('user can select split_task', async () => {
+        test('user can select split_task', async () => {
             console.warn(`MANUAL TEST: verify that you can split a task`);
             await raika.start();
         });
