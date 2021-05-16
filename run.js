@@ -318,8 +318,7 @@ class Agent {
         return this.sendMessage(board, contents);
     }
 
-    setData(dataPath) {
-        const agentData = requireNoCache(dataPath);
+    setData(agentData) {
         for (const dataItem in agentData) {
             this[dataItem] = agentData[dataItem];
         }
@@ -405,7 +404,7 @@ function createAgentFromFile(fileName, dataPath = `${AGENT_PATH}/active`) {
     } else {
         agent = new Agent();
     }
-    agent.setData(`${dataPath}/${fileName}`);
+    agent.setData(agentData);
     return agent;
 }
 
