@@ -6,7 +6,6 @@ const SWARM_PATH = `./boards/${ENV}/swarms`;
 const EVENTS_PATH = `./boards/${ENV}/events`;
 const LIB_PATH = `./lib`;
 const GLOBALS = require(`./boards/${ENV}/globals.js`)
-const workstreams = require('./workstreams.js');
 
 const requestIgnoreList = [];
 
@@ -125,10 +124,6 @@ class Agent {
 
     getTaskByExecutionId(id) {
         return this.taskNames.find(taskname => this.tasks[taskname].executionIds.includes(id));
-    }
-
-    getStreamList(workstreamName) {
-        return workstreams.getWorkstream(this.tasks, workstreamName).streamList;
     }
 
     getRequestIdByTaskName(taskName) {
@@ -499,10 +494,179 @@ class MessageBoard {
     }
 }
 
-class Bot {
-    constructor(id) {
-        this.id = id;
+class Swarms {
+    constructor(data) {
+        this.swarmList = {};
+        this.data = data;
+    }
+
+    getSwarm(type) {
+        const returnedSwarm = this.swarmList[type] || this.spawnSwarm(type);
+        return returnedSwarm;
+    }
+
+    spawnSwarm(type) {
+        const swarm = new Swarm(this, type);
+        this.swarmList[type] = swarm;
+        return swarm;
     }
 }
 
-module.exports = { createAgentFromFile, Agent, AgentRunner, MessageBoard, genNewId };
+class Swarm {
+    constructor(swarms, type, path = SWARM_PATH) {
+        this.swarmlings = {};
+        this.swarms = swarms;
+        this.path = path;
+        this.type = type;
+        const { dictionary } = swarms.data;
+        this.data = { dictionary };
+    }
+
+    getSwarmling(name) {
+        const returnedSwarmling = this.swarmlings[name] || this.spawnSwarmling(name);
+        return returnedSwarmling;
+    }
+
+    // creates a swarmling in a name slot
+    spawnSwarmling(name) {
+        const larva = new SwarmLarva(this, this.type, name, this.path);
+        const swarmling = larva.metamorphose();
+        this.swarmlings[name] = swarmling;
+        return swarmling;
+    }
+}
+
+class SwarmLarva {
+    constructor(swarm, type, name, path = SWARM_PATH) {
+        this.type = type;
+        this.name = name;
+        this.path = path;
+        this.swarm = swarm;
+    }
+
+    // generate whatever the larva was supposed to be for
+    metamorphose() {
+        if (this.type === 'weavers') {
+            return WeaverBot.createFromBlueprint(this.name, `${this.path}/weavers`, this.swarm);
+        }
+    }
+}
+
+// Bots process globally available events instead of directed messages, and perform orthogonal functions from agents, e.g. workstream management
+class Bot {
+    static fetchBlueprint(name, dataPath) {
+        return require(`${dataPath}/${name}/blueprint.js`);
+    }
+
+    constructor(swarm, id) {
+        this.id = id;
+        this.type = 'bot';
+        this.swarm = swarm;
+    }
+
+    // sets property to library function if it's not already a function
+    mapSpecToLibVals(specName) {
+        const specVal = this[`_${specName}`];
+        if (typeof specVal === 'function') {
+            return specVal;
+        } else if ((typeof specVal === 'string') && (specVal !== '')) {
+            return require(`${LIB_PATH}/${specName}.js`)[specVal];
+        } else {
+            return null;
+        }
+    }
+
+}
+
+class WeaverBot extends Bot {
+    static get weaverList() {
+        const workstreamList = fs.readdirSync(`${SWARM_PATH}/weavers`);
+        return workstreamList;
+    }
+
+    static defaults = {
+        filter: () => true,
+        sort: () => 0,
+        weave: (dictionary, sources, filter, sort) => { // by default, weave() concatentates the sources, filters, then sorts
+            const concatenated = Object.keys(sources).reduce((accumulator, source) => accumulator.concat(sources[source]), []);
+            const filtered = concatenated.filter(filter);
+            const sorted = filtered.sort(sort);
+            return sorted;
+        }
+    }
+
+    static createFromBlueprint(name, dataPath, swarm) {
+        const blueprint = Bot.fetchBlueprint(name, dataPath);
+        let weaver = new WeaverBot(swarm);
+        return Object.keys(blueprint).reduce((returnedWeaver, property) => {
+            returnedWeaver[property] = blueprint[property];
+            return returnedWeaver;
+        }, weaver);
+    }
+
+    // sourceList is an object of either workstreams or objects; filter() and order() are both functions, while weave() applies them to sourceList
+    constructor(swarm, id, dictionary = {}, sources = {}, { filter = () => true, sort = () => 0, weave } = {}) {
+        super(swarm, id);
+        this._dictionary = dictionary;
+        this._sources = sources; // sources can be workstreams or objects, but when they're called, they're converted to objects
+        this._filter = filter;
+        this._sort = sort;
+        this._weave = weave || ((dictionary, sources, filter, sort) => { // by default, weave() concatentates the sources, filters, then sorts
+            const concatenatedSources = sources.reduce((accumulator, source) => accumulator.concat(source));
+            const filteredSources = concatenatedSources.filter(filter);
+            const sortedSources= filteredSources.sort(sort);
+            return sortedSources;
+        });
+        this.subtype = 'weaver';
+    }
+
+    get dictionary() {
+        let dictVal;
+        if (Object.keys(this._dictionary).length > 0) { // if dictionary is explicitly defined for the weaver, then use that
+            dictVal = this._dictionary;
+        } else { // otherwise, use the dictionary in the swarm's dictionary
+            dictVal = this.swarm.data.dictionary;
+        }
+        return typeof dictVal === 'function' ?
+            dictVal()
+            : dictVal;
+    }
+
+    get filter() {
+        return this.mapSpecToLibVals('filter') || WeaverBot.defaults.filter;
+    }
+
+    get sort() {
+        return this.mapSpecToLibVals('sort') || WeaverBot.defaults.sort;
+    }
+
+    get weave() {
+        return this.mapSpecToLibVals('weave') || WeaverBot.defaults.weave;
+    }
+
+    get sources() {
+        const returnedSources = {};
+        Object.keys(this._sources).forEach(sourceName => {
+            const sourceValue = this._sources[sourceName];
+            const mappedSourceValue =
+                (Array.isArray(sourceValue) ? sourceValue // if source is an array, just keep it
+                : (sourceValue === 'dict' ? Object.keys(this.dictionary) // if source is dictionary, then use dictionary keys
+                : (typeof sourceValue === "string" ? this.swarm.getSwarmling(sourceValue).streamList // if source is a weaver, then assume it's the name of a weaver bot and pull in its streamlist
+                : Error(`Invalid source value format: ${sourceName}`))));
+            returnedSources[sourceName] = mappedSourceValue;
+        });
+        return returnedSources;
+    }
+
+    get streamList() {
+        return this.weave(this.dictionary, this.sources, this.filter, this.sort);
+    }
+
+    next() {
+        return this.streamList[0];
+    }
+
+    act() {}
+}
+
+module.exports = { createAgentFromFile, Agent, AgentRunner, MessageBoard, Bot, WeaverBot, genNewId, Swarms, Swarm };
