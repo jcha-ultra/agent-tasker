@@ -2,6 +2,9 @@ const fs = require('fs');
 const ENV = process.argv[2] || 'test2';
 const AGENT_PATH = `./boards/${ENV}/agents`;
 const MESSAGE_PATH = `./boards/${ENV}/messages`;
+const SWARM_PATH = `./boards/${ENV}/swarms`;
+const EVENTS_PATH = `./boards/${ENV}/events`;
+const LIB_PATH = `./lib`;
 const GLOBALS = require(`./boards/${ENV}/globals.js`)
 const workstreams = require('./workstreams.js');
 
