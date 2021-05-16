@@ -1,3 +1,14 @@
+
+const { WeaverBot } = require('./run.js');
+
+function getWorkstreamList() {
+    return WeaverBot.weaverList;
+}
+
+function getWorkstream(swarms, workstreamName) {
+    return swarms.getSwarm('weavers').getSwarmling(workstreamName);
+}
+
 class Workstream {
     // sourceList is an array of either workstreams or arrays; filter() and order() are both functions, while weave() applies them to sourceList
     constructor(dictionary = {}, sources = [[]], { filter = () => true, sort = () => 0, weave }) {
@@ -52,14 +63,6 @@ function createWorkstreamMap(tasks = {}) {
         slack,
         jira
     };
-}
-
-function getWorkstream(tasks, workstreamName) {
-    return createWorkstreamMap(tasks)[workstreamName];
-}
-
-function getWorkstreamList() {
-    return Object.keys(createWorkstreamMap());
 }
 
 module.exports = { getWorkstream, getWorkstreamList };
