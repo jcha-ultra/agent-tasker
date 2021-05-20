@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mjcha1024/agents-items#readme",
   "dependencies": {
+    "colors": "^1.4.0",
     "jest": "^26.6.3"
   },
   "devDependencies": {
