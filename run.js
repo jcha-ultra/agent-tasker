@@ -499,7 +499,48 @@ class MessageBoard {
 
     constructor(data) {
         this.swarmList = {};
+class SwarmSystem {
+    constructor(superSwarm, data, alwaysActiveList = [], LarvaClass) {
+        this.superSwarm = superSwarm;
+        this.memberList = {};
         this.data = data;
+        this.alwaysActiveList = alwaysActiveList;
+        this.LarvaClass = LarvaClass;
+    }
+
+    get activeMembers() {
+        return this.alwaysActiveList.reduce((returnedSwarms, member) => {
+            if (!returnedSwarms.includes(member)) {
+                return returnedSwarms.concat([member]);
+            } else {
+                return returnedSwarms;
+            }
+        }, Object.keys(this.memberList));
+    }
+
+    act() {
+        this.activeMembers.forEach(name => {
+            this.getMember(name).act();
+        });
+    }
+
+    getMember(name) {
+        const returnedMember = this.memberList[name] || this.spawnMember(name);
+        return returnedMember;
+    }
+
+    spawnMember(name) {
+        const larva = new LarvaClass(this);
+        return growLarva(larva, name);
+    }
+
+    growLarva(larva, name) {
+        const member = larva.metamorphose();
+        this.memberList[name] = member;
+        return member;
+    }
+}
+
 class Overmind extends SwarmSystem {
     }
 
