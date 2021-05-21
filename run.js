@@ -497,8 +497,6 @@ class MessageBoard {
     }
 }
 
-    constructor(data) {
-        this.swarmList = {};
 class SwarmSystem {
     constructor(superSwarm, data, alwaysActiveList = [], LarvaClass) {
         this.superSwarm = superSwarm;
@@ -542,45 +540,42 @@ class SwarmSystem {
 }
 
 class Overmind extends SwarmSystem {
+    constructor(data) {
+        super(null, data, ['weavers'], null);
     }
 
     getSwarm(type) {
-        const returnedSwarm = this.swarmList[type] || this.spawnSwarm(type);
-        return returnedSwarm;
+        return this.getMember(type);
     }
 
-    spawnSwarm(type) {
+    spawnMember(type) {
         const swarm = new Swarm(this, type);
-        this.swarmList[type] = swarm;
+        this.memberList[type] = swarm;
         return swarm;
     }
 }
 
-class Swarm {
-    constructor(swarms, type, path = SWARM_PATH) {
-        this.swarmlings = {};
-        this.swarms = swarms;
-        this.path = path;
+class Swarm extends SwarmSystem {
+    constructor(overswarm, type, path = SWARM_PATH) {
+        super(overswarm, null, [], SwarmlingLarva);
         this.type = type;
-        const { dictionary } = swarms.data;
+        this.path = path;
+        const { dictionary } = overswarm.data;
         this.data = { dictionary };
     }
 
     getSwarmling(name) {
-        const returnedSwarmling = this.swarmlings[name] || this.spawnSwarmling(name);
-        return returnedSwarmling;
+        return this.getMember(name);
     }
 
     // creates a swarmling in a name slot
-    spawnSwarmling(name) {
-        const larva = new SwarmLarva(this, this.type, name, this.path);
-        const swarmling = larva.metamorphose();
-        this.swarmlings[name] = swarmling;
-        return swarmling;
+    spawnMember(name) {
+        const larva = new this.LarvaClass(this, this.type, name, this.path);
+        return this.growLarva(larva, name);
     }
 }
 
-class SwarmLarva {
+class SwarmlingLarva {
     constructor(swarm, type, name, path = SWARM_PATH) {
         this.type = type;
         this.name = name;
@@ -619,6 +614,8 @@ class Bot {
             return null;
         }
     }
+
+    act() {}
 
 }
 
@@ -713,4 +710,4 @@ class WeaverBot extends Bot {
     act() {}
 }
 
-module.exports = { createAgentFromFile, Agent, AgentRunner, MessageBoard, Bot, WeaverBot, genNewId, Swarms, Swarm };
+module.exports = { createAgentFromFile, Agent, AgentRunner, MessageBoard, Bot, WeaverBot, genNewId, Overmind, Swarm };
