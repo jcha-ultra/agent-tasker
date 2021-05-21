@@ -33,14 +33,14 @@
 
 ## Roadmap:
 
-#### v.0.3.5:
+#### v.0.3.7:
+- swarms: add act() to swarm class if it's not there already
+- bots: bots fetch data dynamically during act, if they know they need to (e.g. when they don't have any data)
 
-#### v.0.3.6:
-- docs: update guiding principles
+#### v.0.3.8:
+- update name of interface file and objects
 
 ### Minor Updates, Bugs, and Cleanup
-- docs: clean up readme and and test files
-- update name of interface file and objects
 - add ability to run round within next task menu
 - weavers: get jira workstream working with weaver solution
 - add ability to split tasks and set dependency with same input option
@@ -51,8 +51,6 @@
 - add ability to display task chain (trace back to parent tasks)
 
 ### v.0.3: Workstreams:
-- swarms: add act() to swarm class if it's not there already
-- bots: bots fetch data dynamically during act, if they know they need to (e.g. when they don't have any data)
 - bots: bot.act() saves bot data
 - weavers: add ability to disable based on time
 - weavers: create core weaver
@@ -96,6 +94,13 @@ Implement priority system (value = importance/effort, urgency = effort/time, 2-d
 - model other humans agents as sources
 
 ## Version History:
+
+#### v.0.3.6:
+- docs: created roadmap and guiding principles
+
+#### v.0.3.5:
+- swarms: updated swarms to use a shared SwarmSystem parent class for shared methods
+- tasks: added option in main menu to go to next task
 
 ### v.0.2: Human Interface
 
