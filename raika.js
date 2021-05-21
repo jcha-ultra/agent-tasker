@@ -206,6 +206,7 @@ class Raika {
                     runRound: {
                         displayedCopy: 'run a round of agent actions',
                         perform: (chosenAction, data) => {
+                            swarms.act(); // temporarily run before agents for fewer bugs
                             agentRunner.runRound();
                             console.log('Ran a round of agent actions');
                             return initialStep;
