@@ -160,6 +160,7 @@ class Agent {
         } catch(e) {
             console.error('Unable to process messages:');
             console.error(e);
+            console.debug("Messages for Agent:")
             console.debug(msgsForAgent)
         }
     }
@@ -223,6 +224,9 @@ class Agent {
                 delete this.tasks[correspondingTask];
             } else if (response.subtype === 'dependency') {
                 const correspondingTask = this.taskNames.find(taskName => this.tasks[taskName].dependencyIds.includes(requestId));
+                // console.warn(requestId)
+                // console.warn(this.taskNames)
+                // console.warn(this.tasks)
                 const sourceRequestId = this.tasks[correspondingTask].requestId;
                 this.tasks[correspondingTask].dependencyIds = removeFromArray(this.tasks[correspondingTask].dependencyIds, response.requestId); // removes from dependencyIds of task
             }
