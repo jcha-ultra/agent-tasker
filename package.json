@@ -1,7 +1,7 @@
 {
   "name": "agents_items",
-  "version": "1.0.0",
-  "description": "Package to simulate evolution of single-cellular agents",
+  "version": "0.3.6",
+  "description": "agent-based system for task management",
   "main": "run.js",
   "scripts": {
     "test": "npx jest"
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/mjcha1024/agents-items.git"
   },
-  "author": "John Cha",
+  "author": "Mengyang Cha",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mjcha1024/agents-items/issues"
