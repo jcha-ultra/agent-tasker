@@ -32,20 +32,6 @@ afterEach(() => {
 
 /*************
 
-Guiding Principles:
-- Little top-down control—agents are semi-independent entities, each making its own decisions
-- Humans are just another type of agents
-- Agents should be as similar to each other as possible in terms of possible actions
-
-Agents:
-- Agents can only send tasks to either its own subagents, or to agents that are explicitly able to receive requests from any agent
-- Agents _can_ post priority updates to non-subagents
-- When splitting tasks, each task must be split into items that are independent of each other
-
-
-Messages:
-- Priority Updates: Increases or decreases priority on tasks
-
 Task Workflows:
 
 [request placed on board:]
@@ -94,80 +80,10 @@ Task Workflows:
 
 **************/
 
-// BACKLOG:
-// do: implement TypeScript
-// do: model other humans agents as sources
-// do: model other humans agents as recipients
-// do: priority system: system automatically switches between modes: urgency -> value -> age
-// do: implement priority system (value = importance/effort, urgency = effort/time, 2-day urgency)
-// do: implement recurring tasks (add new option to mark recurring task as done)
-// do: priority system: system can send out next most urgent task
-// do: priority system: system can organize tasks by urgency (undefined first)
-// do: priority system: user can set target time during processing
-// do: request reader: display task chain (trace back to parent tasks)
-// do: keyword system: user can set keywords during processing
-// do: notes: ability to display notes for tasks
-// do: notes: ability to send notes for tasks
-// do: priority system: system can send out next oldest task
-// do: priority system: system can send out next most valuable task
-// do: priority system: system can organize tasks by value (undefined first)
-// do: add ability to execute task sequences
-// do: priority system: user can set effort rating during processing
-// do: priority system: user can set importance rating during processing
-// do: user can send add_processing_info messages
-// do: weavers: create comms weaver (slack, etc.)
-// do: weavers: create side weaver (documentation, etc.)
-// do: weavers: create core weaver
-// do: weavers: update jira weaver to be jira and confluence (documentation)
-// do: weavers: have isActive, and if that's false, its weavelist will be empty
-// do: add ability to rename task aliases
-// do: workstream: add ability to disable based on time
-// do: save completed tasks: add ability to save completed tasks to a file
-// do: save completed tasks: raika sends task completion event after receiving task completion
-// do: bots: add task saver bot (save switch is in globals)
-// do: events: inactivate after round
-// do: convert agent runner to swarm system
-// do: bots: bot.act() reads off events every round
-
-test('agents can process timed tasks', () => {
-    `1. create timed task
-     2. wait until time passes
-     3. verify that timed task resolves`
-});
-
-// do: add time tasks (task resolves as done when time passes)
-// do: add behavior for agents: if agent receives task that is in isTimeFormat(), then instead of forwarding it to a human agent, it'll send a message to a subagent to wait until timeHasArrived()
-// do: isTimeFormat function
-// do: update weaver sources to be objects instead of an arrays
-// do: weavers: get jira workstream working with weaver solution
-// do: bots: bot.act() saves bot data
-// do: bots: bots fetch data separately each round: requireNoCache(`${dataPath}/${botName}/${botName}_data.js`)
-// do: swarm.act() calls swarmling.act
-// do: color code timestamps
-
-// Pass 40:
-
-// Pass 39:
-
-
-// ....
 
 
 
 
-
-
-
-
-
-// do: commit updates
-// ....
-
-
-
-
-
-// ....
 
 test.only('weaver can construct bot from file', () => {
     const weaver = WeaverBot.createFromFile(testBot1, dataPath = `${BOT_PATH}/active`)
