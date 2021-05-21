@@ -1,6 +1,7 @@
 const readline = require("readline");
 const { createAgentFromFile, AgentRunner, Overmind } = require('./run.js');
 const { getWorkstreamList, getWorkstream } = require('./workstreams.js');
+const { timeHasPassed } = require('./utils/timestamps.js')
 
 
 class Raika {
@@ -184,10 +185,25 @@ class Raika {
                     },
                     getHumanTasks: {
                         displayedCopy: 'get tasks for agent jcha',
+                    getNextTask: {
+                        displayedCopy: 'get next task',
                         perform: (chosenAction, data) => {
                             const tasks = getHumanTasks('jcha');
                             // console.log(`Tasks for jcha:\n${JSON.stringify(tasks, null, '    ')}`);
-                            return createTaskSelectionStep(tasks);
+                            const notTriggers = tasks.filter(task => !task.includes('['));
+                            const triggers = tasks.filter(task => task.includes('[')).sort().reverse();
+                            const lastTask = notTriggers[notTriggers.length - 1];
+                            const nextTasks = triggers;
+                            // console.log(nextTasks)
+                            if (lastTask && !Number.parseInt(lastTask)) {
+                                nextTasks.unshift(lastTask);
+                            }
+                            // console.log(nextTasks)
+                            if (timeHasPassed(tasks[0])) {
+                                nextTasks.unshift(tasks[0]);
+                            }
+                            // console.log(nextTasks)
+                            return createTaskSelectionStep(nextTasks);
                         }
                     },
                     runRound: {
