@@ -493,10 +493,10 @@ class MessageBoard {
     }
 }
 
-class Swarms {
     constructor(data) {
         this.swarmList = {};
         this.data = data;
+class Overmind extends SwarmSystem {
     }
 
     getSwarm(type) {

@@ -1,5 +1,5 @@
 const readline = require("readline");
-const { createAgentFromFile, AgentRunner, Swarms } = require('./run.js');
+const { createAgentFromFile, AgentRunner, Overmind } = require('./run.js');
 const { getWorkstreamList, getWorkstream } = require('./workstreams.js');
 
 
@@ -44,7 +44,7 @@ class Raika {
                 return getHumanAgent(agentName).taskNames;
             }).bind(this);
 
-            const swarms = new Swarms({ dictionary: () => getHumanAgent().tasks });
+            const swarms = new Overmind({ dictionary: () => getHumanAgent().tasks });
 
             const sendDone = (function (requestId, board = this.board, agentName = 'jcha') {
                 const humanAgent = createAgentFromFile(`${agentName}.js`);
