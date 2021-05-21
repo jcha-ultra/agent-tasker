@@ -183,13 +183,10 @@ class Raika {
                         displayedCopy: 'add a new task',
                         perform: () => addTaskStep
                     },
-                    getHumanTasks: {
-                        displayedCopy: 'get tasks for agent jcha',
                     getNextTask: {
                         displayedCopy: 'get next task',
                         perform: (chosenAction, data) => {
                             const tasks = getHumanTasks('jcha');
-                            // console.log(`Tasks for jcha:\n${JSON.stringify(tasks, null, '    ')}`);
                             const notTriggers = tasks.filter(task => !task.includes('['));
                             const triggers = tasks.filter(task => task.includes('[')).sort().reverse();
                             const lastTask = notTriggers[notTriggers.length - 1];
@@ -212,6 +209,13 @@ class Raika {
                             agentRunner.runRound();
                             console.log('Ran a round of agent actions');
                             return initialStep;
+                        }
+                    },
+                    getHumanTasks: {
+                        displayedCopy: 'get tasks for agent jcha',
+                        perform: (chosenAction, data) => {
+                            const tasks = getHumanTasks('jcha');
+                            return createTaskSelectionStep(tasks);
                         }
                     },
                     getWorkstreams: {
