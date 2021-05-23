@@ -212,10 +212,17 @@ class Raika {
                             return initialStep;
                         }
                     },
+                    // getHumanTasks: {
+                    //     displayedCopy: 'get tasks for agent jcha',
+                    //     perform: (chosenAction, data) => {
+                    //         const tasks = getHumanTasks('jcha');
+                    //         return createTaskSelectionStep(tasks);
+                    //     }
+                    // },
                     getHumanTasks: {
                         displayedCopy: 'get tasks for agent jcha',
                         perform: (chosenAction, data) => {
-                            const tasks = getHumanTasks('jcha');
+                            const tasks = getWorkstream(swarms, 'overweave').streamList;
                             return createTaskSelectionStep(tasks);
                         }
                     },
