@@ -1,3 +1,3 @@
-const { MessageBoard } = require('../run.js');
+const { MessageBoard } = require('../main.js');
 const board = new MessageBoard();
 board.stashInactiveMsgs();

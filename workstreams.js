@@ -1,5 +1,5 @@
 
-const { WeaverBot } = require('./run.js');
+const { WeaverBot } = require('./main.js');
 
 function getWorkstreamList() {
     return WeaverBot.weaverList;
