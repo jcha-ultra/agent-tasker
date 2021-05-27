@@ -1,5 +1,5 @@
 module.exports = {
-    id: 'all',
+    id: 'overweave',
     subtype: 'weaver',
     _sources: {
         'dict': 'dict'
