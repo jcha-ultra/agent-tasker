@@ -129,7 +129,7 @@ class Raika {
 
             const createTaskActionsStep = (function (taskChosen) {
                 return new FlowStep(
-                    `What do you want to do with the task '${taskChosen}'?`,
+                    `Current task: "${taskChosen}"`,
                     'choice',
                     {
                         done: {
@@ -199,7 +199,7 @@ class Raika {
                                 nextTasks.unshift(tasks[0]);
                             }
                             // console.log(nextTasks)
-                            return createTaskSelectionStep(nextTasks);
+                            return createTaskActionsStep(nextTasks[0]);
                         }
                     },
                     runRound: {
