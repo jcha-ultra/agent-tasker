@@ -35,27 +35,33 @@
 
 ## Roadmap:
 
-#### v.0.3.8:
-- update name of interface file and objects
+#### v.0.3.10:
+- agents: reorder subagent list so that it goes from oldest to newest
 
-#### v.0.3.9:
-- bots: bots fetch data during initiation
+#### v.0.3.11:
+- bots: bot.act() saves bot data
 
 ### Minor Updates, Bugs, and Cleanup
-- add ability to run round within next task menu
-- reorder agent list so that it goes from oldest to newest
-- add ability to split tasks and set dependency with same input option
-- add ability to specify time in terms of hours from now
+- prod: clean up prod inactive messages
+- swarms: revert swarms folder back to bots
+- docs: add instructions
+- menu: add ability to split tasks and set dependency with same input option
+- testing: create debug option in menu
+- testing: add tests as option in debug menu
 - remove reference to specific human agents (i.e. jcha)
+- messages: convert message board into swarm system
+- messages: optimization: board fetches messages as needed, and saves messages asynchronously
 - convert agent runner to be a swarm under Overmind
 - add ability to rename task aliases
+- add ability to specify time in terms of hours from now
 - add ability to send and display notes for tasks
 - add ability to display task chain (trace back to parent tasks)
 
 ### v.0.3: Workstreams:
-- bots: bot.act() saves bot data
-- workstreams: create comms stream and plug into overweave
-- workstreams: add 20-min cooldown ability to comms stream
+- workstreams: make next task option pull from overweave instead of all tasks
+- workstreams: create comms stream and plug into overweave (does not include slack)
+- workstreams: add 40-min cooldown ability to comms stream
+- workstreams: adjust comms cooldown depending on time of day
 - workstreams: create documentation stream and plug into overweave
 - workstreams: create side weaver (documentation, etc.)
 - workstreams: add ability to inactivate workstream based on current time
@@ -88,6 +94,7 @@ Implement priority system (value = importance/effort, urgency = effort/time, 2-d
 - add ability to execute sequence of tasks (probably via workstream system)
 - implement recurring tasks (add new option to mark recurring task as done)
 - convert to TypeScript
+- create regression test suite
 
 ### Backlog:
 - implement mental health checkup system
@@ -96,6 +103,13 @@ Implement priority system (value = importance/effort, urgency = effort/time, 2-d
 - model other humans agents as sources
 
 ## Version History:
+
+#### v.0.3.9:
+- bots: updated bots so that they fetch their data during initiation
+
+#### v.0.3.8:
+- updated names of files to make more sense for what their actual purposes are
+- added tests folder to gitignore (planning to create a different regression suite later)
 
 #### v.0.3.7:
 - workstreams: created overweave workstream (currently same as the 'all' workstream)
