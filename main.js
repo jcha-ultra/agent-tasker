@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { attachProperties } = require('./utils/misc.js')
 const ENV = process.argv[2] || 'test2';
 const AGENT_PATH = `./boards/${ENV}/agents`;
 const MESSAGE_PATH = `./boards/${ENV}/messages`;
@@ -601,6 +602,16 @@ class Bot {
         this.id = id;
         this.type = 'bot';
         this.swarm = swarm;
+    }
+
+    attachData() {
+        this.data = this.fetchData();
+    }
+
+    // fetches data from data file
+    fetchData() {
+        const dataPath = `${this.path}/data.js`;
+        return require(dataPath);
     }
 
     // sets property to library function if it's not already a function
