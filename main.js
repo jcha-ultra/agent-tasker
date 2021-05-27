@@ -557,12 +557,19 @@ class Overmind extends SwarmSystem {
 }
 
 class Swarm extends SwarmSystem {
-    constructor(overswarm, type, path = SWARM_PATH) {
+    constructor(overswarm, type) {
         super(overswarm, null, [], SwarmlingLarva);
         this.type = type;
-        this.path = path;
         const { dictionary } = overswarm.data;
         this.data = { dictionary };
+    }
+
+    get path() {
+        if (this.type === 'weavers') {
+            return `${SWARM_PATH}/weavers`;
+        } else {
+             return 'unknown_type';
+        }
     }
 
     getSwarmling(name) {
@@ -577,7 +584,7 @@ class Swarm extends SwarmSystem {
 }
 
 class SwarmlingLarva {
-    constructor(swarm, type, name, path = SWARM_PATH) {
+    constructor(swarm, type, name, path) {
         this.type = type;
         this.name = name;
         this.path = path;
@@ -587,7 +594,7 @@ class SwarmlingLarva {
     // generate whatever the larva was supposed to be for
     metamorphose() {
         if (this.type === 'weavers') {
-            return WeaverBot.createFromBlueprint(this.name, `${this.path}/weavers`, this.swarm);
+            return WeaverBot.createFromBlueprint(this.name, this.path, this.swarm);
         }
     }
 }
@@ -602,6 +609,10 @@ class Bot {
         this.id = id;
         this.type = 'bot';
         this.swarm = swarm;
+    }
+
+    get path() {
+        return `${this.swarm.path}/${this.id}`;
     }
 
     attachData() {
@@ -631,8 +642,10 @@ class Bot {
 }
 
 class WeaverBot extends Bot {
+    static dataPath = `${SWARM_PATH}/weavers`;
+
     static get weaverList() {
-        const workstreamList = fs.readdirSync(`${SWARM_PATH}/weavers`);
+        const workstreamList = fs.readdirSync(WeaverBot.dataPath);
         return workstreamList;
     }
 
