@@ -1,14 +1,15 @@
 require('colors');
 
-function timeHasPassed(timeCountThreshold) {
-    timeCountThreshold = Number.parseInt(timeCountThreshold);
-    if (timeCountThreshold) {
+function timeHasPassed(timeCountThresholdRaw) {
+    timeCountThresholdRaw = Number.parseInt(timeCountThresholdRaw);
+    if (timeCountThresholdRaw) {
+        const timeCountThresholdMinute = timeCountThresholdRaw % 100;
+        const timeCountThresholdHour = Math.floor(timeCountThresholdRaw / 100);
         const now = new Date(Date.now());
         const minuteRaw = now.getMinutes() + '';
         const minute = minuteRaw.length < 2 ? '0' + minuteRaw : minuteRaw;
         const hour = now.getHours();
-        const timeCount = Number.parseInt('' + hour + minute);
-        const timeCountDiff = timeCountThreshold - timeCount;
+        const timeCountDiff = (timeCountThresholdHour - hour) * 60 + (timeCountThresholdMinute - minute);
         // console.log(timeCountThreshold)
         // console.log(timeCount)
         return timeCountDiff <= 10;
@@ -16,7 +17,7 @@ function timeHasPassed(timeCountThreshold) {
         return false;
     }
 }
-// console.log(timeHasPassed('1457'))
+// console.log(timeHasPassed('1900'))
 
 function colorCodeTimeString(timeCountThreshold) {
     const now = new Date(Date.now());
