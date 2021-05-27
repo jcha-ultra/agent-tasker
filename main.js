@@ -650,10 +650,9 @@ class WeaverBot extends Bot {
     static createFromBlueprint(name, dataPath, swarm) {
         const blueprint = Bot.fetchBlueprint(name, dataPath);
         let weaver = new WeaverBot(swarm);
-        return Object.keys(blueprint).reduce((returnedWeaver, property) => {
-            returnedWeaver[property] = blueprint[property];
-            return returnedWeaver;
-        }, weaver);
+        attachProperties(weaver, blueprint);
+        weaver.attachData();
+        return weaver;
     }
 
     // sourceList is an object of either workstreams or objects; filter() and order() are both functions, while weave() applies them to sourceList
