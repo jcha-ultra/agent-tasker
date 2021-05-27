@@ -615,6 +615,8 @@ class Bot {
         return `${this.swarm.path}/${this.id}`;
     }
 
+    act() {}
+
     attachData() {
         this.data = this.fetchData();
     }
@@ -636,9 +638,6 @@ class Bot {
             return null;
         }
     }
-
-    act() {}
-
 }
 
 class WeaverBot extends Bot {
@@ -683,6 +682,8 @@ class WeaverBot extends Bot {
         });
         this.subtype = 'weaver';
     }
+
+    act() {}
 
     get dictionary() {
         let dictVal;
@@ -729,8 +730,6 @@ class WeaverBot extends Bot {
     next() {
         return this.streamList[0];
     }
-
-    act() {}
 }
 
 module.exports = { createAgentFromFile, Agent, AgentRunner, MessageBoard, Bot, WeaverBot, genNewId, Overmind, Swarm };
