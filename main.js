@@ -50,7 +50,7 @@ class Agent {
     }
 
     get freeSubAgents() {
-        return this.subagents.free;
+        return this.subagents.free.sort();
     }
 
     get taskNames() {
