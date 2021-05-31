@@ -24,7 +24,7 @@ function saveData(contents, dataPath) {
         if (err) {
             throw err;
         }
-    })
+    });
 }
 
 function removeFromArray(array, elementToRemove) {
@@ -682,8 +682,6 @@ class WeaverBot extends Bot {
         });
         this.subtype = 'weaver';
     }
-
-    act() {}
 
     get dictionary() {
         let dictVal;
