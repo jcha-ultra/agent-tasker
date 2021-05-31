@@ -609,13 +609,16 @@ class Bot {
         this.id = id;
         this.type = 'bot';
         this.swarm = swarm;
+        this.data = {};
     }
 
     get path() {
         return `${this.swarm.path}/${this.id}`;
     }
 
-    act() {}
+    act() {
+        saveData(this.data, `${this.path}/data.js`);
+    }
 
     attachData() {
         this.data = this.fetchData();
