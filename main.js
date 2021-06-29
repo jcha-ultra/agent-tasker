@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { attachProperties } = require('./utils/misc.js')
+const { attachProperties, reorderAgentNames } = require('./utils/misc.js')
 const ENV = process.argv[2] || 'test2';
 const AGENT_PATH = `./boards/${ENV}/agents`;
 const MESSAGE_PATH = `./boards/${ENV}/messages`;
@@ -50,7 +50,7 @@ class Agent {
     }
 
     get freeSubAgents() {
-        return this.subagents.free;
+        return reorderAgentNames(this.subagents.free);
     }
 
     get taskNames() {
