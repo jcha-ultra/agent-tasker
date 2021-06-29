@@ -191,6 +191,8 @@ class Raika {
                             const lastTask = notTriggers[notTriggers.length - 1];
                             const nextTasks = triggers;
                             // console.log(nextTasks)
+                            // console.log(lastTask)
+                            // console.log(Number.parseInt(lastTask))
                             if (lastTask && !Number.parseInt(lastTask)) {
                                 nextTasks.unshift(lastTask);
                             }
