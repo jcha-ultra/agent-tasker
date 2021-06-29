@@ -35,13 +35,12 @@
 ## Roadmap:
 
 #### v.0.3.12:
-- prod: clean up prod inactive messages
-
-#### v.0.4.1:
-- workstreams: create comms stream and plug into overweave (does not include slack)
+- performance: reorder subagents so that older agents are used first
 
 ### Minor Updates, Bugs, and Cleanup:
-- agents: reorder subagents so that older agents are used first
+- performance: make it so that not every agent have to read messages in each round
+- prod: clean up prod inactive messages
+- add ability to set time for task
 - bug: dependents being complete outputs an error
 - docs: add instructions
 - menu: add ability to split tasks and set dependency with same input option
@@ -57,7 +56,11 @@
 - add ability to send and display notes for tasks
 - add ability to display task chain (trace back to parent tasks)
 
-### v.0.4: Workstreams:
+### v.0.x: Workstreams:
+- workstreams: create triggers workstream
+- agents: create task sequences
+- workstreams: create tier-based workstream
+- workstreams: create comms stream and plug into overweave (does not include slack)
 - workstreams: reorder overweave based on the "all" stream
 - workstreams: make next task option pull from overweave instead of all tasks
 - workstreams: add 40-min cooldown ability to comms stream
@@ -66,7 +69,7 @@
 - workstreams: create side weaver (documentation, etc.)
 - workstreams: add ability to inactivate workstream based on current time
 
-### v.0.5: Time, Events, and Triggers:
+### v.0.x: Time, Events, and Triggers:
 - utils: create isTimeFormat function
 - agents: if agent receives task that is in isTimeFormat(), then instead of forwarding it to a human agent, it'll post a request to the triggers board, which will get picked up by a trigger bot
 - events: create event board
@@ -76,7 +79,7 @@
 - events: save completed tasks: interfacer posts task completion event after receiving task completion message
 - bots: save completed tasks: add task saver bot (save switch is in globals)
 
-### v.0.6: Priority System:
+### v.0.x: Priority System:
 Implement priority system (value = importance/effort, urgency = effort/time, 2-day urgency)
 - processing: user can send add_processing_info messages
 - processing: user can set keywords during processing
