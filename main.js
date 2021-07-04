@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { attachProperties, reorderAgentNames } = require('./utils/misc.js')
+const { attachProperties, reorderAgentNames, requireNoCache, requireAdaptive } = require('./utils/misc.js')
 const ENV = process.argv[2] || 'test2';
 const AGENT_PATH = `./boards/${ENV}/agents`;
 const MESSAGE_PATH = `./boards/${ENV}/messages`;
@@ -9,14 +9,6 @@ const LIB_PATH = `./lib`;
 const GLOBALS = require(`./boards/${ENV}/globals.js`)
 
 const requestIgnoreList = [];
-
-function requireNoCache(filePath) {
-    let _invalidateRequireCacheForFile = function(filePath) {
-    	delete require.cache[require.resolve(filePath)];
-    };
-    _invalidateRequireCacheForFile(filePath);
-	return require(filePath);
-}
 
 function saveData(contents, dataPath) {
     const selfExport = 'module.exports = ' + JSON.stringify(contents, null, 4);

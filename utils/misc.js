@@ -42,4 +42,27 @@ function reorderAgentNames(names) {
 // console.log(reorderAgentNames(names)); // expect: ['agent_9_10', 'agent_10_1'. 'agent_10_10', 'agent_10_10', 'agent_11_10', 'agent_100_9', 'agent_100_10']
 
 
-module.exports = { attachProperties, reorderAgentNames };
+function requireNoCache(filePath) {
+    filePath = filePath.replace('./', `${process.cwd()}/`);
+    let _invalidateRequireCacheForFile = function(filePath) {
+    	delete require.cache[require.resolve(filePath)];
+    };
+    _invalidateRequireCacheForFile(filePath);
+	return require(filePath);
+}
+
+// adaptively uses require depending on whether the expected result was cached or not
+function requireAdaptive(filePath) {
+    let messageCached = require(filePath.replace('./', `${process.cwd()}/`)); // override default `require` behavior of `./` being relative to file path
+    // console.log(Object.keys(messageCached).length);
+    if (Object.keys(messageCached).length !== 0) { // If the cached require is nonempty, then return it, otherwise return the no-cache version
+        // console.log('branch1')
+        return messageCached;
+    } else {
+        // console.log('branch2')
+        return requireNoCache(filePath);
+    }
+}
+// console.log(requireAdaptive('/Users/solarapparition/repos/agents-items/boards/prod/agents/active/agent_3_2.js'));
+
+module.exports = { attachProperties, reorderAgentNames, requireNoCache, requireAdaptive };
