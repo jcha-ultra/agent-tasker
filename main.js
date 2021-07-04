@@ -411,7 +411,7 @@ class AgentRunner {
     }
 
     runRound(board = this.board) {
-        const agentList = fs.readdirSync(`${AGENT_PATH}/active`);
+        const agentList = board.getAgentsWithMsgs();
         for (const agentFileName of agentList) {
             const agent = createAgentFromFile(agentFileName, `${AGENT_PATH}/active`);
             agent.act(board);
@@ -448,6 +448,17 @@ class MessageBoard {
     archive(id) {
         saveData(this.getMessage(id), `${MESSAGE_PATH}/inactive/${id}.js`);
         fs.unlinkSync(`${this.messagePath}/${id}.js`);
+    }
+
+    // fetches list of agents that actually have messages for them
+    getAgentsWithMsgs() {
+        const allMessages = this.getAllMessages();
+        const recipients = [...new Set(allMessages.map(message => message.recipientID))];
+        return recipients;
+    }
+
+    getAllMessages() {
+        return this.msgList.map(msgId => requireAdaptive(`${this.messagePath}/${msgId}.js`));
     }
 
     getMessage(id) {
