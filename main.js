@@ -433,18 +433,6 @@ class MessageBoard {
         return fs.readdirSync(this.messagePath).map(fileName => fileName.replace('.js', ''));
     }
 
-    stashInactiveMsgs() {
-        const msgList = fs.readdirSync(`${MESSAGE_PATH}/inactive`);
-        msgList.forEach(msgName => {
-            const oldPath = `${MESSAGE_PATH}/inactive/${msgName}`;
-            const newPath = `${MESSAGE_PATH}/stashed/${msgName}`;
-            fs.renameSync(oldPath, newPath);
-        });
-        const globalsPath = `./boards/${ENV}/globals.js`;
-        GLOBALS.stashedNum = fs.readdirSync(`${MESSAGE_PATH}/stashed`).length;
-        saveData(GLOBALS, globalsPath);
-    }
-
     archive(id) {
         saveData(this.getMessage(id), `${MESSAGE_PATH}/inactive/${id}.js`);
         fs.unlinkSync(`${this.messagePath}/${id}.js`);
@@ -510,6 +498,18 @@ class MessageBoard {
         postedContents.msgId = msgId;
         saveData(postedContents, `${this.messagePath}/${msgId}.js`);
         return msgId;
+    }
+
+    stashInactiveMsgs() {
+        const msgList = fs.readdirSync(`${MESSAGE_PATH}/inactive`);
+        msgList.forEach(msgName => {
+            const oldPath = `${MESSAGE_PATH}/inactive/${msgName}`;
+            const newPath = `${MESSAGE_PATH}/stashed/${msgName}`;
+            fs.renameSync(oldPath, newPath);
+        });
+        const globalsPath = `./boards/${ENV}/globals.js`;
+        GLOBALS.stashedNum = fs.readdirSync(`${MESSAGE_PATH}/stashed`).length;
+        saveData(GLOBALS, globalsPath);
     }
 }
 
