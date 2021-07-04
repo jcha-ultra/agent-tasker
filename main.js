@@ -462,30 +462,42 @@ class MessageBoard {
     }
 
     getMessage(id) {
+        // console.log(id)
+        // console.log(this.msgList.filter(msgId => msgId === id.toString())
+                           // .map(msgId => requireAdaptive(`${this.messagePath}/${msgId}.js`))[0])
         return this.msgList.filter(msgId => msgId === id.toString())
-                           .map(msgId => require(`${this.messagePath}/${msgId}.js`))[0];
+                           .map(msgId => requireAdaptive(`${this.messagePath}/${msgId}.js`))[0];
+    }
+
+    getMessages(filter) {
+        const filteredMsgs = this.getAllMessages().filter(filter);
+        return filteredMsgs;
     }
 
     getMessagesForAgent(agentId) {
-        return this.msgList.map(msgId => {
-            let messageCached = require(`${this.messagePath}/${msgId}.js`);
-            if (Object.keys(messageCached).length !== 0) { // If the cached require works, then return it, otherwise return the no-cache version
-                return messageCached;
-            }
-            return requireNoCache(`${this.messagePath}/${msgId}.js`);
-        })
-            .filter(message => message.recipientID === agentId);
+        function filterForAgent(message) {return message.recipientID === agentId};
+        return this.getMessages(filterForAgent);
+        // return this.msgList.map(msgId => {
+        //     let messageCached = require(`${this.messagePath}/${msgId}.js`);
+        //     if (Object.keys(messageCached).length !== 0) { // If the cached require works, then return it, otherwise return the no-cache version
+        //         return messageCached;
+        //     }
+        //     return requireNoCache(`${this.messagePath}/${msgId}.js`);
+        // })
+        //     .filter(message => message.recipientID === agentId);
     }
 
     getMessagesFromAgent(agentId) {
-        return this.msgList.map(msgId => {
-            let messageCached = require(`${this.messagePath}/${msgId}.js`);
-            if (Object.keys(messageCached).length !== 0) { // If the cached require works, then return it, otherwise return the no-cache version
-                return messageCached;
-            }
-            return requireNoCache(`${this.messagePath}/${msgId}.js`);
-        })
-            .filter(message => message.senderId === agentId);
+        function filterFromAgent(message) {message.senderId === agentId};
+        return this.getMessages(filterFromAgent);
+        // return this.msgList.map(msgId => {
+        //     let messageCached = require(`${this.messagePath}/${msgId}.js`);
+        //     if (Object.keys(messageCached).length !== 0) { // If the cached require works, then return it, otherwise return the no-cache version
+        //         return messageCached;
+        //     }
+        //     return requireNoCache(`${this.messagePath}/${msgId}.js`);
+        // })
+        //     .filter(message => message.senderId === agentId);
     }
 
     getRequestsForAgent(agentID) {
