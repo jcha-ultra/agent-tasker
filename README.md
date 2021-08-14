@@ -34,16 +34,21 @@
 
 ## Roadmap:
 
-#### v.0.3.12:
-- performance: reorder subagents so that older agents are used first
+#### v.0.3.14:
+- convert tasks to pull in external resource
+
+#### v.0.3.15:
 
 ### Minor Updates, Bugs, and Cleanup:
-- performance: make it so that not every agent have to read messages in each round
 - prod: clean up prod inactive messages
-- add ability to set time for task
+- interface: rename interface agent
+- interface: handling for when an input number is invalid
+- interface: make `c` the cancelling command for choice-based menus
+- add ability to set time for task based on current time
 - bug: dependents being complete outputs an error
+- bug: agents are reprocessing dependency notes—line 142 (this happens on the following round)]
 - docs: add instructions
-- menu: add ability to split tasks and set dependency with same input option
+- interface: add ability to split tasks and set dependency with same input option
 - testing: create debug option in menu
 - testing: add tests as option in debug menu
 - remove reference to specific human agents (i.e. jcha)
@@ -51,12 +56,16 @@
 - messages: convert message board into swarm system
 - messages: optimization: board fetches messages as needed, and saves messages asynchronously
 - convert agent runner to be a swarm under Overmind
-- add ability to rename task aliases
 - add ability to specify time in terms of hours from now
 - add ability to send and display notes for tasks
 - add ability to display task chain (trace back to parent tasks)
 
-### v.0.x: Workstreams:
+### Tasks:
+- add ability to rename task aliases
+
+### Workstreams:
+- workstreams: rework so that they run arbitrary code
+- workstreams: add shortcut for workstreams to simulate simple task sequences
 - workstreams: create triggers workstream
 - agents: create task sequences
 - workstreams: create tier-based workstream
@@ -69,7 +78,7 @@
 - workstreams: create side weaver (documentation, etc.)
 - workstreams: add ability to inactivate workstream based on current time
 
-### v.0.x: Time, Events, and Triggers:
+### Time, Events, and Triggers:
 - utils: create isTimeFormat function
 - agents: if agent receives task that is in isTimeFormat(), then instead of forwarding it to a human agent, it'll post a request to the triggers board, which will get picked up by a trigger bot
 - events: create event board
@@ -79,7 +88,7 @@
 - events: save completed tasks: interfacer posts task completion event after receiving task completion message
 - bots: save completed tasks: add task saver bot (save switch is in globals)
 
-### v.0.x: Priority System:
+### Priority System:
 Implement priority system (value = importance/effort, urgency = effort/time, 2-day urgency)
 - processing: user can send add_processing_info messages
 - processing: user can set keywords during processing
@@ -108,6 +117,12 @@ Implement priority system (value = importance/effort, urgency = effort/time, 2-d
 ## Version History:
 
 ### v.0.3: Swarms and Bots:
+
+#### v.0.3.13:
+- performance: make it so that not every agent have to read messages in each round
+
+#### v.0.3.12:
+- performance: reorder subagents so that older agents are used first
 
 #### v.0.3.11:
 - bots: bot.act() now saves bot data automatically to its data file
